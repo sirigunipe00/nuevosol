@@ -1,0 +1,2 @@
+/Users/premsaim/nuevosol/android/app/.cxx/Debug/5w51281z/x86/CMakeFiles/edit_cache.dir
+/Users/premsaim/nuevosol/android/app/.cxx/Debug/5w51281z/x86/CMakeFiles/rebuild_cache.dir

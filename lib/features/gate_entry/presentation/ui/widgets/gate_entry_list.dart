@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nuevosol/app/presentation/widgets/app_page_view2.dart';
+import 'package:nuevosol/app/presentation/widgets/staticlist_tile.dart';
+import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/core/model/page_view_filters.dart';
+import 'package:nuevosol/features/gate_entry/model/gate_entry_form.dart';
+import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter_cubit.dart';
+import 'package:nuevosol/features/gate_entry/presentation/ui/widgets/gate_entry_widget.dart';
+import 'package:nuevosol/styles/app_color.dart';
+import 'package:nuevosol/widgets/infinite_list_widget.dart';
+
+class GateEntryListScrn extends StatefulWidget {
+  const GateEntryListScrn({super.key});
+
+  @override
+  State<GateEntryListScrn> createState() => _GateEntryListScrnState();
+}
+
+class _GateEntryListScrnState extends State<GateEntryListScrn>
+    with StatusModeSelectionMixin {
+  String? status;
+  String? query;
+
+  @override
+  void initState() {
+    status = 'Draft';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppPageView2<GateEntryFilterCubit>(
+      mode: PageMode2.gateentry,
+      backgroundColor: AppColors.white,
+      onNew: () => AppRoute.newGateEntry.push(context),
+      scaffoldBg: '',
+      child: RefreshIndicator(
+        onRefresh: () {
+          return context.cubit<GateEntriesCubit>().fetchInitial(
+            Pair(StringUtils.docStatusInt(status), null),
+          );
+        },
+        child: BlocListener<GateEntryFilterCubit, PageViewFilters>(
+          listener:
+              (_, state) => _fetchInital(context, state.query, state.status),
+          child: InfiniteListViewWidget<GateEntriesCubit, GateEntryForm>(
+            childBuilder:
+                (context, entry) => GateEntryWidget(
+                  gateEntry: entry,
+                  onTap: () {
+                    AppRoute.newGateEntry.push<bool?>(context, extra: entry);
+                  },
+                ),
+            fetchInitial: () => _fetchInital(context, query, status),
+            fetchMore: () => fetchMore(context),
+            emptyListText: 'No GateEntries Found.',
+          ),
+        ),
+      ),
+      onSearch: () async {
+        final selected = await showOptions(context, defaultValue: status);
+        print('Selected status: $selected');
+        if (selected == null || !context.mounted) return;
+
+        setState(() {
+          status = selected;
+          query = null;
+          context.cubit<GateEntryFilterCubit>().onChangeStatus(status ?? '');
+        });
+        _fetchInital(context, query, status!);
+      },
+    );
+  }
+
+  void _fetchInital(BuildContext context, String? query, String? status) {
+    print('Fetching initial with status: $status and query: $query');
+    final filters = context.read<GateEntryFilterCubit>().state;
+    context.cubit<GateEntriesCubit>().fetchInitial(
+      Pair(StringUtils.docStatusInt(status), query),
+    );
+  }
+
+  void fetchMore(BuildContext context) {
+    final filters = context.read<GateEntryFilterCubit>().state;
+    context.cubit<GateEntriesCubit>().fetchMore(
+      Pair(StringUtils.docStatusInt(filters.status), filters.query),
+    );
+  }
+}

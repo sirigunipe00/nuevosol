@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247437191888",
+    "project_id": "nuevosol-6b4e0",
+    "storage_bucket": "nuevosol-6b4e0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247437191888:android:45577e7a958290d886ccd5",
+        "android_client_info": {
+          "package_name": "in.easycloud.nuevosol"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6gXxE0VYSMjkjmnE3RbLkDDlbEaDxSYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

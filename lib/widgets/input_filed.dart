@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/styles/app_color.dart';
+import 'package:nuevosol/widgets/caption_text.dart';
+import 'package:nuevosol/widgets/spaced_column.dart';
+
+class InputField extends StatelessWidget {
+  InputField({
+    super.key,
+    required this.title,
+    this.initialValue,
+    this.onChanged,
+    this.onSubmitted,
+    this.inputType = TextInputType.text,
+    this.maxLength = 255,
+    this.readOnly = false,
+    this.hintText,
+    this.suffixIcon,
+    this.autofocus = false,
+    this.borderColor,
+    this.minLines,
+    this.maxLines,
+    this.inputFormatters,
+    this.focusNode,
+    this.color = AppColors.black,
+    this.isRequired = false,
+    TextEditingController? controller,
+    this.validator,
+  }) {
+    this.controller = controller ?? TextEditingController();
+    if (initialValue?.isNotEmpty == true) {
+      this.controller?.text = initialValue!;
+    }
+  }
+
+  final String title;
+  final String? initialValue;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final TextInputType inputType;
+  final int maxLength;
+  final bool readOnly;
+  final String? hintText;
+  final Widget? suffixIcon;
+  final FocusNode? focusNode;
+  final Color? borderColor;
+  final String? Function(String?)? validator;
+  late final TextEditingController? controller;
+  final bool autofocus;
+  final bool isRequired;
+  final Color color;
+  final int? minLines;
+  final int? maxLines;
+  final List<TextInputFormatter>? inputFormatters;
+
+  @override
+  Widget build(BuildContext context) {
+   
+    return Focus(
+      focusNode: focusNode,
+      child: SpacedColumn(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        defaultHeight: 4.0,
+        children: [
+          CaptionText(title: title, isRequired: isRequired, color: color),
+          Container(
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: TextFormField(
+              style:const TextStyle(color: Colors.black,fontSize: 14),
+              controller: controller,
+
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                suffixIcon: suffixIcon,
+                counterText: '',
+                hintText: hintText,
+                hintStyle: context.textTheme.labelSmall?.copyWith(
+                  color: AppColors.grey,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              obscuringCharacter: '*',
+              textInputAction: TextInputAction.done,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              onChanged: onChanged,
+              validator: validator,
+     
+              keyboardType: inputType,
+              inputFormatters: inputFormatters,
+              maxLength: maxLength,
+              textCapitalization: TextCapitalization.none,
+              readOnly: readOnly,
+              minLines: minLines,
+              maxLines: minLines,
+              autocorrect: false,
+              autofocus: autofocus,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
