@@ -33,17 +33,17 @@ class DocStatusWidget extends StatelessWidget {
     );
   }
 
-  Color toColor() => switch (status.trim()) {
-    'Submitted' => const Color(0xFFEAFFF6),
-    'Draft' => const Color(0xFFE3F2FE),
-    'Rejected' => const Color(0xFFC16D67),
+ Color toColor() => switch(status.trim()) {
+    'Submitted' => const Color(0xFFEDF6FD),
+    'Completed'|| 'Rejected' => const Color(0xFFe4f5e9),
+    'Draft' || 'Cancelled' => const Color(0xFFFFF0F0),
     String() => AppColors.black,
   };
 
-  Color toTextColor() => switch (status.trim()) {
-    'Submitted' => const Color(0xFF35C285),
-    'Draft' => const Color(0xFF0087FF),
-    'Rejected' => const Color(0xFFFFE2DA),
+  Color toTextColor() => switch(status.trim()) {
+    'Submitted' => const Color(0xFF1172C9),
+    'Completed' || 'Rejected' => const Color(0xFF16794c),
+    'Draft' || 'Cancelled' => const Color(0xFFFE6061),
     String() => AppColors.white,
   };
 }

@@ -12,8 +12,7 @@ part of 'logged_in_user.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 LoggedInUser _$LoggedInUserFromJson(Map<String, dynamic> json) {
   return _LoggedInUser.fromJson(json);
@@ -54,6 +53,8 @@ mixin _$LoggedInUser {
   String? get mobileNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'otp_verified')
   bool? get isOtpVerfied => throw _privateConstructorUsedError;
+  @JsonKey(name: 'role_status')
+  UserRoles? get roles => throw _privateConstructorUsedError;
 
   /// Serializes this LoggedInUser to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,32 +69,33 @@ mixin _$LoggedInUser {
 /// @nodoc
 abstract class $LoggedInUserCopyWith<$Res> {
   factory $LoggedInUserCopyWith(
-    LoggedInUser value,
-    $Res Function(LoggedInUser) then,
-  ) = _$LoggedInUserCopyWithImpl<$Res, LoggedInUser>;
+          LoggedInUser value, $Res Function(LoggedInUser) then) =
+      _$LoggedInUserCopyWithImpl<$Res, LoggedInUser>;
   @useResult
-  $Res call({
-    String name,
-    String username,
-    @JsonKey(name: 'first_name', defaultValue: '') String? firstName,
-    @JsonKey(name: 'last_name', defaultValue: '') String? lastName,
-    @JsonKey(name: 'api_key', defaultValue: '') String apiKey,
-    @JsonKey(name: 'api_secret', defaultValue: '') String apiSecret,
-    @JsonKey(name: 'email', defaultValue: '') String? email,
-    @JsonKey(defaultValue: '') String? password,
-    @JsonKey(name: 'role_profile_name', defaultValue: '')
-    String? roleProfileName,
-    @JsonKey(name: 'user_type') String? userType,
-    @JsonKey(name: 'gender') String? gender,
-    @JsonKey(name: 'birth_date') String? bithDate,
-    @JsonKey(name: 'depo_name') String? depoName,
-    @JsonKey(name: 'full_name') String? fullName,
-    String? phone,
-    String? location,
-    String? bio,
-    @JsonKey(name: 'mobile_no') String? mobileNo,
-    @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
-  });
+  $Res call(
+      {String name,
+      String username,
+      @JsonKey(name: 'first_name', defaultValue: '') String? firstName,
+      @JsonKey(name: 'last_name', defaultValue: '') String? lastName,
+      @JsonKey(name: 'api_key', defaultValue: '') String apiKey,
+      @JsonKey(name: 'api_secret', defaultValue: '') String apiSecret,
+      @JsonKey(name: 'email', defaultValue: '') String? email,
+      @JsonKey(defaultValue: '') String? password,
+      @JsonKey(name: 'role_profile_name', defaultValue: '')
+      String? roleProfileName,
+      @JsonKey(name: 'user_type') String? userType,
+      @JsonKey(name: 'gender') String? gender,
+      @JsonKey(name: 'birth_date') String? bithDate,
+      @JsonKey(name: 'depo_name') String? depoName,
+      @JsonKey(name: 'full_name') String? fullName,
+      String? phone,
+      String? location,
+      String? bio,
+      @JsonKey(name: 'mobile_no') String? mobileNo,
+      @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
+      @JsonKey(name: 'role_status') UserRoles? roles});
+
+  $UserRolesCopyWith<$Res>? get roles;
 }
 
 /// @nodoc
@@ -130,107 +132,104 @@ class _$LoggedInUserCopyWithImpl<$Res, $Val extends LoggedInUser>
     Object? bio = freezed,
     Object? mobileNo = freezed,
     Object? isOtpVerfied = freezed,
+    Object? roles = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            name:
-                null == name
-                    ? _value.name
-                    : name // ignore: cast_nullable_to_non_nullable
-                        as String,
-            username:
-                null == username
-                    ? _value.username
-                    : username // ignore: cast_nullable_to_non_nullable
-                        as String,
-            firstName:
-                freezed == firstName
-                    ? _value.firstName
-                    : firstName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            lastName:
-                freezed == lastName
-                    ? _value.lastName
-                    : lastName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            apiKey:
-                null == apiKey
-                    ? _value.apiKey
-                    : apiKey // ignore: cast_nullable_to_non_nullable
-                        as String,
-            apiSecret:
-                null == apiSecret
-                    ? _value.apiSecret
-                    : apiSecret // ignore: cast_nullable_to_non_nullable
-                        as String,
-            email:
-                freezed == email
-                    ? _value.email
-                    : email // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            password:
-                freezed == password
-                    ? _value.password
-                    : password // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            roleProfileName:
-                freezed == roleProfileName
-                    ? _value.roleProfileName
-                    : roleProfileName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            userType:
-                freezed == userType
-                    ? _value.userType
-                    : userType // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            gender:
-                freezed == gender
-                    ? _value.gender
-                    : gender // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            bithDate:
-                freezed == bithDate
-                    ? _value.bithDate
-                    : bithDate // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            depoName:
-                freezed == depoName
-                    ? _value.depoName
-                    : depoName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            fullName:
-                freezed == fullName
-                    ? _value.fullName
-                    : fullName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            phone:
-                freezed == phone
-                    ? _value.phone
-                    : phone // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            location:
-                freezed == location
-                    ? _value.location
-                    : location // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            bio:
-                freezed == bio
-                    ? _value.bio
-                    : bio // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            mobileNo:
-                freezed == mobileNo
-                    ? _value.mobileNo
-                    : mobileNo // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            isOtpVerfied:
-                freezed == isOtpVerfied
-                    ? _value.isOtpVerfied
-                    : isOtpVerfied // ignore: cast_nullable_to_non_nullable
-                        as bool?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: freezed == lastName
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      apiKey: null == apiKey
+          ? _value.apiKey
+          : apiKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      apiSecret: null == apiSecret
+          ? _value.apiSecret
+          : apiSecret // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
+      roleProfileName: freezed == roleProfileName
+          ? _value.roleProfileName
+          : roleProfileName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gender: freezed == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bithDate: freezed == bithDate
+          ? _value.bithDate
+          : bithDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      depoName: freezed == depoName
+          ? _value.depoName
+          : depoName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      location: freezed == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      mobileNo: freezed == mobileNo
+          ? _value.mobileNo
+          : mobileNo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isOtpVerfied: freezed == isOtpVerfied
+          ? _value.isOtpVerfied
+          : isOtpVerfied // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      roles: freezed == roles
+          ? _value.roles
+          : roles // ignore: cast_nullable_to_non_nullable
+              as UserRoles?,
+    ) as $Val);
+  }
+
+  /// Create a copy of LoggedInUser
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserRolesCopyWith<$Res>? get roles {
+    if (_value.roles == null) {
+      return null;
+    }
+
+    return $UserRolesCopyWith<$Res>(_value.roles!, (value) {
+      return _then(_value.copyWith(roles: value) as $Val);
+    });
   }
 }
 
@@ -238,33 +237,35 @@ class _$LoggedInUserCopyWithImpl<$Res, $Val extends LoggedInUser>
 abstract class _$$LoggedInUserImplCopyWith<$Res>
     implements $LoggedInUserCopyWith<$Res> {
   factory _$$LoggedInUserImplCopyWith(
-    _$LoggedInUserImpl value,
-    $Res Function(_$LoggedInUserImpl) then,
-  ) = __$$LoggedInUserImplCopyWithImpl<$Res>;
+          _$LoggedInUserImpl value, $Res Function(_$LoggedInUserImpl) then) =
+      __$$LoggedInUserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String name,
-    String username,
-    @JsonKey(name: 'first_name', defaultValue: '') String? firstName,
-    @JsonKey(name: 'last_name', defaultValue: '') String? lastName,
-    @JsonKey(name: 'api_key', defaultValue: '') String apiKey,
-    @JsonKey(name: 'api_secret', defaultValue: '') String apiSecret,
-    @JsonKey(name: 'email', defaultValue: '') String? email,
-    @JsonKey(defaultValue: '') String? password,
-    @JsonKey(name: 'role_profile_name', defaultValue: '')
-    String? roleProfileName,
-    @JsonKey(name: 'user_type') String? userType,
-    @JsonKey(name: 'gender') String? gender,
-    @JsonKey(name: 'birth_date') String? bithDate,
-    @JsonKey(name: 'depo_name') String? depoName,
-    @JsonKey(name: 'full_name') String? fullName,
-    String? phone,
-    String? location,
-    String? bio,
-    @JsonKey(name: 'mobile_no') String? mobileNo,
-    @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
-  });
+  $Res call(
+      {String name,
+      String username,
+      @JsonKey(name: 'first_name', defaultValue: '') String? firstName,
+      @JsonKey(name: 'last_name', defaultValue: '') String? lastName,
+      @JsonKey(name: 'api_key', defaultValue: '') String apiKey,
+      @JsonKey(name: 'api_secret', defaultValue: '') String apiSecret,
+      @JsonKey(name: 'email', defaultValue: '') String? email,
+      @JsonKey(defaultValue: '') String? password,
+      @JsonKey(name: 'role_profile_name', defaultValue: '')
+      String? roleProfileName,
+      @JsonKey(name: 'user_type') String? userType,
+      @JsonKey(name: 'gender') String? gender,
+      @JsonKey(name: 'birth_date') String? bithDate,
+      @JsonKey(name: 'depo_name') String? depoName,
+      @JsonKey(name: 'full_name') String? fullName,
+      String? phone,
+      String? location,
+      String? bio,
+      @JsonKey(name: 'mobile_no') String? mobileNo,
+      @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
+      @JsonKey(name: 'role_status') UserRoles? roles});
+
+  @override
+  $UserRolesCopyWith<$Res>? get roles;
 }
 
 /// @nodoc
@@ -272,9 +273,8 @@ class __$$LoggedInUserImplCopyWithImpl<$Res>
     extends _$LoggedInUserCopyWithImpl<$Res, _$LoggedInUserImpl>
     implements _$$LoggedInUserImplCopyWith<$Res> {
   __$$LoggedInUserImplCopyWithImpl(
-    _$LoggedInUserImpl _value,
-    $Res Function(_$LoggedInUserImpl) _then,
-  ) : super(_value, _then);
+      _$LoggedInUserImpl _value, $Res Function(_$LoggedInUserImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of LoggedInUser
   /// with the given fields replaced by the non-null parameter values.
@@ -300,133 +300,119 @@ class __$$LoggedInUserImplCopyWithImpl<$Res>
     Object? bio = freezed,
     Object? mobileNo = freezed,
     Object? isOtpVerfied = freezed,
+    Object? roles = freezed,
   }) {
-    return _then(
-      _$LoggedInUserImpl(
-        name:
-            null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                    as String,
-        username:
-            null == username
-                ? _value.username
-                : username // ignore: cast_nullable_to_non_nullable
-                    as String,
-        firstName:
-            freezed == firstName
-                ? _value.firstName
-                : firstName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        lastName:
-            freezed == lastName
-                ? _value.lastName
-                : lastName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        apiKey:
-            null == apiKey
-                ? _value.apiKey
-                : apiKey // ignore: cast_nullable_to_non_nullable
-                    as String,
-        apiSecret:
-            null == apiSecret
-                ? _value.apiSecret
-                : apiSecret // ignore: cast_nullable_to_non_nullable
-                    as String,
-        email:
-            freezed == email
-                ? _value.email
-                : email // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        password:
-            freezed == password
-                ? _value.password
-                : password // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        roleProfileName:
-            freezed == roleProfileName
-                ? _value.roleProfileName
-                : roleProfileName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        userType:
-            freezed == userType
-                ? _value.userType
-                : userType // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        gender:
-            freezed == gender
-                ? _value.gender
-                : gender // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        bithDate:
-            freezed == bithDate
-                ? _value.bithDate
-                : bithDate // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        depoName:
-            freezed == depoName
-                ? _value.depoName
-                : depoName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        fullName:
-            freezed == fullName
-                ? _value.fullName
-                : fullName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        phone:
-            freezed == phone
-                ? _value.phone
-                : phone // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        location:
-            freezed == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        bio:
-            freezed == bio
-                ? _value.bio
-                : bio // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        mobileNo:
-            freezed == mobileNo
-                ? _value.mobileNo
-                : mobileNo // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        isOtpVerfied:
-            freezed == isOtpVerfied
-                ? _value.isOtpVerfied
-                : isOtpVerfied // ignore: cast_nullable_to_non_nullable
-                    as bool?,
-      ),
-    );
+    return _then(_$LoggedInUserImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: freezed == lastName
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      apiKey: null == apiKey
+          ? _value.apiKey
+          : apiKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      apiSecret: null == apiSecret
+          ? _value.apiSecret
+          : apiSecret // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
+      roleProfileName: freezed == roleProfileName
+          ? _value.roleProfileName
+          : roleProfileName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gender: freezed == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bithDate: freezed == bithDate
+          ? _value.bithDate
+          : bithDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      depoName: freezed == depoName
+          ? _value.depoName
+          : depoName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      location: freezed == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      mobileNo: freezed == mobileNo
+          ? _value.mobileNo
+          : mobileNo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isOtpVerfied: freezed == isOtpVerfied
+          ? _value.isOtpVerfied
+          : isOtpVerfied // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      roles: freezed == roles
+          ? _value.roles
+          : roles // ignore: cast_nullable_to_non_nullable
+              as UserRoles?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LoggedInUserImpl extends _LoggedInUser {
-  const _$LoggedInUserImpl({
-    required this.name,
-    required this.username,
-    @JsonKey(name: 'first_name', defaultValue: '') this.firstName,
-    @JsonKey(name: 'last_name', defaultValue: '') this.lastName,
-    @JsonKey(name: 'api_key', defaultValue: '') required this.apiKey,
-    @JsonKey(name: 'api_secret', defaultValue: '') required this.apiSecret,
-    @JsonKey(name: 'email', defaultValue: '') this.email,
-    @JsonKey(defaultValue: '') this.password,
-    @JsonKey(name: 'role_profile_name', defaultValue: '') this.roleProfileName,
-    @JsonKey(name: 'user_type') this.userType,
-    @JsonKey(name: 'gender') this.gender,
-    @JsonKey(name: 'birth_date') this.bithDate,
-    @JsonKey(name: 'depo_name') this.depoName,
-    @JsonKey(name: 'full_name') required this.fullName,
-    this.phone,
-    this.location,
-    this.bio,
-    @JsonKey(name: 'mobile_no') this.mobileNo,
-    @JsonKey(name: 'otp_verified') this.isOtpVerfied,
-  }) : super._();
+  const _$LoggedInUserImpl(
+      {required this.name,
+      required this.username,
+      @JsonKey(name: 'first_name', defaultValue: '') this.firstName,
+      @JsonKey(name: 'last_name', defaultValue: '') this.lastName,
+      @JsonKey(name: 'api_key', defaultValue: '') required this.apiKey,
+      @JsonKey(name: 'api_secret', defaultValue: '') required this.apiSecret,
+      @JsonKey(name: 'email', defaultValue: '') this.email,
+      @JsonKey(defaultValue: '') this.password,
+      @JsonKey(name: 'role_profile_name', defaultValue: '')
+      this.roleProfileName,
+      @JsonKey(name: 'user_type') this.userType,
+      @JsonKey(name: 'gender') this.gender,
+      @JsonKey(name: 'birth_date') this.bithDate,
+      @JsonKey(name: 'depo_name') this.depoName,
+      @JsonKey(name: 'full_name') required this.fullName,
+      this.phone,
+      this.location,
+      this.bio,
+      @JsonKey(name: 'mobile_no') this.mobileNo,
+      @JsonKey(name: 'otp_verified') this.isOtpVerfied,
+      @JsonKey(name: 'role_status') this.roles})
+      : super._();
 
   factory _$LoggedInUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoggedInUserImplFromJson(json);
@@ -483,10 +469,13 @@ class _$LoggedInUserImpl extends _LoggedInUser {
   @override
   @JsonKey(name: 'otp_verified')
   final bool? isOtpVerfied;
+  @override
+  @JsonKey(name: 'role_status')
+  final UserRoles? roles;
 
   @override
   String toString() {
-    return 'LoggedInUser(name: $name, username: $username, firstName: $firstName, lastName: $lastName, apiKey: $apiKey, apiSecret: $apiSecret, email: $email, password: $password, roleProfileName: $roleProfileName, userType: $userType, gender: $gender, bithDate: $bithDate, depoName: $depoName, fullName: $fullName, phone: $phone, location: $location, bio: $bio, mobileNo: $mobileNo, isOtpVerfied: $isOtpVerfied)';
+    return 'LoggedInUser(name: $name, username: $username, firstName: $firstName, lastName: $lastName, apiKey: $apiKey, apiSecret: $apiSecret, email: $email, password: $password, roleProfileName: $roleProfileName, userType: $userType, gender: $gender, bithDate: $bithDate, depoName: $depoName, fullName: $fullName, phone: $phone, location: $location, bio: $bio, mobileNo: $mobileNo, isOtpVerfied: $isOtpVerfied, roles: $roles)';
   }
 
   @override
@@ -525,33 +514,35 @@ class _$LoggedInUserImpl extends _LoggedInUser {
             (identical(other.mobileNo, mobileNo) ||
                 other.mobileNo == mobileNo) &&
             (identical(other.isOtpVerfied, isOtpVerfied) ||
-                other.isOtpVerfied == isOtpVerfied));
+                other.isOtpVerfied == isOtpVerfied) &&
+            (identical(other.roles, roles) || other.roles == roles));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
-    runtimeType,
-    name,
-    username,
-    firstName,
-    lastName,
-    apiKey,
-    apiSecret,
-    email,
-    password,
-    roleProfileName,
-    userType,
-    gender,
-    bithDate,
-    depoName,
-    fullName,
-    phone,
-    location,
-    bio,
-    mobileNo,
-    isOtpVerfied,
-  ]);
+        runtimeType,
+        name,
+        username,
+        firstName,
+        lastName,
+        apiKey,
+        apiSecret,
+        email,
+        password,
+        roleProfileName,
+        userType,
+        gender,
+        bithDate,
+        depoName,
+        fullName,
+        phone,
+        location,
+        bio,
+        mobileNo,
+        isOtpVerfied,
+        roles
+      ]);
 
   /// Create a copy of LoggedInUser
   /// with the given fields replaced by the non-null parameter values.
@@ -563,34 +554,37 @@ class _$LoggedInUserImpl extends _LoggedInUser {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoggedInUserImplToJson(this);
+    return _$$LoggedInUserImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _LoggedInUser extends LoggedInUser {
-  const factory _LoggedInUser({
-    required final String name,
-    required final String username,
-    @JsonKey(name: 'first_name', defaultValue: '') final String? firstName,
-    @JsonKey(name: 'last_name', defaultValue: '') final String? lastName,
-    @JsonKey(name: 'api_key', defaultValue: '') required final String apiKey,
-    @JsonKey(name: 'api_secret', defaultValue: '')
-    required final String apiSecret,
-    @JsonKey(name: 'email', defaultValue: '') final String? email,
-    @JsonKey(defaultValue: '') final String? password,
-    @JsonKey(name: 'role_profile_name', defaultValue: '')
-    final String? roleProfileName,
-    @JsonKey(name: 'user_type') final String? userType,
-    @JsonKey(name: 'gender') final String? gender,
-    @JsonKey(name: 'birth_date') final String? bithDate,
-    @JsonKey(name: 'depo_name') final String? depoName,
-    @JsonKey(name: 'full_name') required final String? fullName,
-    final String? phone,
-    final String? location,
-    final String? bio,
-    @JsonKey(name: 'mobile_no') final String? mobileNo,
-    @JsonKey(name: 'otp_verified') final bool? isOtpVerfied,
-  }) = _$LoggedInUserImpl;
+  const factory _LoggedInUser(
+      {required final String name,
+      required final String username,
+      @JsonKey(name: 'first_name', defaultValue: '') final String? firstName,
+      @JsonKey(name: 'last_name', defaultValue: '') final String? lastName,
+      @JsonKey(name: 'api_key', defaultValue: '') required final String apiKey,
+      @JsonKey(name: 'api_secret', defaultValue: '')
+      required final String apiSecret,
+      @JsonKey(name: 'email', defaultValue: '') final String? email,
+      @JsonKey(defaultValue: '') final String? password,
+      @JsonKey(name: 'role_profile_name', defaultValue: '')
+      final String? roleProfileName,
+      @JsonKey(name: 'user_type') final String? userType,
+      @JsonKey(name: 'gender') final String? gender,
+      @JsonKey(name: 'birth_date') final String? bithDate,
+      @JsonKey(name: 'depo_name') final String? depoName,
+      @JsonKey(name: 'full_name') required final String? fullName,
+      final String? phone,
+      final String? location,
+      final String? bio,
+      @JsonKey(name: 'mobile_no') final String? mobileNo,
+      @JsonKey(name: 'otp_verified') final bool? isOtpVerfied,
+      @JsonKey(name: 'role_status')
+      final UserRoles? roles}) = _$LoggedInUserImpl;
   const _LoggedInUser._() : super._();
 
   factory _LoggedInUser.fromJson(Map<String, dynamic> json) =
@@ -648,6 +642,9 @@ abstract class _LoggedInUser extends LoggedInUser {
   @override
   @JsonKey(name: 'otp_verified')
   bool? get isOtpVerfied;
+  @override
+  @JsonKey(name: 'role_status')
+  UserRoles? get roles;
 
   /// Create a copy of LoggedInUser
   /// with the given fields replaced by the non-null parameter values.

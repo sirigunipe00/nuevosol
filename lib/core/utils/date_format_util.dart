@@ -15,6 +15,7 @@ abstract class _DateTimeFormats {
   static final toYYYYmmDDHHmmss = DateFormat('yyyy-MM-dd HH:mm:ss');
   static final ddMMyyyyHHmmss = DateFormat('dd-MM-yyyy HH:mm:ss');
   static final hhmmss = DateFormat('HH:mm:ss');
+  static final dateTimeLabel = DateFormat('MMM d, h:mm a');
   static final currentTimeFormat = DateFormat('dd-MMM-yyyy hh:mm a');
 }
 abstract class DateFormatUtil {
@@ -34,6 +35,7 @@ abstract class DateFormatUtil {
   static String friendlyFormat(DateTime dateTime) => _DateTimeFormats.friendlyFormat.format(dateTime);
   static String hhmmss(DateTime dateTime) => _DateTimeFormats.hhmmss.format(dateTime);
   static String ddMMyyyyHHmmss(DateTime dateTime) => _DateTimeFormats.ddMMyyyyHHmmss.format(dateTime);
+    static String dateTimeLabel(DateTime dateTime) => _DateTimeFormats.dateTimeLabel.format(dateTime);
    static String ddMMyyyyFromStr(String date) {
     try {
       final dateTime = DateTime.parse(date);

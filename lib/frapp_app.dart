@@ -4,83 +4,66 @@ import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/auth/presentation/bloc/auth/auth_cubit.dart';
 import 'package:nuevosol/features/auth/presentation/ui/sign_in/sign_in_cubit.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter_cubit.dart';
+import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/gate_exit/presentation/bloc/gate_exit_filter_cubit.dart';
-import 'package:nuevosol/features/logistic_request/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/logistic_request/presentation/bloc/logistic_planning_filter_cubit.dart';
-import 'package:nuevosol/features/transport_confirmation/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/transport_confirmation/presentation/bloc/transport_filter_cubit.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/bloc/vehicle_reporting_filtercubit.dart';
+import 'package:nuevosol/features/gate_exit/presentation/bloc/gate_exit_filter.dart';
 import 'package:nuevosol/styles/material_theme.dart';
 
-class ShaktiHormann extends StatelessWidget {
-  const ShaktiHormann({super.key});
+
+class FrappeApp extends StatelessWidget {
+  const FrappeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => $sl.get<AuthCubit>()..authCheckRequested()),
-        BlocProvider(create: (_) => $sl.get<SignInCubit>()),
+        BlocProvider<AuthCubit>(
+          create: (_) => $sl.get<AuthCubit>()..authCheckRequested()),
+        BlocProvider<SignInCubit>(create: (_) => $sl.get<SignInCubit>()),
         BlocProvider(create: (_) => GateEntryFilterCubit()),
-        BlocProvider(create: (_)=> GateExitFilterCubit()),
-        BlocProvider(create: (_)=> LogisticPlanningFilterCubit()),
-        BlocProvider(create: (_)=> TransportFilterCubit()),
-        BlocProvider(create: (_)=> VehicleReportingFilterCubit()),
-
-
+        BlocProvider(create: (_) => GateExitFilterCubit()),
+      
         BlocProvider(
-          create: (_) => GateEntryBlocProvider.get().fetchGateEntries(),
-        ),
-         BlocProvider(
-          create: (_) => GateExitBlocProvider.get().fetchGateExit(),
-        ),
+          create: (_) => GateEntryBlocProvider.get().fetchGateEntries()),
         BlocProvider(
-          create: (_) => LogisticPlanningBlocProvider.get().fetchLogistics(),
-        ),
-         BlocProvider(
-          create: (_) => TransportCnfmBlocProvider.get().fetchTransport(),
-        ),
-         BlocProvider(
-          create: (_) => VehicleBlocProvider.get().fetchVehicle(),
-        ),
+          create: (_) => GateExitBlocProvider.get().fetchGateExit()),
+        BlocProvider(
+          create: (_) => GateEntryBlocProvider.get().fetchPONumbers()),
+        BlocProvider(create: (_) => GateExitBlocProvider.get().salesInvoiceList()),
+        // BlocProvider(create: (_) => DispatchBlocProvider.get().fetchGaylords()),
       ],
-      child: BlocConsumer<AuthCubit, AuthState>(
+      child: BlocListener<AuthCubit, AuthState>(
         listener: (_, state) {
-          final routerCtxt = AppRouterConfig.parentNavigatorKey.currentContext;
-          if (routerCtxt == null) return;
+          final routerCtxt = AppRouterConfig.parentNavigatorKey.currentContext!;
           state.maybeWhen(
+            orElse: () => AppRoute.initial.go(routerCtxt),
+            // loading: () => AppRoute.initial.go(routerCtxt),
             authenticated: () {
               final filters = Pair(StringUtils.docStatusInt('Draft'), null);
-              routerCtxt.cubit<GateEntriesCubit>().fetchInitial(filters);
-              routerCtxt.cubit<GateExitCubit>().fetchInitial(filters);
-              routerCtxt.cubit<LogisticPlanningCubit>().fetchInitial(filters);
-              routerCtxt.cubit<TransportCubit>().fetchInitial(filters);
-              routerCtxt.cubit<VehicleReportingCubit>().fetchInitial(filters);
 
-
+              routerCtxt
+                ..cubit<GateEntriesCubit>().fetchInitial(filters)
+                ..cubit<GateExitCubit>().fetchInitial(filters)
+                ..cubit<PurchaseOrders>().request('')
+                ..cubit<SalesInvoiceList>().request('');
+                // ..cubit<GateRegistrationsCubit>().fetchInitial(PageListFilters.initial())
+                // ..cubit<DispatchCubit>().fetchInitial(PageListFilters.initial())
+                // ..cubit<PoApprovalCubit>().fetchInitial(PageListFilters.initial());
               AppRoute.home.go(routerCtxt);
             },
-            unAuthenticated: () {
-              AppRoute.login.go(routerCtxt);
-            },
-            orElse: () {
-              AppRoute.login.go(routerCtxt);
-            },
+            unAuthenticated: () => AppRoute.login.go(routerCtxt),
           );
         },
-        builder: (_, state) {
-           return MaterialApp.router(
-            title: 'Shakti Hormann',
+        
+          child: MaterialApp.router(
+            title: 'Nuevosol',
             theme: AppMaterialTheme.lightTheme,
             darkTheme: AppMaterialTheme.lightTheme,
             routerConfig: AppRouterConfig.router,
             debugShowCheckedModeBanner: false,
-          );
+
           
-        },
+        ),
       ),
     );
   }

@@ -28,7 +28,29 @@ class AppDialog {
         ),
       );
 
-  static Future<T?> showErrorDialog<T>(
+  // static Future<T?> showErrorDialog<T>(
+  //   BuildContext context, {
+  //   String? title,
+  //   required String content,
+  //   required VoidCallback onTapDismiss,
+  //   bool barrierDismissible = true,
+  //   String buttonText = 'Cancel',
+  // }) async =>
+  //     await showGeneralDialog<T?>(
+  //       context: context,
+  //       barrierLabel: 'ErrorDialog',
+  //       useRootNavigator: true,
+  //       barrierDismissible: barrierDismissible,
+  //       pageBuilder: (_, __, ___) => DialogWidget(
+  //         title: title,
+  //         content: content,
+  //         buttonText: buttonText,
+  //         onTapDismiss: onTapDismiss,
+  //         dialogType: DialogType.error,
+  //       ),
+  //     );
+
+      static Future<T?> showErrorDialog<T>(
     BuildContext context, {
     String? title,
     required String content,
@@ -41,12 +63,12 @@ class AppDialog {
         barrierLabel: 'ErrorDialog',
         useRootNavigator: true,
         barrierDismissible: barrierDismissible,
-        pageBuilder: (_, __, ___) => DialogWidget(
+        pageBuilder: (_, __, ___) => ErrorContent(
           title: title,
           content: content,
           buttonText: buttonText,
           onTapDismiss: onTapDismiss,
-          dialogType: DialogType.error,
+          imagePath: 'assets/error.svg',
         ),
       );
 
@@ -56,16 +78,16 @@ class AppDialog {
     required String content,
     required VoidCallback onTapDismiss,
     String buttonText = 'Thank you',
-    bool barrierDismissible = true,
+    // bool barrierDismissible = true,
   }) async =>
       await showGeneralDialog<T>(
         context: context,
         barrierLabel: 'SuccessDialog',
         useRootNavigator: true,
-        barrierDismissible: barrierDismissible,
+        barrierDismissible: false,
         pageBuilder: (_, __, ___) => SuccessContent(
           title: title,
-          imagePath: 'assets/images/success.png',
+          imagePath: 'assets/succes.svg',
           content: content,
           buttonText: buttonText,
           onTapDismiss: onTapDismiss

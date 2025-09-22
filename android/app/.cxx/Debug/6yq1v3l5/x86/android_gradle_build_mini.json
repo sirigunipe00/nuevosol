@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/sai/fvm/versions/3.29.3/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/sai/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/sai/Desktop/Flutter Projects Keerthi/nuevosol/android/app/.cxx/Debug/6yq1v3l5/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/sai/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/sai/Desktop/Flutter Projects Keerthi/nuevosol/android/app/.cxx/Debug/6yq1v3l5/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

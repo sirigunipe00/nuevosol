@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/styles/app_color.dart';
 
-class GoBackIconBtn extends StatelessWidget {
-  const GoBackIconBtn({super.key});
+class GoBackWidget extends StatelessWidget {
+  const GoBackWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: InkWell(
-        onTap: context.close,
-        child: const CircleAvatar(
-          backgroundColor: AppColors.white,
-          radius: 16,
-          child: Icon(Icons.arrow_back, color: AppColors.liteyellow, size: 20),
-        ),
+    return InkWell(
+      onTap: context.close,
+      child: const CircleAvatar(
+        radius: 16,
+        backgroundColor: AppColors.chimneySweep,
+        child: Icon(Icons.arrow_back, color: AppColors.white, size: 20),
       ),
     );
   }

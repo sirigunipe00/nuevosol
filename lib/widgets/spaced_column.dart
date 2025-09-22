@@ -29,20 +29,22 @@ class SpacedColumn extends StatelessWidget {
 
     return Padding(
       padding: margin ?? EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: crossAxisAlignment,
-        mainAxisAlignment: mainAxisAlignment,
-        mainAxisSize: mainAxisSize,
-        children: [
-          // children.expand((widget) => [widget, spacerWidget, if(divider != null) divider!]).toList(),
-          for(int i=0; i< children.length; i++)...[
-            children[i],
-            if(i != children.length - 1 && divider != null && !borderException.contains(i))...[
-              divider!,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisAlignment: mainAxisAlignment,
+          mainAxisSize: mainAxisSize,
+          children: [
+            // children.expand((widget) => [widget, spacerWidget, if(divider != null) divider!]).toList(),
+            for(int i=0; i< children.length; i++)...[
+              children[i],
+              if(i != children.length - 1 && divider != null && !borderException.contains(i))...[
+                divider!,
+              ],
+              spacerWidget,
             ],
-            spacerWidget,
-          ],
-        ]
+          ]
+        ),
       ),
     );
   }

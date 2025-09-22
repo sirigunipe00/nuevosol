@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/styles/app_color.dart';
+import 'package:nuevosol/styles/app_text_styles.dart';
 import 'package:nuevosol/widgets/caption_text.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 
@@ -22,11 +22,8 @@ class InputField extends StatelessWidget {
     this.minLines,
     this.maxLines,
     this.inputFormatters,
-    this.focusNode,
-    this.color = AppColors.black,
     this.isRequired = false,
     TextEditingController? controller,
-    this.validator,
   }) {
     this.controller = controller ?? TextEditingController();
     if (initialValue?.isNotEmpty == true) {
@@ -43,77 +40,75 @@ class InputField extends StatelessWidget {
   final bool readOnly;
   final String? hintText;
   final Widget? suffixIcon;
-  final FocusNode? focusNode;
   final Color? borderColor;
-  final String? Function(String?)? validator;
   late final TextEditingController? controller;
   final bool autofocus;
   final bool isRequired;
-  final Color color;
   final int? minLines;
-  final int? maxLines;
+   final int? maxLines;
   final List<TextInputFormatter>? inputFormatters;
+  
+  
 
   @override
   Widget build(BuildContext context) {
-   
-    return Focus(
-      focusNode: focusNode,
-      child: SpacedColumn(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        defaultHeight: 4.0,
-        children: [
-          CaptionText(title: title, isRequired: isRequired, color: color),
-          Container(
-            margin: EdgeInsets.zero,
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+    final textFieldBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: const BorderSide(color: AppColors.black, width: 0.8),
+    );
 
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: TextFormField(
-              style:const TextStyle(color: Colors.black,fontSize: 14),
-              controller: controller,
-
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                suffixIcon: suffixIcon,
-                counterText: '',
-                hintText: hintText,
-                hintStyle: context.textTheme.labelSmall?.copyWith(
-                  color: AppColors.grey,
-                  fontFamily: 'Urbanist',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
+    return SpacedColumn(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      defaultHeight: 4.0,
+      children: [
+        CaptionText(title: title, isRequired: isRequired),
+        Container(
+          margin: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppColors.white),
+            boxShadow: [
+              BoxShadow(
+                color: borderColor ?? AppColors.white,
+                blurRadius: 2,
+                offset: const Offset(2, 2)
               ),
-              obscuringCharacter: '*',
-              textInputAction: TextInputAction.done,
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              onChanged: onChanged,
-              validator: validator,
-     
-              keyboardType: inputType,
-              inputFormatters: inputFormatters,
-              maxLength: maxLength,
-              textCapitalization: TextCapitalization.none,
-              readOnly: readOnly,
-              minLines: minLines,
-              maxLines: minLines,
-              autocorrect: false,
-              autofocus: autofocus,
-            ),
+            ],
+            borderRadius: BorderRadius.circular(16.0),
           ),
-        ],
-      ),
+          child: TextField(
+            style:  AppTextStyles.textEntryStyle(context).copyWith(color: Colors.grey[800]),
+
+            controller: controller,
+            decoration: InputDecoration(
+              border: textFieldBorder,
+              enabledBorder: textFieldBorder,
+              focusedBorder: textFieldBorder,
+              contentPadding: const EdgeInsets.all(16.0),
+              suffixIcon: suffixIcon,
+              counterText: '',
+              filled: readOnly, 
+              fillColor: readOnly ? AppColors.himlayaPeeks : Colors.white,
+
+            ),
+            obscuringCharacter: '*',
+            textInputAction: TextInputAction.done,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            onChanged: onChanged,
+            onSubmitted: onSubmitted,
+            keyboardType: inputType,
+            inputFormatters: inputFormatters,
+            maxLength: maxLength,
+            textCapitalization: TextCapitalization.none,
+            readOnly: readOnly,
+            minLines: minLines,
+            maxLines: minLines,
+            autocorrect: false,
+            autofocus: autofocus,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nuevosol/core/core.dart';
-import 'package:nuevosol/styles/app_icons.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 

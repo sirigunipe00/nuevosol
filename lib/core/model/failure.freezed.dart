@@ -12,8 +12,7 @@ part of 'failure.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Failure {
@@ -56,40 +55,32 @@ class _$FailureCopyWithImpl<$Res, $Val extends Failure>
     Object? title = freezed,
     Object? status = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            error:
-                null == error
-                    ? _value.error
-                    : error // ignore: cast_nullable_to_non_nullable
-                        as String,
-            header:
-                freezed == header
-                    ? _value.header
-                    : header // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            title:
-                freezed == title
-                    ? _value.title
-                    : title // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            status:
-                freezed == status
-                    ? _value.status
-                    : status // ignore: cast_nullable_to_non_nullable
-                        as int?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+      header: freezed == header
+          ? _value.header
+          : header // ignore: cast_nullable_to_non_nullable
+              as String?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$FailureImplCopyWith<$Res> implements $FailureCopyWith<$Res> {
   factory _$$FailureImplCopyWith(
-    _$FailureImpl value,
-    $Res Function(_$FailureImpl) then,
-  ) = __$$FailureImplCopyWithImpl<$Res>;
+          _$FailureImpl value, $Res Function(_$FailureImpl) then) =
+      __$$FailureImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String error, String? header, String? title, int? status});
@@ -100,9 +91,8 @@ class __$$FailureImplCopyWithImpl<$Res>
     extends _$FailureCopyWithImpl<$Res, _$FailureImpl>
     implements _$$FailureImplCopyWith<$Res> {
   __$$FailureImplCopyWithImpl(
-    _$FailureImpl _value,
-    $Res Function(_$FailureImpl) _then,
-  ) : super(_value, _then);
+      _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -114,42 +104,32 @@ class __$$FailureImplCopyWithImpl<$Res>
     Object? title = freezed,
     Object? status = freezed,
   }) {
-    return _then(
-      _$FailureImpl(
-        error:
-            null == error
-                ? _value.error
-                : error // ignore: cast_nullable_to_non_nullable
-                    as String,
-        header:
-            freezed == header
-                ? _value.header
-                : header // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        title:
-            freezed == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        status:
-            freezed == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                    as int?,
-      ),
-    );
+    return _then(_$FailureImpl(
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+      header: freezed == header
+          ? _value.header
+          : header // ignore: cast_nullable_to_non_nullable
+              as String?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
   }
 }
 
 /// @nodoc
 
 class _$FailureImpl implements _Failure {
-  const _$FailureImpl({
-    required this.error,
-    this.header,
-    this.title,
-    this.status,
-  });
+  const _$FailureImpl(
+      {required this.error, this.header, this.title, this.status});
 
   @override
   final String error;
@@ -189,12 +169,11 @@ class _$FailureImpl implements _Failure {
 }
 
 abstract class _Failure implements Failure {
-  const factory _Failure({
-    required final String error,
-    final String? header,
-    final String? title,
-    final int? status,
-  }) = _$FailureImpl;
+  const factory _Failure(
+      {required final String error,
+      final String? header,
+      final String? title,
+      final int? status}) = _$FailureImpl;
 
   @override
   String get error;

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nuevosol/features/auth/model/user_roles.dart';
 
 part 'logged_in_user.freezed.dart';
 part 'logged_in_user.g.dart';
@@ -27,6 +28,7 @@ class LoggedInUser with _$LoggedInUser {
     String? bio,
     @JsonKey(name: 'mobile_no') String? mobileNo,
     @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
+    @JsonKey(name: 'role_status') UserRoles? roles,
   }) = _LoggedInUser;
 
   factory LoggedInUser.fromJson(Map<String, dynamic> json) =>

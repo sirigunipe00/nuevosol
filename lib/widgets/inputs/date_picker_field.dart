@@ -19,7 +19,7 @@ class AppDateField extends StatefulWidget {
     this.isRequired = false,
     this.dateformat = 'dd-MM-yyyy',
     this.fillColor,
-    this.initialValue,
+    this.initialValue, required Color borderColor,
   });
 
   final String title;
@@ -87,7 +87,7 @@ class _AppDateFieldState extends State<AppDateField> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
-            style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            style: TextStyle(color: Colors.black.withValues(alpha: 0.6)),
             onTap: () {
            
               if (widget.readOnly) return;

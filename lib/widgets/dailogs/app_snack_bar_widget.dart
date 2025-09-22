@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/styles/app_color.dart';
-import 'package:nuevosol/styles/app_icons.dart';
 
 
 enum AppSnackBarType { error, success, info}

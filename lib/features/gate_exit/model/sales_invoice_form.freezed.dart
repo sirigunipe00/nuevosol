@@ -12,8 +12,7 @@ part of 'sales_invoice_form.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 SalesInvoiceForm _$SalesInvoiceFormFromJson(Map<String, dynamic> json) {
   return _SalesInvoiceForm.fromJson(json);
@@ -23,14 +22,14 @@ SalesInvoiceForm _$SalesInvoiceFormFromJson(Map<String, dynamic> json) {
 mixin _$SalesInvoiceForm {
   @JsonKey(name: 'name')
   String? get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'company')
-  String? get plantName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'customer')
+  String? get customer => throw _privateConstructorUsedError;
   @JsonKey(name: 'posting_date', defaultValue: '')
   String? get postingDate => throw _privateConstructorUsedError;
-  @JsonKey(name: 'vehicle_no', defaultValue: '')
-  String? get vehicleNo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'remarks')
-  String? get remarks => throw _privateConstructorUsedError;
+  @JsonKey(name: 'due_date', defaultValue: '')
+  String? get dueDate => throw _privateConstructorUsedError;
+  @JsonKey(name: 'grand_total')
+  int? get grandTotal => throw _privateConstructorUsedError;
 
   /// Serializes this SalesInvoiceForm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,17 +44,15 @@ mixin _$SalesInvoiceForm {
 /// @nodoc
 abstract class $SalesInvoiceFormCopyWith<$Res> {
   factory $SalesInvoiceFormCopyWith(
-    SalesInvoiceForm value,
-    $Res Function(SalesInvoiceForm) then,
-  ) = _$SalesInvoiceFormCopyWithImpl<$Res, SalesInvoiceForm>;
+          SalesInvoiceForm value, $Res Function(SalesInvoiceForm) then) =
+      _$SalesInvoiceFormCopyWithImpl<$Res, SalesInvoiceForm>;
   @useResult
-  $Res call({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'company') String? plantName,
-    @JsonKey(name: 'posting_date', defaultValue: '') String? postingDate,
-    @JsonKey(name: 'vehicle_no', defaultValue: '') String? vehicleNo,
-    @JsonKey(name: 'remarks') String? remarks,
-  });
+  $Res call(
+      {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'customer') String? customer,
+      @JsonKey(name: 'posting_date', defaultValue: '') String? postingDate,
+      @JsonKey(name: 'due_date', defaultValue: '') String? dueDate,
+      @JsonKey(name: 'grand_total') int? grandTotal});
 }
 
 /// @nodoc
@@ -74,70 +71,59 @@ class _$SalesInvoiceFormCopyWithImpl<$Res, $Val extends SalesInvoiceForm>
   @override
   $Res call({
     Object? name = freezed,
-    Object? plantName = freezed,
+    Object? customer = freezed,
     Object? postingDate = freezed,
-    Object? vehicleNo = freezed,
-    Object? remarks = freezed,
+    Object? dueDate = freezed,
+    Object? grandTotal = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            name:
-                freezed == name
-                    ? _value.name
-                    : name // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            plantName:
-                freezed == plantName
-                    ? _value.plantName
-                    : plantName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            postingDate:
-                freezed == postingDate
-                    ? _value.postingDate
-                    : postingDate // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            vehicleNo:
-                freezed == vehicleNo
-                    ? _value.vehicleNo
-                    : vehicleNo // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            remarks:
-                freezed == remarks
-                    ? _value.remarks
-                    : remarks // ignore: cast_nullable_to_non_nullable
-                        as String?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customer: freezed == customer
+          ? _value.customer
+          : customer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postingDate: freezed == postingDate
+          ? _value.postingDate
+          : postingDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dueDate: freezed == dueDate
+          ? _value.dueDate
+          : dueDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      grandTotal: freezed == grandTotal
+          ? _value.grandTotal
+          : grandTotal // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$SalesInvoiceFormImplCopyWith<$Res>
     implements $SalesInvoiceFormCopyWith<$Res> {
-  factory _$$SalesInvoiceFormImplCopyWith(
-    _$SalesInvoiceFormImpl value,
-    $Res Function(_$SalesInvoiceFormImpl) then,
-  ) = __$$SalesInvoiceFormImplCopyWithImpl<$Res>;
+  factory _$$SalesInvoiceFormImplCopyWith(_$SalesInvoiceFormImpl value,
+          $Res Function(_$SalesInvoiceFormImpl) then) =
+      __$$SalesInvoiceFormImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'company') String? plantName,
-    @JsonKey(name: 'posting_date', defaultValue: '') String? postingDate,
-    @JsonKey(name: 'vehicle_no', defaultValue: '') String? vehicleNo,
-    @JsonKey(name: 'remarks') String? remarks,
-  });
+  $Res call(
+      {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'customer') String? customer,
+      @JsonKey(name: 'posting_date', defaultValue: '') String? postingDate,
+      @JsonKey(name: 'due_date', defaultValue: '') String? dueDate,
+      @JsonKey(name: 'grand_total') int? grandTotal});
 }
 
 /// @nodoc
 class __$$SalesInvoiceFormImplCopyWithImpl<$Res>
     extends _$SalesInvoiceFormCopyWithImpl<$Res, _$SalesInvoiceFormImpl>
     implements _$$SalesInvoiceFormImplCopyWith<$Res> {
-  __$$SalesInvoiceFormImplCopyWithImpl(
-    _$SalesInvoiceFormImpl _value,
-    $Res Function(_$SalesInvoiceFormImpl) _then,
-  ) : super(_value, _then);
+  __$$SalesInvoiceFormImplCopyWithImpl(_$SalesInvoiceFormImpl _value,
+      $Res Function(_$SalesInvoiceFormImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of SalesInvoiceForm
   /// with the given fields replaced by the non-null parameter values.
@@ -145,53 +131,45 @@ class __$$SalesInvoiceFormImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
-    Object? plantName = freezed,
+    Object? customer = freezed,
     Object? postingDate = freezed,
-    Object? vehicleNo = freezed,
-    Object? remarks = freezed,
+    Object? dueDate = freezed,
+    Object? grandTotal = freezed,
   }) {
-    return _then(
-      _$SalesInvoiceFormImpl(
-        name:
-            freezed == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        plantName:
-            freezed == plantName
-                ? _value.plantName
-                : plantName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        postingDate:
-            freezed == postingDate
-                ? _value.postingDate
-                : postingDate // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        vehicleNo:
-            freezed == vehicleNo
-                ? _value.vehicleNo
-                : vehicleNo // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        remarks:
-            freezed == remarks
-                ? _value.remarks
-                : remarks // ignore: cast_nullable_to_non_nullable
-                    as String?,
-      ),
-    );
+    return _then(_$SalesInvoiceFormImpl(
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customer: freezed == customer
+          ? _value.customer
+          : customer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postingDate: freezed == postingDate
+          ? _value.postingDate
+          : postingDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dueDate: freezed == dueDate
+          ? _value.dueDate
+          : dueDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      grandTotal: freezed == grandTotal
+          ? _value.grandTotal
+          : grandTotal // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SalesInvoiceFormImpl implements _SalesInvoiceForm {
-  const _$SalesInvoiceFormImpl({
-    @JsonKey(name: 'name') this.name,
-    @JsonKey(name: 'company') this.plantName,
-    @JsonKey(name: 'posting_date', defaultValue: '') this.postingDate,
-    @JsonKey(name: 'vehicle_no', defaultValue: '') this.vehicleNo,
-    @JsonKey(name: 'remarks') this.remarks,
-  });
+  const _$SalesInvoiceFormImpl(
+      {@JsonKey(name: 'name') this.name,
+      @JsonKey(name: 'customer') this.customer,
+      @JsonKey(name: 'posting_date', defaultValue: '') this.postingDate,
+      @JsonKey(name: 'due_date', defaultValue: '') this.dueDate,
+      @JsonKey(name: 'grand_total') this.grandTotal});
 
   factory _$SalesInvoiceFormImpl.fromJson(Map<String, dynamic> json) =>
       _$$SalesInvoiceFormImplFromJson(json);
@@ -200,21 +178,21 @@ class _$SalesInvoiceFormImpl implements _SalesInvoiceForm {
   @JsonKey(name: 'name')
   final String? name;
   @override
-  @JsonKey(name: 'company')
-  final String? plantName;
+  @JsonKey(name: 'customer')
+  final String? customer;
   @override
   @JsonKey(name: 'posting_date', defaultValue: '')
   final String? postingDate;
   @override
-  @JsonKey(name: 'vehicle_no', defaultValue: '')
-  final String? vehicleNo;
+  @JsonKey(name: 'due_date', defaultValue: '')
+  final String? dueDate;
   @override
-  @JsonKey(name: 'remarks')
-  final String? remarks;
+  @JsonKey(name: 'grand_total')
+  final int? grandTotal;
 
   @override
   String toString() {
-    return 'SalesInvoiceForm(name: $name, plantName: $plantName, postingDate: $postingDate, vehicleNo: $vehicleNo, remarks: $remarks)';
+    return 'SalesInvoiceForm(name: $name, customer: $customer, postingDate: $postingDate, dueDate: $dueDate, grandTotal: $grandTotal)';
   }
 
   @override
@@ -223,25 +201,19 @@ class _$SalesInvoiceFormImpl implements _SalesInvoiceForm {
         (other.runtimeType == runtimeType &&
             other is _$SalesInvoiceFormImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.plantName, plantName) ||
-                other.plantName == plantName) &&
+            (identical(other.customer, customer) ||
+                other.customer == customer) &&
             (identical(other.postingDate, postingDate) ||
                 other.postingDate == postingDate) &&
-            (identical(other.vehicleNo, vehicleNo) ||
-                other.vehicleNo == vehicleNo) &&
-            (identical(other.remarks, remarks) || other.remarks == remarks));
+            (identical(other.dueDate, dueDate) || other.dueDate == dueDate) &&
+            (identical(other.grandTotal, grandTotal) ||
+                other.grandTotal == grandTotal));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    name,
-    plantName,
-    postingDate,
-    vehicleNo,
-    remarks,
-  );
+      runtimeType, name, customer, postingDate, dueDate, grandTotal);
 
   /// Create a copy of SalesInvoiceForm
   /// with the given fields replaced by the non-null parameter values.
@@ -250,24 +222,25 @@ class _$SalesInvoiceFormImpl implements _SalesInvoiceForm {
   @pragma('vm:prefer-inline')
   _$$SalesInvoiceFormImplCopyWith<_$SalesInvoiceFormImpl> get copyWith =>
       __$$SalesInvoiceFormImplCopyWithImpl<_$SalesInvoiceFormImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SalesInvoiceFormImplToJson(this);
+    return _$$SalesInvoiceFormImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _SalesInvoiceForm implements SalesInvoiceForm {
-  const factory _SalesInvoiceForm({
-    @JsonKey(name: 'name') final String? name,
-    @JsonKey(name: 'company') final String? plantName,
-    @JsonKey(name: 'posting_date', defaultValue: '') final String? postingDate,
-    @JsonKey(name: 'vehicle_no', defaultValue: '') final String? vehicleNo,
-    @JsonKey(name: 'remarks') final String? remarks,
-  }) = _$SalesInvoiceFormImpl;
+  const factory _SalesInvoiceForm(
+          {@JsonKey(name: 'name') final String? name,
+          @JsonKey(name: 'customer') final String? customer,
+          @JsonKey(name: 'posting_date', defaultValue: '')
+          final String? postingDate,
+          @JsonKey(name: 'due_date', defaultValue: '') final String? dueDate,
+          @JsonKey(name: 'grand_total') final int? grandTotal}) =
+      _$SalesInvoiceFormImpl;
 
   factory _SalesInvoiceForm.fromJson(Map<String, dynamic> json) =
       _$SalesInvoiceFormImpl.fromJson;
@@ -276,17 +249,17 @@ abstract class _SalesInvoiceForm implements SalesInvoiceForm {
   @JsonKey(name: 'name')
   String? get name;
   @override
-  @JsonKey(name: 'company')
-  String? get plantName;
+  @JsonKey(name: 'customer')
+  String? get customer;
   @override
   @JsonKey(name: 'posting_date', defaultValue: '')
   String? get postingDate;
   @override
-  @JsonKey(name: 'vehicle_no', defaultValue: '')
-  String? get vehicleNo;
+  @JsonKey(name: 'due_date', defaultValue: '')
+  String? get dueDate;
   @override
-  @JsonKey(name: 'remarks')
-  String? get remarks;
+  @JsonKey(name: 'grand_total')
+  int? get grandTotal;
 
   /// Create a copy of SalesInvoiceForm
   /// with the given fields replaced by the non-null parameter values.

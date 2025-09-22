@@ -11,53 +11,46 @@ import 'package:nuevosol/core/di/injector.dart';
 import 'package:nuevosol/core/logger/app_logger.dart';
 import 'package:nuevosol/firebase_options.dart';
 
-
 Future<void> bootstrap(void Function() runApp) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  await _initInjector();
-  if(kDebugMode) {
-    await register<Urls>(Urls.local(), instanceName: 'baseUrl');
-  } else {
-    await register<Urls>(Urls.local(), instanceName: 'baseUrl');
-  }
-  await _initFirebase();
-  _setupErrorHandling(runApp);
-}
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-Future<void> _initInjector() async {
-  await configureDependencies(env: Environment.prod);
-}
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-Future<void> _initFirebase() async {
-  await Firebase.initializeApp(name: 'nuevosol', options: DefaultFirebaseOptions.android);
-  if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
-}
+    await configureDependencies(env: Environment.prod);
 
+    if (kDebugMode) {
+      await register<Urls>(Urls.local(), instanceName: 'baseUrl');
+    } else {
+      await register<Urls>(Urls.local(), instanceName: 'baseUrl');
+    }
 
-void _setupErrorHandling(void Function() runApp) {
-  Isolate.current.addErrorListener(
-    RawReceivePort((pair) async {
-      try {
-        final List<dynamic> errorAndStacktrace = pair as List<dynamic>;
-        await FirebaseCrashlytics.instance.recordError(
-          errorAndStacktrace.first,
-          errorAndStacktrace.last as StackTrace,
-        );
-      } on Exception catch (e, st) {
-        $logger.error('[Running isolate error]', e, st);
-      }
-    }).sendPort,
-  );
+    await Firebase.initializeApp(
+        name: 'nuevosol', options: DefaultFirebaseOptions.android);
 
-  runZonedGuarded<Future<void>>(
-    () async {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-      runApp();
-    },
-    FirebaseCrashlytics.instance.recordError,
-  );
+    if (kDebugMode) {
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    }
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    Isolate.current.addErrorListener(
+      RawReceivePort((pair) async {
+        try {
+          final List<dynamic> errorAndStacktrace = pair as List<dynamic>;
+          await FirebaseCrashlytics.instance.recordError(
+            errorAndStacktrace.first,
+            errorAndStacktrace.last as StackTrace,
+          );
+        } on Exception catch (e, st) {
+          $logger.error('[Running isolate error]', e, st);
+        }
+      }).sendPort,
+    );
+
+    runApp();
+  }, (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+  });
 }

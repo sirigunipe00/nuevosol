@@ -18,12 +18,12 @@ class AppDropDownWidget<T> extends StatefulWidget {
     this.listItemBuilder,
     this.headerBuilder,
     this.futureRequest,
-    required this.color,
-    this.focusNode,
+    this.borderColor,
+    this.showScanner = false,
+    this.onScannerTap,
   });
 
   final String? title;
-  final FocusNode? focusNode;
   final String? hint;
   final List<T> items;
   final HeaderBuilder<T>? headerBuilder;
@@ -33,8 +33,10 @@ class AppDropDownWidget<T> extends StatefulWidget {
   final T? defaultSelection;
   final bool isMandatory;
   final bool readOnly;
+  final Color? borderColor;
+  final bool showScanner;
+  final VoidCallback? onScannerTap;
   final dynamic Function(T? item)? onSelected;
-  final Color color;
 
   @override
   State<AppDropDownWidget<T>> createState() => _AppDropDownWidgetState<T>();
@@ -50,39 +52,83 @@ class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Focus(
-      focusNode: widget.focusNode,
-      child: AbsorbPointer(
-        absorbing: widget.readOnly,
-        child: Column(
-          key: widget.key,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (widget.title.containsValidValue) ...[
-              CaptionText(title: widget.title!, isRequired: widget.isMandatory),
-            ],
-            const SizedBox(height: 4),
-            CustomDropdown<T>.searchRequest(
-              decoration: CustomDropdownDecoration(
-                closedFillColor: Colors.grey[100],
-                expandedFillColor: Colors.grey[100],
-                hintStyle: AppTextStyles.titleLarge(
-                  context,
-                ).copyWith(color: AppColors.grey),
-              ),
-              futureRequest: widget.futureRequest,
-              hintText: widget.hint,
+  void didUpdateWidget(covariant AppDropDownWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If defaultSelection changes, update the internal _selectedValue
+    if (widget.defaultSelection != oldWidget.defaultSelection) {
+      setState(() {
+        _selectedValue = widget.defaultSelection;
+      });
+    }
+  }
 
-              items: widget.items,
-              headerBuilder: widget.headerBuilder,
-              listItemBuilder: widget.listItemBuilder,
-              onChanged: widget.onSelected,
-              initialItem: _selectedValue,
-            ),
-            const SizedBox(height: 8),
+  @override
+  Widget build(BuildContext context) {
+    return AbsorbPointer(
+      absorbing: widget.readOnly,
+      child: Column(
+        key: widget.key,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget.title.containsValidValue) ...[
+            CaptionText(title: widget.title!, isRequired: widget.isMandatory),
           ],
-        ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(
+                child: DefaultTextStyle(
+                  style: AppTextStyles.titleLarge(
+                    context,
+                  ).copyWith(color: AppColors.black),
+                  child: CustomDropdown<T>.searchRequest(
+                    decoration: CustomDropdownDecoration(
+                      hintStyle: AppTextStyles.titleLarge(
+                        context,
+                      ).copyWith(color: AppColors.black),
+                      closedBorder: Border.all(
+                        width: 0.8,
+                        color: AppColors.black,
+                      ),
+                      expandedBorder: Border.all(
+                        width: 0.8,
+                        color: AppColors.black,
+                      ),
+                      closedShadow: [
+                        BoxShadow(
+                          color: (widget.borderColor ?? Colors.black),
+                          blurRadius: 2,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                    ),
+
+                    futureRequest: widget.futureRequest,
+                    hintText: widget.hint,
+                    items: widget.items,
+                    headerBuilder: widget.headerBuilder,
+                    listItemBuilder: widget.listItemBuilder,
+                    onChanged: widget.onSelected,
+                    initialItem: widget.defaultSelection,
+                  ),
+                ),
+              ),
+
+              if (widget.showScanner) ...[
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: widget.onScannerTap,
+                  child: const Icon(
+                    Icons.qr_code_scanner,
+                    size: 52,
+                    color: AppColors.black,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }

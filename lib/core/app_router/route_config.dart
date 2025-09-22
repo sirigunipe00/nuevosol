@@ -1,39 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nuevosol/app/presentation/ui/app_profile_page.dart';
-import 'package:nuevosol/app/presentation/ui/app_home_page.dart';
-import 'package:nuevosol/app/presentation/ui/app_splash_scrn.dart';
-import 'package:nuevosol/app/presentation/ui/dashboard_page.dart';
-import 'package:nuevosol/app/presentation/widgets/app_scaffold_widget.dart';
-import 'package:nuevosol/app/presentation/widgets/notifcations_scrn.dart';
-import 'package:nuevosol/core/consts/messages.dart';
+import 'package:nuevosol/app/presentation/app_profile_page.dart';
+import 'package:nuevosol/app/widgets/image_preview_scrn.dart';
 import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/app/presentation/app_home_page.dart';
+import 'package:nuevosol/app/presentation/app_splash_scrn.dart';
+import 'package:nuevosol/app/presentation/app_update_blocprovider.dart';
+import 'package:nuevosol/app/widgets/app_scaffold_widget.dart';
 import 'package:nuevosol/features/auth/presentation/ui/authentication_scrn.dart';
-import 'package:nuevosol/features/gate_entry/model/gate_entry_form.dart';
+import 'package:nuevosol/features/gate_entry/model/gate_entry.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/gate_entry/presentation/bloc/create_gate_cubit/gate_entry_cubit.dart';
+import 'package:nuevosol/features/gate_entry/presentation/bloc/create_gate_entry_cubit/create_gateentry_cubit.dart';
 import 'package:nuevosol/features/gate_entry/presentation/ui/create/new_gate_entry.dart';
-import 'package:nuevosol/features/gate_entry/presentation/ui/widgets/gate_entry_list.dart';
-import 'package:nuevosol/features/gate_exit/model/gate_exit_form.dart';
+import 'package:nuevosol/features/gate_entry/presentation/ui/gate_entry_list/gate_entry_list.dart';
+import 'package:nuevosol/features/gate_exit/model/gate_exit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_cubit/gate_exit_cubit.dart';
+import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/create/new_gate_exit.dart';
-import 'package:nuevosol/features/gate_exit/presentation/ui/widgets/gate_exit_list.dart';
-import 'package:nuevosol/features/loading_confirmation/presentation/ui/widgets/loading_cnfrm_list.dart';
-import 'package:nuevosol/features/logistic_request/model/logistic_planning_form.dart';
-import 'package:nuevosol/features/logistic_request/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/logistic_request/presentation/bloc/create_lr_cubit/logistic_planning_cubit.dart';
-import 'package:nuevosol/features/logistic_request/presentation/ui/create/new_logistic_request.dart';
-import 'package:nuevosol/features/logistic_request/presentation/ui/widgets/logistic_request_list.dart';
-import 'package:nuevosol/features/transport_confirmation/presentation/bloc/create_transport_cubit.dart/create_transport_cubit.dart';
-import 'package:nuevosol/features/transport_confirmation/presentation/ui/create/new_transport.dart';
-import 'package:nuevosol/features/transport_confirmation/presentation/ui/widgets/transport_cnfm_list.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/bloc/bloc_provider.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/bloc/create_vr_cubit/create_vehicle_cubit.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/ui/create/new_vehicle_reporting.dart';
-import 'package:nuevosol/features/vehicle_reporting/presentation/ui/widgets/vehicle_reporting_list.dart';
-import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
+import 'package:nuevosol/features/gate_exit/presentation/ui/gate_exit_list/gate_exit_list.dart';
 
 class AppRouterConfig {
   static final parentNavigatorKey = GlobalKey<NavigatorState>();
@@ -46,10 +31,9 @@ class AppRouterConfig {
         path: AppRoute.initial.path,
         builder: (_, state) => const AppSplashScreen(),
       ),
-
-       GoRoute(
+      GoRoute(
         path: AppRoute.login.path,
-        builder: (_, state) => const LoginScrnWidget(),
+        builder: (_, state) => const AuthenticationScrn(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -60,15 +44,23 @@ class AppRouterConfig {
             routes: [
               GoRoute(
                 path: AppRoute.home.path,
-                builder: (_, state) => const AppHomePage(),
+                builder: (_, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) =>
+                            AppUpdateBlocprovider.get().appversionCubit()
+                              ..request(),
+                      ),
+                    ],
+                    child: const AppHomePage(),
+                  );
+                },
                 routes: [
                   GoRoute(
-                    path: _getPath(AppRoute.notifications),
-                    builder: (ctxt, state) => NotificationListScreen(),
-                  ),
-                  GoRoute(
-                    path: _getPath(AppRoute.gateEntry),
+                  path: _getPath(AppRoute.gateEntry),
                     builder: (ctxt, state) {
+                      
                       final filters = Pair(
                         StringUtils.docStatusInt('Draft'),
                         null,
@@ -82,216 +74,208 @@ class AppRouterConfig {
                     routes: [
                       GoRoute(
                         path: _getPath(AppRoute.newGateEntry),
-                        onExit: (context, state) async {
-                          final form = state.extra as GateEntryForm?;
-                          final formStatus =
-                              form?.docStatus == 1 ? 'Submitted' : 'Draft';
-                          return await _promptConf(
-                            context,
-                            formStatus: formStatus,
-                          );
-                        },
-                        builder: (_, state) {
-                          final gateEntryForm = state.extra as GateEntryForm?;
+                        builder: (ctxt, state) {
+                          final provider = GateEntryBlocProvider.get();
+                          // final name = state.extra as String?;
+                          final form = state.extra as GateEntry?;
+                          
                           return MultiBlocProvider(
                             providers: [
+                              // if (name.isNull) ...[
+                              //   BlocProvider(
+                              //       create: (_) => provider.getDetails()),
+                              // ] else ...[]
+                                BlocProvider(
+                                    create: (_) =>
+                                        provider.supplietList()..request('')),
+                              
                               BlocProvider(
-                                create:
-                                    (_) =>
-                                        GateEntryBlocProvider.get()
-                                            .purchaseOrderList()
-                                          ..request(''),
-                              ),
+                                  create: (_) =>
+                                      provider.fetchPONumbers()..request(form?.name ?? '')),
                               BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreateGateEntryCubit>()
-                                          ..initDetails(gateEntryForm),
-                              ),
+                                  create: (_) => $sl.get<CreateGateEntryCubit>()..initDetails(form)),
                             ],
                             child: const NewGateEntry(),
                           );
                         },
+                        routes: [
+                          GoRoute(
+                            path: _getPath(AppRoute.newGateEntryPreview),
+                            builder: (_, state) {
+                              final data = state.extra as Pair<String, String?>;
+                              return ImagePreviewScrn.fromPair(data);
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   GoRoute(
-                    path: _getPath(AppRoute.gatexit),
-                    builder: (ctxt, state) => const GateExitListScrn(),
+                    path: _getPath(AppRoute.gateExit),
+                   builder: (ctxt, state) {
+                      final filters = Pair(
+                        StringUtils.docStatusInt('Draft'),
+                        null,
+                      );
+                      return BlocProvider(create:
+                            (context) => GateExitBlocProvider.get().fetchGateExit()..fetchInitial(filters),
+                        child: const GateExitListScrn(),
+                      );
+                    },
                     routes: [
                       GoRoute(
-                        onExit: (context, state) async {
-                          final form = state.extra as GateExitForm?;
-                          final formStatus =
-                              form?.docStatus == 1 ? 'Submitted' : 'Draft';
-                          return await _promptConf(
-                            context,
-                            formStatus: formStatus,
-                          );
-                        },
                         path: _getPath(AppRoute.newGateExit),
                         builder: (_, state) {
-                          final form = state.extra as GateExitForm?;
+                          final provider = GateExitBlocProvider.get();
+                          final form = state.extra as GateExit?;
                           return MultiBlocProvider(
                             providers: [
+                              // if (name.isNull) ...[
+                              //   BlocProvider(
+                              //       create: (_) => provider.getDetails()),
+                              // ] else ...[
+                              //   BlocProvider(
+                              //       create: (_) =>
+                              //           provider.getDetails()..request(name!)),
+                              // ],
                               BlocProvider(
-                                create:
-                                    (_) =>
-                                        GateExitBlocProvider.get()
-                                            .salesInvoiceList()
-                                          ..request(''),
-                              ),
+                                  create: (_) => provider.salesInvoiceList()..request(form?.name ?? '')),
                               BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreateGateExitCubit>()
-                                          ..initDetails(form),
-                              ),
+                                  create: (_) =>
+                                      $sl.get<CreateGateExitCubit>()..initDetails(form)),
                             ],
                             child: const NewGateExit(),
                           );
                         },
+                        routes: [
+                          GoRoute(
+                            path: _getPath(AppRoute.newGateExitPreview),
+                            builder: (_, state) {
+                              final data = state.extra as Pair<String, String?>;
+                              return ImagePreviewScrn.fromPair(data);
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  GoRoute(
-                    path: _getPath(AppRoute.logisticRequest),
-                    builder: (_, state) => const LogisticRequestList(),
-                    routes: [
-                      GoRoute(
-                        path: _getPath(AppRoute.newLogisticRequest),
-                        onExit:
-                            (context, state) async =>
-                                await _promptConf(context, formStatus: 'Draft'),
-                        builder: (_, state) {
-                          final bloc = LogisticPlanningBlocProvider.get();
-                          final lofisticForm =
-                              state.extra as LogisticPlanningForm?;
-                          return MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreateLogisticCubit>()
-                                          ..initDetails(lofisticForm),
-                              ),
-                              BlocProvider(
-                                create:
-                                    (_) => bloc.salesOrderList()..request(''),
-                              ),
-                              BlocProvider(
-                                create:
-                                    (_) => bloc.transportersList()..request(''),
-                              ),
-                            ],
-                            child: const NewLogisticRequest(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: _getPath(AppRoute.transportConfirmation),
-                    builder: (ctxt, state) => const TransportCnfmList(),
-                    routes: [
-                      GoRoute(
-                        path: _getPath(AppRoute.newTarnsportCnfrm),
-                        onExit:
-                            (context, state) async =>
-                                await _promptConf(context, formStatus: 'Draft'),
-                        builder: (_, state) {
-                          final bloc = LogisticPlanningBlocProvider.get();
-
-                          final form = state.extra;
-                          return MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create:
-                                    (_) => bloc.transportersList()..request(''),
-                              ),
-                              BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreateTransportCubit>()
-                                          ..initDetails(form),
-                              ),
-                            ],
-                            child: const NewTransportCnfm(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: _getPath(AppRoute.vehcileReporting),
-                    builder: (ctxt, state) => const VehicleReportingList(),
-                    routes: [
-                      GoRoute(
-                        path: _getPath(AppRoute.newVehiclereporting),
-                        onExit:
-                            (context, state) async =>
-                                await _promptConf(context, formStatus: 'Draft'),
-                        builder: (_, state) {
-                          final bloc = VehicleBlocProvider.get();
-                          final blocprovider =
-                              LogisticPlanningBlocProvider.get();
-                          final form = state.extra;
-                          return MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreateVehicleCubit>()
-                                          ..initDetails(form),
-                              ),
-                              BlocProvider(
-                                create:
-                                    (_) =>
-                                        blocprovider.transportersList()
-                                          ..request(''),
-                              ),
-                              BlocProvider(
-                                create: (_) => bloc.logisticList()..request(''),
-                              ),
-                            ],
-                            child: const NewVehicleReporting(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: _getPath(AppRoute.loadingConfirmation),
-                    builder: (ctxt, state) => const LoadingCnfrmList(),
-                    routes: const [
-                      // GoRoute(
-                      //   path: _getPath(AppRoute.newLoadingConfirmation),
-                      //       onExit: (context, state) async => await _promptConf(context),
-                      //       builder: (_, state) {
-                      //         final blocprovider = VisitorInOutBlocProvider.get();
-                      //         final form = state.extra;
-                      //         return MultiBlocProvider(
-                      //           providers: [
-                      //             BlocProvider(create: (_) => blocprovider.inviteVisitor()),
-                      //             BlocProvider(
-                      //               create: (_) => $sl.get<CreateVisitorInOutCubit>()..init(form),
-                      //             ),
-                      //           ],
-                      //           child: const NewVisitorInOut(),
-                      //         );
-                      //       },
-                      // )
-                    ],
-                  ),
+                  // GoRoute(
+                  //   path: _getPath(AppRoute.gateRegistration),
+                  //   builder: (ctxt, state) {
+                  //     return const GateRegistrationListScrn();
+                  //   },
+                  //   routes: [
+                  //     GoRoute(
+                  //       path: _getPath(AppRoute.newGateRegistration),
+                  //       builder: (_, state) {
+                  //         final blocprovider =
+                  //             GateRegistrationBlocProvider.get();
+                  //         return MultiBlocProvider(
+                  //           providers: [
+                  //             BlocProvider(
+                  //                 create: (_) =>
+                  //                     blocprovider.employeeList()..request()),
+                  //             BlocProvider(
+                  //               create: (_) => $sl.get<GateRegistrationCubit>()
+                  //                 ..initDetails(state.extra),
+                  //             ),
+                  //           ],
+                  //           child: const NewGateRegistration(),
+                  //         );
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                  // GoRoute(
+                  //     path: _getPath(AppRoute.dipatchGaylord),
+                  //     builder: (ctxt, state) {
+                  //       return const DispatchGaylordList();
+                  //     },
+                  //     routes: [
+                  //       GoRoute(
+                  //         path: _getPath(AppRoute.dispatchGaylordPreview),
+                  //         builder: (_, state) {
+                  //           final form = state.extra as GaylordForm;
+                  //           final blocprovider = DispatchBlocProvider.get();
+                  //           return MultiBlocProvider(
+                  //             providers: [
+                  //               BlocProvider(
+                  //                 create: (_) =>
+                  //                     blocprovider.fetchGaylordItems()
+                  //                       ..request(form.name),
+                  //               ),
+                  //               BlocProvider(
+                  //                   create: (_) =>
+                  //                       blocprovider.updateGaylord()),
+                  //               BlocProvider(
+                  //                 create: (_) => blocprovider.removeGaylord(),
+                  //               ),
+                  //               BlocProvider(
+                  //                   create: (_) =>
+                  //                       blocprovider.submitGaylord()),
+                  //             ],
+                  //             child: DispatchGaylordFormWidget(
+                  //               form: form,
+                  //             ),
+                  //           );
+                  //         },
+                  //       )
+                  //     ]),
+                  // GoRoute(
+                  //   path: _getPath(AppRoute.poApprovalList),
+                  //   builder: (ctxt, state) => const PoApprovalListScrn(),
+                  //   routes: [
+                  //     GoRoute(
+                  //       path: _getPath(AppRoute.poApprovalListPreview),
+                  //       builder: (_, state) {
+                  //         final form = state.extra as PoApprovalForm;
+                  //         final blocprovider = PoApprovalBlocProvider.get();
+                  //         return MultiBlocProvider(
+                  //           providers: [
+                  //             BlocProvider(
+                  //               create: (_) => blocprovider.fetchPoOrderItems()
+                  //                 ..request(form.name),
+                  //             ),
+                  //             BlocProvider(
+                  //                 create: (_) => blocprovider.rejectPO()),
+                  //             BlocProvider(
+                  //                 create: (_) => blocprovider.approvePO()),
+                  //             BlocProvider(
+                  //                 create: (_) =>
+                  //                     blocprovider.poPermissionCubit()
+                  //                       ..request(form.name)),
+                  //           ],
+                  //           child: PoApprovalFormWidegt(form: form),
+                  //         );
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                  // GoRoute(
+                  //   path: _getPath(AppRoute.dashboards),
+                  //   builder: (ctxt, state) => BlocProvider(
+                  //     create: (_) =>
+                  //         DashboardBlocProvider.get().dashboardsCubit()
+                  //           ..request(),
+                  //     child: const DashboardsListScrn(),
+                  //   ),
+                  //   routes: [
+                  //     GoRoute(
+                  //       path: _getPath(AppRoute.dashboardView),
+                  //       builder: (_, state) {
+                  //         final mastr = state.extra as DashboardMaster;
+                  //         final provider = DashboardBlocProvider.get();
+                  //         return BlocProvider(
+                  //           create: (_) => provider.dashboardURLCubit()
+                  //             ..request(mastr.name),
+                  //           child: DashboardWebview(
+                  //               name: mastr.name, title: mastr.title),
+                  //         );
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
                 ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoute.dashboard.path,
-                builder: (_, __) => const AppDashboardPage(),
               ),
             ],
           ),
@@ -307,30 +291,6 @@ class AppRouterConfig {
       ),
     ],
   );
-
-  static Future<bool> _promptConf(
-    BuildContext context, {
-    required String formStatus,
-  }) async {
-    final promptConf = shouldAskForConfirmation.value;
-
-    if (!promptConf) return true;
-
-    if (formStatus == 'Submitted') {
-      return true;
-    }
-
-    final result = await AppDialog.askForConfirmation<bool?>(
-      context,
-      title: 'Are you sure?',
-      confirmBtnText: 'Yes',
-      content: Messages.clearConfirmation,
-      onTapConfirm: () => context.pop(true),
-      onTapDismiss: () => context.pop(false),
-    );
-
-    return result ?? false;
-  }
 
   static String _getPath(AppRoute route) => route.path.split('/').last;
 }

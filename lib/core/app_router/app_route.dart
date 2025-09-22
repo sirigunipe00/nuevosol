@@ -5,43 +5,45 @@ abstract class _AppRoutePaths {
   static const initial = '/';
   static const login = '/login';
   static const home = '/home';
+  static const gateEntry = '/home/gateentry';
+  static const newGateEntry = '/home/gateentry/newGateEntry';
+  static const newGateEntryPreview = '/home/gateentry/newGateEntry/preview';
+  static const gateExit = '/home/gateexit';
+  static const newGateExit = '/home/gateexit/newGateExit';
+  static const newGateExitPreview = '/home/gateexit/newGateExit/preview';
+  static const gateRegistration = '/home/gateRegistration';
+  static const newGateRegistration = '/home/gateRegistration/newGateRegistration';
+  static const newGateRegistrationPreview ='/home/gateRegistration/newGateRegistration/preview';
+  static const dipatchGaylord ='/home/dispatchGaylord';
+  static const dispatchGaylordPreview = '/home/dispatchGaylord/dispatchGaylordPreview';
+  static const poApprovalList = '/home/poapprovallist';
+  static const poApprovalListPreview ='/home/poapprovallist/poApprovalListPreview';
+  static const dashboards = '/home/dashboards';
+  static const dashboardView = '/home/dashboards/view';
   static const account = '/account';
-  static const dashboard = '/dashboard';
-  static const gateEntry='/home/gateentry';
-   static const gateExit='/home/gateexit';
-  static const newGateEntry='/home/gateentry/newGateEntry';
-  static const newGateExit='/home/gateexit/newGateExit';
-  static const notifications='/home/notifications';
-  static const logisticRequest='/home/logisticrRequest';
-  static const newLogisticRequest='/home/logisticrRequest/newLogisticRequest';
-  static const transportConfirmation='/home/transportConfirmation';
-  static const newTarnsportCnfrm='/home/transportConfirmation/newTarnsportCnfrm';
-  static const vehcileReporting='/home/vehiclereporting';
-  static const newVehiclereporting='/home/vehiclereporting/newvehiclereporting';
-  static const loadingConfirmation='/home/loadingConfirmation';
-  static const newloadingConfirmation='/home/loadingConfirmation/newLoadingConfirmation';
 }
 
 enum AppRoute {
   initial(_AppRoutePaths.initial),
   login(_AppRoutePaths.login),
   home(_AppRoutePaths.home),
-  dashboard(_AppRoutePaths.dashboard),
   gateEntry(_AppRoutePaths.gateEntry),
-  gatexit(_AppRoutePaths.gateExit),
   newGateEntry(_AppRoutePaths.newGateEntry),
+  newGateEntryPreview(_AppRoutePaths.newGateEntryPreview),
+  gateExit(_AppRoutePaths.gateExit),
   newGateExit(_AppRoutePaths.newGateExit),
-  newLogisticRequest(_AppRoutePaths.newLogisticRequest),
-  newLoadingConfirmation(_AppRoutePaths.newloadingConfirmation),
-  newTarnsportCnfrm(_AppRoutePaths.newTarnsportCnfrm),
-  newVehiclereporting(_AppRoutePaths.newVehiclereporting),
-  account(_AppRoutePaths.account),
-  logisticRequest(_AppRoutePaths.logisticRequest),
-  transportConfirmation(_AppRoutePaths.transportConfirmation),
-  vehcileReporting(_AppRoutePaths.vehcileReporting),
-  loadingConfirmation(_AppRoutePaths.loadingConfirmation),
-  notifications(_AppRoutePaths.notifications);
-  
+  newGateExitPreview(_AppRoutePaths.newGateExitPreview),
+  gateRegistration(_AppRoutePaths.gateRegistration),
+  newGateRegistration(_AppRoutePaths.newGateRegistration),
+  newGateRegistrationPreview(_AppRoutePaths.newGateRegistrationPreview),
+  dipatchGaylord(_AppRoutePaths.dipatchGaylord),
+  dispatchGaylordPreview(_AppRoutePaths.dispatchGaylordPreview),
+  poApprovalList(_AppRoutePaths.poApprovalList),
+  poApprovalListPreview(_AppRoutePaths.poApprovalListPreview),
+  dashboards(_AppRoutePaths.dashboards),
+  dashboardView(_AppRoutePaths.dashboardView),
+
+  account(_AppRoutePaths.account);
 
   const AppRoute(this.path);
   final String path;

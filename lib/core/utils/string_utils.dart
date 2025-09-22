@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:nuevosol/core/core.dart';
 
 class StringUtils {
@@ -17,71 +16,9 @@ class StringUtils {
     return [s1, s2, s3].where((e) => !e.isNull).join('');
   }
 
-  static bool validateEmail(String value) {
-    const pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    return RegExp(pattern).hasMatch(value);
-  }
-
-  static bool validateGSTIn(String value) {
-    const pattern =
-        r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$';
-    return RegExp(pattern).hasMatch(value);
-  }
-
-  static bool validateIFSCode(String value) {
-    const pattern = r'^[A-Za-z]{4}0[A-Z0-9a-z]{7}$';
-    return !RegExp(pattern).hasMatch(value);
-  }
-
-  static bool validateUPI(String upi) {
-    final regex = RegExp(r'^[\w.\-_]{2,256}@[a-zA-Z]{2,64}$');
-    return regex.hasMatch(upi);
-  }
-
-  static bool isValidIndianMobile(String number) {
-    // Regex pattern: ^[6-9] - starts with 6-9, \d{9} - followed by 9 digits
-    return RegExp(r'^[6-9]\d{9}$').hasMatch(number);
-  }
-
-  static bool isIPv4(String baseUrl) {
-    final ipv4Pattern = RegExp(r'^(\d{1,3}\.){3}\d{1,3}(:\d+)?$');
-    return ipv4Pattern.hasMatch(baseUrl);
-  }
-
-  static int docStatusInt(String? status) {
-    switch (status?.toLowerCase()) {
-      case 'draft':
-        return 0;
-      case 'submitted':
-        return 1;
-      case 'all':
-        return 2;
-      default:
-        return 0;
-    }
-  }
-
-  static bool isValidFSSAINumber(String fssaiNumber) {
-    final fssaiRegExp = RegExp(r'^\d{14}$');
-    return fssaiRegExp.hasMatch(fssaiNumber);
-  }
-
-  static String readPlacemark(Placemark? placeMark) {
-    final name = placeMark?.name;
-    final subLocality = placeMark?.subLocality;
-    final locality = placeMark?.locality;
-    final administrativeArea = placeMark?.administrativeArea;
-    final postalCode = placeMark?.postalCode;
-    final country = placeMark?.country;
-    return [
-      name,
-      subLocality,
-      locality,
-      administrativeArea,
-      postalCode,
-      country,
-    ].nonNulls.join(', ');
+  static String trimTime(String? s1) {
+    if (s1.doesNotHaveValue) return '';
+    return RegExp(r'^\d{2}:\d{2}:\d{2}').stringMatch(s1!) ?? '';
   }
 
   static String docStatus(int status) {
@@ -93,6 +30,16 @@ class StringUtils {
       return 'Draft';
     }
   }
+
+  static int docStatusInt(String status) {
+    if (status == 'Draft') {
+      return 0;
+    } else if (status == 'Submitted') {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }
 
 extension StringExentions on String? {
@@ -102,7 +49,6 @@ extension StringExentions on String? {
   bool get doesNotHaveValue => !containsValidValue;
 
   String get valueOrEmpty => this ?? '';
-  String get valueOrNil => this ?? '-Nil-';
 
   Either<Failure, T> asFailure<T>() => left(Failure(error: this!));
 

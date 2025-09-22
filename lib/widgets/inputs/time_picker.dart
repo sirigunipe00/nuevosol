@@ -1,109 +1,143 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/styles/app_color.dart';
+import 'package:nuevosol/widgets/caption_text.dart';
+import 'package:nuevosol/widgets/spaced_column.dart';
 
-class TimePickerField extends StatefulWidget {
-
-  const TimePickerField({
+class TimeSelectionField extends StatefulWidget {
+  const TimeSelectionField({
     super.key,
-    this.title,
-    this.backgroundColor=Colors.grey,
+    required this.title,
+    this.initialValue,
+    this.readOnly = false,
     this.hintText,
-    this.initialTime,
-    required this.onTimeChanged,
-    this.borderColor = Colors.grey, required bool readOnly,
+    this.suffixIcon,
+    required this.onTimeSelect,
+    this.borderColor = AppColors.registration,
+    this.isRequired =false,
   });
-  final String? title;
+
+  final String title;
+  final String? initialValue;
+  final bool readOnly;
   final String? hintText;
-  final String? initialTime;
-  final ValueChanged<String> onTimeChanged;
-  final Color borderColor;
-  final Color backgroundColor;
+  final Widget? suffixIcon;
+  final Color? borderColor;
+  final bool isRequired;
+  final Function(TimeOfDay time) onTimeSelect;
 
   @override
-  State<TimePickerField> createState() => _TimePickerFieldState();
+  State<TimeSelectionField> createState() => _TimeSelectionFieldState();
 }
 
-class _TimePickerFieldState extends State<TimePickerField> {
-  late TextEditingController _controller;
+class _TimeSelectionFieldState extends State<TimeSelectionField> {
+  late TextEditingController controller;
+  TimeOfDay? selectedTime;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialTime ?? '');
-  }
+    controller = TextEditingController(text: widget.initialValue);
+    if (widget.initialValue.containsValidValue) {
+      final parts = widget.initialValue!.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
 
-  Future<void> _pickTime() async {
-    TimeOfDay initialTime = TimeOfDay.now();
-
-    
-    if (widget.initialTime != null && widget.initialTime!.isNotEmpty) {
-      final parts = widget.initialTime!.split(':');
-      if (parts.length >= 2) {
-        final hour = int.tryParse(parts[0]) ?? 0;
-        final minute = int.tryParse(parts[1]) ?? 0;
-        initialTime = TimeOfDay(hour: hour, minute: minute);
-      }
-    }
-
-    final pickedTime = await showTimePicker(
-      context: context,
-      initialTime: initialTime,
-      builder: (context, child) {
-      
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child ?? const SizedBox(),
-        );
-      },
-    );
-
-    if (pickedTime != null) {
-      final hour = pickedTime.hour.toString().padLeft(2, '0');
-      final minute = pickedTime.minute.toString().padLeft(2, '0');
-      final time24h = '$hour:$minute';
-
-      _controller.text = time24h;
-      widget.onTimeChanged(time24h);
-      setState(() {});
+      final timeOfDay = TimeOfDay(hour: hour, minute: minute);
+      selectedTime = timeOfDay;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final textFieldBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: const BorderSide(color: AppColors.black, width: 0.8),
+    );
+
+    return SpacedColumn(
       crossAxisAlignment: CrossAxisAlignment.start,
+      defaultHeight: 4.0,
       children: [
-        if (widget.title != null && widget.title!.isNotEmpty) ...[
-          Text(
-            widget.title!,
-            style:const  TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-              fontFamily: 'Urbanist'
-            ),
+        // Text(
+        //   widget.title,
+        //   style: const TextStyle(color: Colors.black),
+        // ),
+         CaptionText(title: widget.title,isRequired: widget.isRequired,),
+        Container(
+          margin: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppColors.white, width: 0),
+            boxShadow: [
+              BoxShadow(
+                color: widget.borderColor ?? AppColors.white,
+                blurRadius: 0.8,
+                offset: const Offset(4, 4),
+              ),
+            ],
+            borderRadius: BorderRadius.circular(16.0),
           ),
-          const SizedBox(height: 2),
-        ],
-        TextField(
-          controller: _controller,
-          readOnly: true,
-          decoration: InputDecoration(
-            hintText: widget.hintText ?? 'Select Time',
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(8),
+          child: TextField(
+            onTap: () {
+              if (widget.readOnly) return;
+              showTimePickerDialog();
+            },
+            controller: controller,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 16,
             ),
-            suffixIcon: const Icon(Icons.access_time),
-            fillColor: Colors.grey[100],
-            filled: true,
-            contentPadding: const EdgeInsets.
-            symmetric(
-              horizontal: 12,
-              vertical:8,
+            decoration: InputDecoration(
+              border: textFieldBorder,
+              enabledBorder: textFieldBorder,
+              disabledBorder: textFieldBorder,
+              focusedBorder: textFieldBorder,
+              contentPadding: const EdgeInsets.all(16.0),
+              suffixIcon: widget.suffixIcon,
+              counterText: '',
+              fillColor: widget.readOnly ? AppColors.himlayaPeeks : Colors.white,
+              filled: widget.readOnly,
             ),
+            //  obscuringCharacter: '*',
+            textInputAction: TextInputAction.done,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            textCapitalization: TextCapitalization.none,
+            readOnly: true,
+            autocorrect: false,
           ),
-          onTap: _pickTime,
         ),
       ],
     );
   }
+
+  void showTimePickerDialog() async {
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: this.selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (selectedTime != null) {
+      setState(() {
+        this.selectedTime = selectedTime;
+        controller.text = formatTimeOfDay(selectedTime);
+      });
+      widget.onTimeSelect(selectedTime);
+    }
+  }
+
+  String formatTimeOfDay(TimeOfDay timeOfDay) {
+    return DateFormat('HH:mm').format(DateTime(
+      1970,
+      1,
+      1,
+      timeOfDay.hour,
+      timeOfDay.minute,
+      0,
+    ));
+  }
 }
+

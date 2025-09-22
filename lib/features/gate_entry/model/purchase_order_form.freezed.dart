@@ -12,8 +12,7 @@ part of 'purchase_order_form.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 PurchaseOrderForm _$PurchaseOrderFormFromJson(Map<String, dynamic> json) {
   return _PurchaseOrderForm.fromJson(json);
@@ -23,12 +22,12 @@ PurchaseOrderForm _$PurchaseOrderFormFromJson(Map<String, dynamic> json) {
 mixin _$PurchaseOrderForm {
   @JsonKey(name: 'name')
   String? get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'company')
-  String? get plantName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'supplier')
-  String? get supplier => throw _privateConstructorUsedError;
-  @JsonKey(name: 'custom_remarks')
-  String? get remarks => throw _privateConstructorUsedError;
+  @JsonKey(name: 'workflow_state')
+  String? get workFlowState => throw _privateConstructorUsedError;
+  @JsonKey(name: 'supplier_name')
+  String? get supplierName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'schedule_date', defaultValue: '')
+  String? get scheduleDate => throw _privateConstructorUsedError;
 
   /// Serializes this PurchaseOrderForm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,16 +42,14 @@ mixin _$PurchaseOrderForm {
 /// @nodoc
 abstract class $PurchaseOrderFormCopyWith<$Res> {
   factory $PurchaseOrderFormCopyWith(
-    PurchaseOrderForm value,
-    $Res Function(PurchaseOrderForm) then,
-  ) = _$PurchaseOrderFormCopyWithImpl<$Res, PurchaseOrderForm>;
+          PurchaseOrderForm value, $Res Function(PurchaseOrderForm) then) =
+      _$PurchaseOrderFormCopyWithImpl<$Res, PurchaseOrderForm>;
   @useResult
-  $Res call({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'company') String? plantName,
-    @JsonKey(name: 'supplier') String? supplier,
-    @JsonKey(name: 'custom_remarks') String? remarks,
-  });
+  $Res call(
+      {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'workflow_state') String? workFlowState,
+      @JsonKey(name: 'supplier_name') String? supplierName,
+      @JsonKey(name: 'schedule_date', defaultValue: '') String? scheduleDate});
 }
 
 /// @nodoc
@@ -71,63 +68,53 @@ class _$PurchaseOrderFormCopyWithImpl<$Res, $Val extends PurchaseOrderForm>
   @override
   $Res call({
     Object? name = freezed,
-    Object? plantName = freezed,
-    Object? supplier = freezed,
-    Object? remarks = freezed,
+    Object? workFlowState = freezed,
+    Object? supplierName = freezed,
+    Object? scheduleDate = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            name:
-                freezed == name
-                    ? _value.name
-                    : name // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            plantName:
-                freezed == plantName
-                    ? _value.plantName
-                    : plantName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            supplier:
-                freezed == supplier
-                    ? _value.supplier
-                    : supplier // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            remarks:
-                freezed == remarks
-                    ? _value.remarks
-                    : remarks // ignore: cast_nullable_to_non_nullable
-                        as String?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      workFlowState: freezed == workFlowState
+          ? _value.workFlowState
+          : workFlowState // ignore: cast_nullable_to_non_nullable
+              as String?,
+      supplierName: freezed == supplierName
+          ? _value.supplierName
+          : supplierName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      scheduleDate: freezed == scheduleDate
+          ? _value.scheduleDate
+          : scheduleDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$PurchaseOrderFormImplCopyWith<$Res>
     implements $PurchaseOrderFormCopyWith<$Res> {
-  factory _$$PurchaseOrderFormImplCopyWith(
-    _$PurchaseOrderFormImpl value,
-    $Res Function(_$PurchaseOrderFormImpl) then,
-  ) = __$$PurchaseOrderFormImplCopyWithImpl<$Res>;
+  factory _$$PurchaseOrderFormImplCopyWith(_$PurchaseOrderFormImpl value,
+          $Res Function(_$PurchaseOrderFormImpl) then) =
+      __$$PurchaseOrderFormImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'company') String? plantName,
-    @JsonKey(name: 'supplier') String? supplier,
-    @JsonKey(name: 'custom_remarks') String? remarks,
-  });
+  $Res call(
+      {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'workflow_state') String? workFlowState,
+      @JsonKey(name: 'supplier_name') String? supplierName,
+      @JsonKey(name: 'schedule_date', defaultValue: '') String? scheduleDate});
 }
 
 /// @nodoc
 class __$$PurchaseOrderFormImplCopyWithImpl<$Res>
     extends _$PurchaseOrderFormCopyWithImpl<$Res, _$PurchaseOrderFormImpl>
     implements _$$PurchaseOrderFormImplCopyWith<$Res> {
-  __$$PurchaseOrderFormImplCopyWithImpl(
-    _$PurchaseOrderFormImpl _value,
-    $Res Function(_$PurchaseOrderFormImpl) _then,
-  ) : super(_value, _then);
+  __$$PurchaseOrderFormImplCopyWithImpl(_$PurchaseOrderFormImpl _value,
+      $Res Function(_$PurchaseOrderFormImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of PurchaseOrderForm
   /// with the given fields replaced by the non-null parameter values.
@@ -135,46 +122,39 @@ class __$$PurchaseOrderFormImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
-    Object? plantName = freezed,
-    Object? supplier = freezed,
-    Object? remarks = freezed,
+    Object? workFlowState = freezed,
+    Object? supplierName = freezed,
+    Object? scheduleDate = freezed,
   }) {
-    return _then(
-      _$PurchaseOrderFormImpl(
-        name:
-            freezed == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        plantName:
-            freezed == plantName
-                ? _value.plantName
-                : plantName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        supplier:
-            freezed == supplier
-                ? _value.supplier
-                : supplier // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        remarks:
-            freezed == remarks
-                ? _value.remarks
-                : remarks // ignore: cast_nullable_to_non_nullable
-                    as String?,
-      ),
-    );
+    return _then(_$PurchaseOrderFormImpl(
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      workFlowState: freezed == workFlowState
+          ? _value.workFlowState
+          : workFlowState // ignore: cast_nullable_to_non_nullable
+              as String?,
+      supplierName: freezed == supplierName
+          ? _value.supplierName
+          : supplierName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      scheduleDate: freezed == scheduleDate
+          ? _value.scheduleDate
+          : scheduleDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PurchaseOrderFormImpl implements _PurchaseOrderForm {
-  const _$PurchaseOrderFormImpl({
-    @JsonKey(name: 'name') this.name,
-    @JsonKey(name: 'company') this.plantName,
-    @JsonKey(name: 'supplier') this.supplier,
-    @JsonKey(name: 'custom_remarks') this.remarks,
-  });
+  const _$PurchaseOrderFormImpl(
+      {@JsonKey(name: 'name') this.name,
+      @JsonKey(name: 'workflow_state') this.workFlowState,
+      @JsonKey(name: 'supplier_name') this.supplierName,
+      @JsonKey(name: 'schedule_date', defaultValue: '') this.scheduleDate});
 
   factory _$PurchaseOrderFormImpl.fromJson(Map<String, dynamic> json) =>
       _$$PurchaseOrderFormImplFromJson(json);
@@ -183,18 +163,18 @@ class _$PurchaseOrderFormImpl implements _PurchaseOrderForm {
   @JsonKey(name: 'name')
   final String? name;
   @override
-  @JsonKey(name: 'company')
-  final String? plantName;
+  @JsonKey(name: 'workflow_state')
+  final String? workFlowState;
   @override
-  @JsonKey(name: 'supplier')
-  final String? supplier;
+  @JsonKey(name: 'supplier_name')
+  final String? supplierName;
   @override
-  @JsonKey(name: 'custom_remarks')
-  final String? remarks;
+  @JsonKey(name: 'schedule_date', defaultValue: '')
+  final String? scheduleDate;
 
   @override
   String toString() {
-    return 'PurchaseOrderForm(name: $name, plantName: $plantName, supplier: $supplier, remarks: $remarks)';
+    return 'PurchaseOrderForm(name: $name, workFlowState: $workFlowState, supplierName: $supplierName, scheduleDate: $scheduleDate)';
   }
 
   @override
@@ -203,17 +183,18 @@ class _$PurchaseOrderFormImpl implements _PurchaseOrderForm {
         (other.runtimeType == runtimeType &&
             other is _$PurchaseOrderFormImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.plantName, plantName) ||
-                other.plantName == plantName) &&
-            (identical(other.supplier, supplier) ||
-                other.supplier == supplier) &&
-            (identical(other.remarks, remarks) || other.remarks == remarks));
+            (identical(other.workFlowState, workFlowState) ||
+                other.workFlowState == workFlowState) &&
+            (identical(other.supplierName, supplierName) ||
+                other.supplierName == supplierName) &&
+            (identical(other.scheduleDate, scheduleDate) ||
+                other.scheduleDate == scheduleDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, name, plantName, supplier, remarks);
+      Object.hash(runtimeType, name, workFlowState, supplierName, scheduleDate);
 
   /// Create a copy of PurchaseOrderForm
   /// with the given fields replaced by the non-null parameter values.
@@ -222,23 +203,23 @@ class _$PurchaseOrderFormImpl implements _PurchaseOrderForm {
   @pragma('vm:prefer-inline')
   _$$PurchaseOrderFormImplCopyWith<_$PurchaseOrderFormImpl> get copyWith =>
       __$$PurchaseOrderFormImplCopyWithImpl<_$PurchaseOrderFormImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PurchaseOrderFormImplToJson(this);
+    return _$$PurchaseOrderFormImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _PurchaseOrderForm implements PurchaseOrderForm {
-  const factory _PurchaseOrderForm({
-    @JsonKey(name: 'name') final String? name,
-    @JsonKey(name: 'company') final String? plantName,
-    @JsonKey(name: 'supplier') final String? supplier,
-    @JsonKey(name: 'custom_remarks') final String? remarks,
-  }) = _$PurchaseOrderFormImpl;
+  const factory _PurchaseOrderForm(
+      {@JsonKey(name: 'name') final String? name,
+      @JsonKey(name: 'workflow_state') final String? workFlowState,
+      @JsonKey(name: 'supplier_name') final String? supplierName,
+      @JsonKey(name: 'schedule_date', defaultValue: '')
+      final String? scheduleDate}) = _$PurchaseOrderFormImpl;
 
   factory _PurchaseOrderForm.fromJson(Map<String, dynamic> json) =
       _$PurchaseOrderFormImpl.fromJson;
@@ -247,14 +228,14 @@ abstract class _PurchaseOrderForm implements PurchaseOrderForm {
   @JsonKey(name: 'name')
   String? get name;
   @override
-  @JsonKey(name: 'company')
-  String? get plantName;
+  @JsonKey(name: 'workflow_state')
+  String? get workFlowState;
   @override
-  @JsonKey(name: 'supplier')
-  String? get supplier;
+  @JsonKey(name: 'supplier_name')
+  String? get supplierName;
   @override
-  @JsonKey(name: 'custom_remarks')
-  String? get remarks;
+  @JsonKey(name: 'schedule_date', defaultValue: '')
+  String? get scheduleDate;
 
   /// Create a copy of PurchaseOrderForm
   /// with the given fields replaced by the non-null parameter values.

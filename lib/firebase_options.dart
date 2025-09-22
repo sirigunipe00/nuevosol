@@ -17,20 +17,17 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-      //   return ios;
-      // case TargetPlatform.macOS:
-      //   return macos;
-      // case TargetPlatform.windows:
-      //   return windows;
+        return ios;
+      case TargetPlatform.macOS:
+        return macos;
+      case TargetPlatform.windows:
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -43,49 +40,50 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // static const FirebaseOptions web = FirebaseOptions(
-  //   apiKey: 'AIzaSyCgzlH6jkXUudsqyvZtFq2CUJvsOb26kRE',
-  //   appId: '1:697946700598:web:512cafe9d81f6350479197',
-  //   messagingSenderId: '697946700598',
-  //   projectId: 'shakti-hormann',
-  //   authDomain: 'shakti-hormann.firebaseapp.com',
-  //   storageBucket: 'shakti-hormann.firebasestorage.app',
-  //   measurementId: 'G-41DKVF3B9X',
-  // );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDfNG07YhCuiM-EIVY91RxhwYRzJxSTJ9I',
-    appId: '1:697946700598:android:68f089e86097bb39479197',
-    messagingSenderId: '697946700598',
-    projectId: 'shakti-hormann',
-    storageBucket: 'shakti-hormann.firebasestorage.app',
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAE8Psg9BCHtXbBuglobaI75Sv03owUvVg',
+    appId: '1:247437191888:web:817da0b220cd76d486ccd5',
+    messagingSenderId: '247437191888',
+    projectId: 'nuevosol-6b4e0',
+    authDomain: 'nuevosol-6b4e0.firebaseapp.com',
+    storageBucket: 'nuevosol-6b4e0.firebasestorage.app',
+    measurementId: 'G-SQRSMMTL5X',
   );
 
-  // static const FirebaseOptions ios = FirebaseOptions(
-  //   apiKey: 'AIzaSyBAbu2B-QIBCsUZkgIpRnw1hJy-dgRPxOU',
-  //   appId: '1:697946700598:ios:ea04f9fb01274854479197',
-  //   messagingSenderId: '697946700598',
-  //   projectId: 'shakti-hormann',
-  //   storageBucket: 'shakti-hormann.firebasestorage.app',
-  //   iosBundleId: 'com.example.shaktiHormann',
-  // );
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyD6gXxE0VYSMjkjmnE3RbLkDDlbEaDxSYI',
+    appId: '1:247437191888:android:45577e7a958290d886ccd5',
+    messagingSenderId: '247437191888',
+    projectId: 'nuevosol-6b4e0',
+    storageBucket: 'nuevosol-6b4e0.firebasestorage.app',
+  );
 
-  // static const FirebaseOptions macos = FirebaseOptions(
-  //   apiKey: 'AIzaSyBAbu2B-QIBCsUZkgIpRnw1hJy-dgRPxOU',
-  //   appId: '1:697946700598:ios:ea04f9fb01274854479197',
-  //   messagingSenderId: '697946700598',
-  //   projectId: 'shakti-hormann',
-  //   storageBucket: 'shakti-hormann.firebasestorage.app',
-  //   iosBundleId: 'com.example.shaktiHormann',
-  // );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDFJPab3DBczztz_GHTcQz1Hs7SXLA9Gqk',
+    appId: '1:247437191888:ios:b89c0d4b3a312d8c86ccd5',
+    messagingSenderId: '247437191888',
+    projectId: 'nuevosol-6b4e0',
+    storageBucket: 'nuevosol-6b4e0.firebasestorage.app',
+    iosBundleId: 'com.example.nuevosol',
+  );
 
-  // static const FirebaseOptions windows = FirebaseOptions(
-  //   apiKey: 'AIzaSyCgzlH6jkXUudsqyvZtFq2CUJvsOb26kRE',
-  //   appId: '1:697946700598:web:e2da833f8ff75e37479197',
-  //   messagingSenderId: '697946700598',
-  //   projectId: 'shakti-hormann',
-  //   authDomain: 'shakti-hormann.firebaseapp.com',
-  //   storageBucket: 'shakti-hormann.firebasestorage.app',
-  //   measurementId: 'G-RWVDQWNHT8',
-  // );
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDFJPab3DBczztz_GHTcQz1Hs7SXLA9Gqk',
+    appId: '1:247437191888:ios:b89c0d4b3a312d8c86ccd5',
+    messagingSenderId: '247437191888',
+    projectId: 'nuevosol-6b4e0',
+    storageBucket: 'nuevosol-6b4e0.firebasestorage.app',
+    iosBundleId: 'com.example.nuevosol',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAE8Psg9BCHtXbBuglobaI75Sv03owUvVg',
+    appId: '1:247437191888:web:ccdc6821b05f1ea486ccd5',
+    messagingSenderId: '247437191888',
+    projectId: 'nuevosol-6b4e0',
+    authDomain: 'nuevosol-6b4e0.firebaseapp.com',
+    storageBucket: 'nuevosol-6b4e0.firebasestorage.app',
+    measurementId: 'G-BEB5H3C9TK',
+  );
+
 }

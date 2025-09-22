@@ -6,7 +6,7 @@ class Urls {
   // factory Urls.shaktiHormannUAT() =>
   //     const Urls('https://aparnagmuat.easycloud.co.in/api');
   // factory Urls.prod() => const Urls('https://rucoprd.sunpure.in/api');
-  factory Urls.local() => const Urls('http://65.21.243.18:8000/api');
+  factory Urls.local() => const Urls('http://65.21.176.38:8000/api');
 
   const Urls(this.url);
   static String filepath(String path) =>
@@ -23,19 +23,19 @@ class Urls {
 
   static final login = '$cusWs/login';
   static final getList = '$cusWs/frappe.client.get_list';
-  static final getUsers = '$cusWs/shaktihormann.api.getUsers';
+  static final getUsers = '$cusWs/nuevosol.gate_api.getUsers';
 
   static final appVersion = '$cusWs/easy_common.api.get_app_version';
 
-  static final companyName = '$jsonWs/Company';
-  static final createGateEntry = '$cusWs/shaktihormann.api.createGateEntry';
-  static final submitGateEntry = '$cusWs/shaktihormann.api.submit_gate_entry';
-  static final createGateExit = '$cusWs/shaktihormann.api.create_gate_exit';
-  static final submitGateExit = '$cusWs/shaktihormann.api.submit_gate_exit';
-  static final createLogisticPlanning =
-      '$cusWs/shaktihormann.api.create_logistic_planning';
-  static final updateLogisticPlanning =
-      '$cusWs/shaktihormann.api.update_logistic_planning';
-  static final updateTransport='$cusWs/shaktihormann.api.update_logistic_transporter';
-  static final createVehicleReporting='$cusWs/shaktihormann.api.create_vehicle_reporting';
+  // static final companyName = '$jsonWs/Company';
+  static final createGateEntry = '$cusWs/nuevosol.gate_api.createGateEntry';
+  // static final submitGateEntry = '$cusWs/shaktihormann.api.submit_gate_entry';
+  static final createGateExit = '$cusWs/nuevosol.gate_api.createGateExit';
+  // static final submitGateExit = '$cusWs/shaktihormann.api.submit_gate_exit';
+  // static final createLogisticPlanning =
+  //     '$cusWs/shaktihormann.api.create_logistic_planning';
+  // static final updateLogisticPlanning =
+  //     '$cusWs/shaktihormann.api.update_logistic_planning';
+  // static final updateTransport='$cusWs/shaktihormann.api.update_logistic_transporter';
+  // static final createVehicleReporting='$cusWs/shaktihormann.api.create_vehicle_reporting';
 }
