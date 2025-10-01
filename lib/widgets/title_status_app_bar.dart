@@ -3,6 +3,8 @@ import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_text_styles.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
+import 'package:nuevosol/doc_status_widget.dart';
+
 
 enum DocNoAlignment { vertical, horizontal }
 
@@ -63,12 +65,12 @@ class TitleStatusAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Icon(Icons.arrow_back, color: AppColors.white, size: 18),
         ),
       ),
-      // actions: [
-      //   Padding(
-      //     padding: const EdgeInsets.only(right: 10.0),
-      //     child: DocStatusWidget(status: status),
-      //   ),
-      // ],
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: DocStatusWidget(status: status),
+        ),
+      ],
     );
   }
 

@@ -171,7 +171,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
 
     final response = await post(config);
     return response.processAsync((r) async {
-      return right(Pair(r.data!.first, r.data!.second));
+      return right(r.data!);
     });
   }
  
@@ -187,13 +187,17 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     // if (plantName != null && plantName.isNotEmpty) {
     //   filters.add(['company', '=', plantName]);
     // }
+       final filters = [
+      ['docstatus', '=', 1], 
+      // if (name.isNotEmpty) ['supplier', 'like', '%$name%'],
+    ];
 
       final reqParams = {
       'limit': 20,
       'order_by': 'creation desc',
       'doctype': 'Purchase Order',
       'fields': jsonEncode(['*']),   
-      // 'filters': jsonEncode(filters), 
+      'filters': jsonEncode(filters), 
     };
 
      

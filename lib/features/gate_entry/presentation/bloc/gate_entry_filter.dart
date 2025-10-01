@@ -9,13 +9,8 @@ class GateEntryFilterCubit extends FiltersCubit {
 
   @override
   void onChangeStatus(String status) {
-    if (status.isNotEmpty) {
-      final newState = state.copyWith(status: status);
-      emitSafeState(newState);
-    } else {
-      final newState = state.copyWith(status: 'Draft');
-      emitSafeState(newState);
-    }
+    final newState = state.copyWith(status: status);
+    emitSafeState(newState);
   }
 
   @override

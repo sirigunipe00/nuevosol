@@ -23,7 +23,7 @@ class _NewGateEntryState extends State<NewGateEntry> {
   Widget build(BuildContext context) {
     final gateEntryState = context.read<CreateGateEntryCubit>().state;
     final form = gateEntryState.form;
-    final status = form.status;
+    final status = form.docStatus;
     final name = form.name;
 
     final isNew = gateEntryState.view == GateEntryView.create;
@@ -33,7 +33,7 @@ class _NewGateEntryState extends State<NewGateEntry> {
           : TitleStatusAppBar(
               title: 'Gate Entry',
               docNo: name.valueOrEmpty,
-              status: status.valueOrEmpty,
+              status: StringUtils.docStatus(status ?? 0),
               textColor: AppColors.marigoldDDust,
             ) as PreferredSizeWidget,
       body: BlocListener<CreateGateEntryCubit, CreateGateEntryState>(

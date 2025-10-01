@@ -257,12 +257,14 @@ class CreateGateExitState with _$CreateGateExitState {
   }) = _CreateGateExitState;
 
   factory CreateGateExitState.initial() {
+    final now = DateTime.now();
     final creationDate = DFU.friendlyFormat(DFU.now());
     final entryDate = DFU.ddMMyyyy(DFU.now());
+    
 
 
     return CreateGateExitState(
-      form: GateExit(creationDate: creationDate,gateExitDate: entryDate),
+      form: GateExit(creationDate: creationDate,gateExitDate: entryDate, gateExitTime: now.toString()),
       view: GateExitView.create,
       isLoading: false,
       isSuccess: false,

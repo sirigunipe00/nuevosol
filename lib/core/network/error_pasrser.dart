@@ -1,25 +1,25 @@
-import 'dart:convert';
+import 'package:nuevosol/core/logger/app_logger.dart';
+import 'package:nuevosol/core/model/failure.dart';
 
-String defaultErrorParser(
-    Map<String, dynamic> response, String defErrorMessage) {
+Failure defaultErrorParser(Map<String, dynamic> response, String defErrorMessage) {
   try {
-    if (response.containsKey('_server_messages')) {
-      final serverMsgs =
-          json.decode(response['_server_messages']) as List<dynamic>;
-      if (serverMsgs.isNotEmpty) {
-        final messageData = json.decode(serverMsgs.first);
-        final errorMsg = messageData['message'];
-        return errorMsg;
-      }
+    if(response.containsKey('_server_messages')) {
+      return Failure(error: response['exc_type'], title: 'Message');
     }
-    if (response.containsKey('exception')) {
-      final errorMsg = response['message'];
-      final exception = response['exception'];
-      return errorMsg ?? exception;
+    late String errorMsg;
+    if(response.containsKey('message')) {
+      errorMsg = response['message'];
     } else {
-      return defErrorMessage;
+      errorMsg = response['exception'];
+      errorMsg = errorMsg.replaceAll('frappe.exceptions.', '');
     }
-  } on Exception catch (_) {
+    final excType = response['exc_type'] as String?;
+    final exception = response['exception'];
+    final stachTrace = response['exc'];
+    $logger.error('[Frappe $errorMsg]', exception, stachTrace);
+    return Failure(title: excType, error: errorMsg);
+  } on Exception catch (e, st) {
+    $logger.error('[Error Parser]', e, st);
     throw const FormatException('Unrecognized json error response');
   }
 }

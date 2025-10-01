@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/core/model/page_view_filters.dart';
 import 'package:nuevosol/features/auth/presentation/bloc/auth/auth_cubit.dart';
 import 'package:nuevosol/features/auth/presentation/ui/sign_in/sign_in_cubit.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/gate_exit_filter.dart';
+import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/po_approval_list/presentation/bloc/po_approval_filters_cubit.dart';
 import 'package:nuevosol/styles/material_theme.dart';
 
 
@@ -22,6 +25,7 @@ class FrappeApp extends StatelessWidget {
         BlocProvider<SignInCubit>(create: (_) => $sl.get<SignInCubit>()),
         BlocProvider(create: (_) => GateEntryFilterCubit()),
         BlocProvider(create: (_) => GateExitFilterCubit()),
+        BlocProvider(create: (_) => PoApprovalFiltersCubit()),
       
         BlocProvider(
           create: (_) => GateEntryBlocProvider.get().fetchGateEntries()),
@@ -30,7 +34,7 @@ class FrappeApp extends StatelessWidget {
         BlocProvider(
           create: (_) => GateEntryBlocProvider.get().fetchPONumbers()),
         BlocProvider(create: (_) => GateExitBlocProvider.get().salesInvoiceList()),
-        // BlocProvider(create: (_) => DispatchBlocProvider.get().fetchGaylords()),
+        BlocProvider(create: (_) => PoApprovalBlocProvider.get().fetchPurchaseOrders()),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listener: (_, state) {
@@ -45,25 +49,23 @@ class FrappeApp extends StatelessWidget {
                 ..cubit<GateEntriesCubit>().fetchInitial(filters)
                 ..cubit<GateExitCubit>().fetchInitial(filters)
                 ..cubit<PurchaseOrders>().request('')
-                ..cubit<SalesInvoiceList>().request('');
+                ..cubit<SalesInvoiceList>().request('')
+                ..cubit<PoApprovalCubit>().fetchInitial(PageViewFilters.initial());
                 // ..cubit<GateRegistrationsCubit>().fetchInitial(PageListFilters.initial())
                 // ..cubit<DispatchCubit>().fetchInitial(PageListFilters.initial())
-                // ..cubit<PoApprovalCubit>().fetchInitial(PageListFilters.initial());
+                
               AppRoute.home.go(routerCtxt);
             },
             unAuthenticated: () => AppRoute.login.go(routerCtxt),
           );
         },
-        
-          child: MaterialApp.router(
+        child: MaterialApp.router(
             title: 'Nuevosol',
             theme: AppMaterialTheme.lightTheme,
             darkTheme: AppMaterialTheme.lightTheme,
             routerConfig: AppRouterConfig.router,
             debugShowCheckedModeBanner: false,
-
-          
-        ),
+            ),
       ),
     );
   }

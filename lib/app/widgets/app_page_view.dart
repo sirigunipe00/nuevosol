@@ -92,7 +92,7 @@ class _HomeCardContent extends StatelessWidget {
               Text(context.dayOfTimeGreeting(), 
                 style: AppTextStyles.titleLarge(context).copyWith(fontSize: 20)),
               Text('Ready to capture some entries & exits?', 
-                style: AppTextStyles.titleMediumWhite(context).copyWith(fontSize: 14)),
+                style: AppTextStyles.titleMediumWhite(context).copyWith(fontSize: 16)),
             ],
           ),
         ),

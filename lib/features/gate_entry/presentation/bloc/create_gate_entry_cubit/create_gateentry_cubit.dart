@@ -55,6 +55,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
   }) async {
     shouldAskForConfirmation.value = true;
     final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    
     final form = state.form;
 
     final vehiclePhotos = vehiclePhoto ?? form.vehiclePhotoImg;
@@ -65,7 +66,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
     final newForm = form.copyWith(
       customSupplier: customSupplier ?? form.customSupplier,
       name: name ?? form.name,
-      createTime: createTime ?? form.createTime,
+      createTime: createTime ?? form.createTime ,
       creationDate: today,
       owner: owner ?? form.owner,
       customeUnit1: customUnit1 ?? form.customeUnit1,
@@ -297,11 +298,12 @@ class CreateGateEntryState with _$CreateGateEntryState {
   }) = _CreateGateEntryState;
 
   factory CreateGateEntryState.initial() {
+    final now = DateTime.now();
     final creationDate = DFU.friendlyFormat(DFU.now());
     final entryDate = DFU.ddMMyyyy(DFU.now());
 
     return CreateGateEntryState(
-      form: GateEntry(creationDate: creationDate, gateEntryDate: entryDate),
+      form: GateEntry(creationDate: creationDate, gateEntryDate: entryDate, createTime: now.toString(), ),
       view: GateEntryView.create,
       isLoading: false,
       isSuccess: false,

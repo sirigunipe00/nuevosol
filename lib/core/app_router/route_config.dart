@@ -19,6 +19,10 @@ import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart
 import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/create/new_gate_exit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/gate_exit_list/gate_exit_list.dart';
+import 'package:nuevosol/features/po_approval_list/model/po_approval.dart';
+import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/po_approval_list/presentation/ui/details/po_approval_form_widget.dart';
+import 'package:nuevosol/features/po_approval_list/presentation/ui/po_approval_list/po_approval_list.dart';
 
 class AppRouterConfig {
   static final parentNavigatorKey = GlobalKey<NavigatorState>();
@@ -60,11 +64,7 @@ class AppRouterConfig {
                   GoRoute(
                   path: _getPath(AppRoute.gateEntry),
                     builder: (ctxt, state) {
-                      
-                      final filters = Pair(
-                        StringUtils.docStatusInt('Draft'),
-                        null,
-                      );
+                      final filters = Pair(  StringUtils.docStatusInt('Draft'), null,);
                       return BlocProvider(
                         create:
                             (context) => GateEntryBlocProvider.get().fetchGateEntries()..fetchInitial(filters),
@@ -88,8 +88,7 @@ class AppRouterConfig {
                                 BlocProvider(
                                     create: (_) =>
                                         provider.supplietList()..request('')),
-                              
-                              BlocProvider(
+                               BlocProvider(
                                   create: (_) =>
                                       provider.fetchPONumbers()..request(form?.name ?? '')),
                               BlocProvider(
@@ -113,10 +112,7 @@ class AppRouterConfig {
                   GoRoute(
                     path: _getPath(AppRoute.gateExit),
                    builder: (ctxt, state) {
-                      final filters = Pair(
-                        StringUtils.docStatusInt('Draft'),
-                        null,
-                      );
+                      final filters = Pair( StringUtils.docStatusInt('Draft'),null,);
                       return BlocProvider(create:
                             (context) => GateExitBlocProvider.get().fetchGateExit()..fetchInitial(filters),
                         child: const GateExitListScrn(),
@@ -221,36 +217,38 @@ class AppRouterConfig {
                   //         },
                   //       )
                   //     ]),
-                  // GoRoute(
-                  //   path: _getPath(AppRoute.poApprovalList),
-                  //   builder: (ctxt, state) => const PoApprovalListScrn(),
-                  //   routes: [
-                  //     GoRoute(
-                  //       path: _getPath(AppRoute.poApprovalListPreview),
-                  //       builder: (_, state) {
-                  //         final form = state.extra as PoApprovalForm;
-                  //         final blocprovider = PoApprovalBlocProvider.get();
-                  //         return MultiBlocProvider(
-                  //           providers: [
-                  //             BlocProvider(
-                  //               create: (_) => blocprovider.fetchPoOrderItems()
-                  //                 ..request(form.name),
-                  //             ),
-                  //             BlocProvider(
-                  //                 create: (_) => blocprovider.rejectPO()),
-                  //             BlocProvider(
-                  //                 create: (_) => blocprovider.approvePO()),
-                  //             BlocProvider(
-                  //                 create: (_) =>
-                  //                     blocprovider.poPermissionCubit()
-                  //                       ..request(form.name)),
-                  //           ],
-                  //           child: PoApprovalFormWidegt(form: form),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
+                  GoRoute(
+                    path: _getPath(AppRoute.poApprovalList),
+                    builder: (ctxt, state) => const PoApprovalListScrn(),
+                    routes: [
+                      GoRoute(
+                        path: _getPath(AppRoute.poApprovalListPreview),
+                        builder: (_, state) {
+                          final form = state.extra as PoApprovalForm;
+                          final blocprovider = PoApprovalBlocProvider.get();
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (_) => blocprovider.fetchPoOrderItems()
+                                  ..request(form.name),
+                              ),
+                              BlocProvider(
+                                  create: (_) => blocprovider.rejectPO()),
+                              BlocProvider(
+                                  create: (_) => blocprovider.approvePO()),
+                              BlocProvider(
+                                  create: (_) => blocprovider.poAttchmentsCubit()..request(form.name)),
+                              BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.poPermissionCubit()
+                                        ..request(form.name)),
+                            ],
+                            child: PoApprovalFormWidegt(form: form),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   // GoRoute(
                   //   path: _getPath(AppRoute.dashboards),
                   //   builder: (ctxt, state) => BlocProvider(

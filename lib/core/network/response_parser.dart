@@ -1,5 +1,9 @@
 import 'dart:convert';
-import 'package:nuevosol/core/core.dart';
+
+import 'package:nuevosol/core/logger/app_logger.dart';
+import 'package:nuevosol/core/network/api_response.dart';
+import 'package:nuevosol/core/network/exception.dart';
+
 
 typedef ApiObjectParser<T> = T Function(Map<String, dynamic>);
 
@@ -16,42 +20,42 @@ class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
     String defErrorMessage,
   ) {
     try {
-      final response = json.decode(apiResponse) as Map<String, dynamic>;
-      final message = response['message'];
-      if (message is List<dynamic>) {
-        final res = parser(response);
-        return ApiResponse.success(res);
+      final Map<String, dynamic> response =
+          json.decode(apiResponse) as Map<String, dynamic>;
+      
+      if(response['status'] == 400) {
+        return ApiResponse.failure(response['message'].toString());
       }
-      final messageObj = response['message'];
-      if (messageObj is Map<String, dynamic>) {
-        if (messageObj.containsKey('status')) {
-          final status = messageObj['status'];
-          if (status == 200) {
-            final result = parser(response);
-            return ApiResponse.success(result);
-          } else if (status == 500 || status == 400 || status == 422 || status == 401) {
-            final message = messageObj['message'];
-            return ApiResponse.failure(message, status: 400);
-          }
+      if (response.containsKey('message')) {
+        final message = response['message'];
+        if (message is List<dynamic>) {
+          // if (message.every((element) => element is List<dynamic>)) {
+          //   return ApiResponse.success(message);
+          // }
+          final result = parser(response);
+          return ApiResponse.success(result);
         }
-        if (response.containsKey('_server_messages')) {
-          final serverMsgs =
-              json.decode(response['_server_messages']) as List<dynamic>;
-          if (serverMsgs.isNotEmpty) {
-            final messageData = json.decode(serverMsgs.first);
-            final errorMsg = messageData['message'];
-            return ApiResponse.failure(errorMsg, status: 400);
-          }
+        if(message is String) {
+          final ress = parser(response);
+          return ApiResponse.success(ress);
         }
-      } else if (messageObj is String) {
+        final msgObj = message as Map<String, dynamic>;
+        final status = msgObj['status'] as int? ?? 200;
+        if (status == 200) {
+          final result = parser(response);
+          return ApiResponse.success(result);
+        } else if (msgObj.containsKey('message')) {
+          final String message = msgObj['message'];
+          return ApiResponse.failure(message);
+        }
+      } else if (response.containsKey('data')) {
         final result = parser(response);
         return ApiResponse.success(result);
       }
 
-      final result = parser(response);
-      return ApiResponse.success(result);
+      throw UnExpectedResponseException(Errors.unrecognizedResponse);
     } on Exception catch (e, st) {
-      $logger.error('[ResponseParser]', e, st);
+      $logger.error(e, st);
       throw Exception(e);
     }
   }
@@ -69,13 +73,12 @@ class Errors {
   static String get unauthorized =>
       'Looks like you do not have access to this information';
   static String get invalidcredentials =>
-      'Wrong credentials.\nInvalid Username or Password';
+      'Wrong credentials. Invalid Username or Password';
   static String get clientError =>
       'Unfortunately we could not complete the request.';
   static String get responseIsNotValidJson => 'Invalid json response';
   static String get unrecognizedResponse => 'Unsupported response format';
-  static String get gatewayTimeout =>
-      'Server is taking too long to respond. Please try again later.';
+
   // Login
   static String get invalidUser => 'Invalid User';
 }

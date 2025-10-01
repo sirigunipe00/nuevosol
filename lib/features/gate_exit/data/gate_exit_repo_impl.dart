@@ -134,14 +134,21 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
   AsyncValueOf<List<SalesInvoiceForm>> fetchSalesInvoice(String name) async {
     return await executeSafely(() async {
       //     final plantName = user().plantName;
+       final filters = [
+      ['docstatus', '=', 1], 
+
+      // if (name.isNotEmpty) ['customer', 'like', '%$name%'],
+    ];
 
       final reqParams = {
         'limit': 20,
           'oreder_by': 'create desc',
           'doctype': 'Sales Invoice',
           'fields': ['*'],
-      };
+          'filters': jsonEncode(filters), 
 
+      };
+     
       // if (plantName != null && plantName.isNotEmpty) {
       //   reqParams['filters'] = [
       //     ['company', '=', plantName],

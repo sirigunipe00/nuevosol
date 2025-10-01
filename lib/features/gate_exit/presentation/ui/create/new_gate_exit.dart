@@ -23,7 +23,7 @@ class _NewGateExitState extends State<NewGateExit> {
   Widget build(BuildContext context) {
     final gateExitState = context.read<CreateGateExitCubit>().state;
     final form = gateExitState.form;
-    final status = form.status;
+    final status = form.docStatus;
     final name = form.name;
     final isNew = gateExitState.view == GateExitView.create;
 
@@ -33,7 +33,7 @@ class _NewGateExitState extends State<NewGateExit> {
           : TitleStatusAppBar(
               title: 'Gate Exit',
               docNo: name.valueOrEmpty,
-              status: status.valueOrEmpty,
+              status: StringUtils.docStatus(status ?? 0),
               textColor: AppColors.shyMoment,
             ) as PreferredSizeWidget,
       backgroundColor: AppColors.white,

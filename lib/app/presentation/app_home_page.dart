@@ -38,18 +38,18 @@ class AppHomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // if (userRoles == null)
-                // Padding(
-                //   padding: const EdgeInsets.all(16.0),
-                //   child: Text(
-                //     '${context.user.name} does not have access to view the features.',
-                //     style: AppTextStyles.featureLabelStyle(context).copyWith(
-                //       color: Colors.red,
-                //     ),
-                //     textAlign: TextAlign.center,
-                //   ),
-                // ),
-              // if (userRoles != null) ...[
+              if (userRoles == null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    '${context.user.name} does not have access to view the features.',
+                    style: AppTextStyles.featureLabelStyle(context).copyWith(
+                      color: Colors.red,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              if (userRoles != null) ...[
                 Expanded(
                   child: GridView.count(
                     padding: const EdgeInsets.all(12.0),
@@ -59,7 +59,7 @@ class AppHomePage extends StatelessWidget {
                     mainAxisSpacing: 12.0,
                     childAspectRatio: 1,
                     children: [
-                   if (userRoles != null && BooleanUtls.fromInt(userRoles.entry))
+                   if (BooleanUtls.fromInt(userRoles.entry))
                         AppFeatureWidget(
                           icon: AppIcons.vechileEntry.toWidget(
                               height: 100, width: 120, fit: BoxFit.contain),
@@ -68,7 +68,7 @@ class AppHomePage extends StatelessWidget {
                           featureColor: AppColors.marigoldDDust,
                           onTap: () => AppRoute.gateEntry.push(context),
                         ),
-               if (userRoles != null && BooleanUtls.fromInt(userRoles.exit))
+               if (BooleanUtls.fromInt(userRoles.exit))
                         AppFeatureWidget(
                           icon: AppIcons.vehcileExit.toWidget(
                               height: 100, width: 120, fit: BoxFit.contain),
@@ -107,19 +107,19 @@ class AppHomePage extends StatelessWidget {
                 
                    
                       // if (BooleanUtls.fromInt(userRoles.approval))
-                      //   AppFeatureWidget(
-                      //     icon: FittedBox(
-                      //       child: AppIcons.poApproval.toWidget(
-                      //           height: 100, width: 120, fit: BoxFit.contain),
-                      //     ),
-                      //     title: FittedBox(
-                      //       child: Text('PO Approval List',
-                      //           style:
-                      //               AppTextStyles.featureLabelStyle(context)),
-                      //     ),
-                      //     featureColor: const Color(0xFF0DB295),
-                      //     onTap: () => AppRoute.poApprovalList.push(context),
-                      //   ),
+                        AppFeatureWidget(
+                          icon: FittedBox(
+                            child: AppIcons.poApproval.toWidget(
+                                height: 100, width: 120, fit: BoxFit.contain),
+                          ),
+                          title: FittedBox(
+                            child: Text('PO Approval List',
+                                style:
+                                    AppTextStyles.featureLabelStyle(context)),
+                          ),
+                          featureColor: const Color(0xFF0DB295),
+                          onTap: () => AppRoute.poApprovalList.push(context),
+                        ),
                       // // if (BooleanUtls.fromInt(userRoles.dashbaords))
                       //   AppFeatureWidget(
                       //     icon: AppIcons.dashboards.toWidget(
@@ -132,7 +132,7 @@ class AppHomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-              // ],
+              ],
             ],
           ),
         ),

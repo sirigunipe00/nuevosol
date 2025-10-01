@@ -365,7 +365,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
         BlocBuilder<SupplierList, SupplierState>(
           buildWhen: (previous, current) => previous != current,
 
-          // return previous.runtimeType != current.runtimeType;
           builder: (_, state) {
             final allData = state.maybeWhen(
               orElse: () => <SupplierForm>[],
@@ -381,29 +380,14 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
               items: names,
               readOnly: isCompleted,
               defaultSelection:
-                  (context
-                                  .read<CreateGateEntryCubit>()
-                                  .state
-                                  .form
-                                  .customSupplier !=
-                              null &&
-                          context
-                              .read<CreateGateEntryCubit>()
-                              .state
-                              .form
-                              .customSupplier!
-                              .isNotEmpty)
+                  (context.read<CreateGateEntryCubit>().state.form.customSupplier != null &&
+                          context.read<CreateGateEntryCubit>().state.form
+                              .customSupplier! .isNotEmpty)
                       ? names.firstWhere(
-                        (g) =>
-                            g.name ==
-                            context
-                                .read<CreateGateEntryCubit>()
-                                .state
-                                .form
-                                .customSupplier,
+                        (g) => g.name ==
+                            context.read<CreateGateEntryCubit>().state.form.customSupplier,
                         orElse: () => const SupplierForm(),
-                      )
-                      : null,
+                      ): null,
 
               futureRequest: (query) async {
                 if (query.isEmpty) return names;
@@ -510,11 +494,9 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
         ),
         TimeSelectionField(
           title: 'Gate Entry Time',
-          initialValue: DateFormat(
-            'HH:mm',
-          ).format(DateTime.now()), // show current time
-          readOnly: true, // ensures user cannot edit
-          onTimeSelect: (_) {}, // do nothing, since it’s read-only
+          initialValue: formatTime(form.createTime), 
+          readOnly: true, 
+          onTimeSelect: (_) {}, 
           borderColor: AppColors.marigoldDDust,
           suffixIcon: const Icon(
             Icons.access_time_filled,
@@ -597,8 +579,15 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
 String? formatTime(String? backendTime) {
   if (backendTime == null || backendTime.isEmpty) return null;
 
-  final parts = backendTime.split(':');
-  if (parts.length < 2) return backendTime;
+  try {
+    // Parse ISO 8601 string into DateTime
+    final dateTime = DateTime.parse(backendTime);
 
-  return '${parts[0]}:${parts[1]}';
+    // Format as HH:mm (24hr) or hh:mm a (12hr with AM/PM)
+    return DateFormat('HH:mm').format(dateTime);
+    // return DateFormat('hh:mm a').format(dateTime); // if you want AM/PM
+  } catch (e) {
+    // If parsing fails, just return original
+    return backendTime;
+  }
 }

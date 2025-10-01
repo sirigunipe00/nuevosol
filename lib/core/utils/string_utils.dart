@@ -40,7 +40,29 @@ class StringUtils {
       return 0;
     }
   }
+  static String getFileNameFromUrl(String url) {
+    final uri = Uri.parse(url);
+    final fileName = uri.pathSegments.isNotEmpty ? uri.pathSegments.last : '';
+    return fileName;
+  }
+
+
+  static bool isImage(String extension) {
+    final ext = extension.replaceAll('.', '');
+    return switch (ext) {
+      'jpg' || 'jpeg' || 'png' || 'gif' || 'bmp' || 'svg' => true,
+      _ => false,
+    };
+  }
+
+  static bool isDoc(String ext) {
+    return switch (ext) {
+      'pdf' => true,
+      _ => false,
+    };
+  }
 }
+  
 
 extension StringExentions on String? {
   bool get containsValidValue =>
@@ -49,6 +71,12 @@ extension StringExentions on String? {
   bool get doesNotHaveValue => !containsValidValue;
 
   String get valueOrEmpty => this ?? '';
+
+  bool get isNotValidName => containsValidValue && this!.length < 3;
+
+  bool get isImage => StringUtils.isImage(this!.replaceAll('.', ''));
+  bool get isDocument => StringUtils.isDoc(this!.replaceAll('.', ''));
+
 
   Either<Failure, T> asFailure<T>() => left(Failure(error: this!));
 

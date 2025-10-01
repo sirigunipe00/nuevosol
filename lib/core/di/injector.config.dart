@@ -35,6 +35,11 @@ import '../../features/gate_exit/data/gate_exit_repo_impl.dart' as _i100;
 import '../../features/gate_exit/presentation/bloc/bloc_provider.dart' as _i565;
 import '../../features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart'
     as _i161;
+import '../../features/po_approval_list/data/po_approval_repo.dart' as _i285;
+import '../../features/po_approval_list/data/po_approval_repo_impl.dart'
+    as _i299;
+import '../../features/po_approval_list/presentation/bloc/bloc_provider.dart'
+    as _i313;
 import '../core.dart' as _i351;
 import '../local_storage/key_vale_storage.dart' as _i1012;
 import '../network/api_client.dart' as _i557;
@@ -90,9 +95,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i174.GateEntryRepoImpl(gh<_i351.ApiClient>()));
     gh.lazySingleton<_i495.GateExitRepo>(
         () => _i100.GateExitRepoImpl(gh<_i351.ApiClient>()));
+    gh.lazySingleton<_i285.PoApprovalRepo>(
+        () => _i299.PoApprovalRepoImpl(gh<_i351.ApiClient>()));
     gh.factory<_i947.SignInCubit>(
         () => _i947.SignInCubit(gh<_i585.AuthRepo>()));
     gh.factory<_i190.AuthCubit>(() => _i190.AuthCubit(gh<_i585.AuthRepo>()));
+    gh.lazySingleton<_i313.PoApprovalBlocProvider>(
+        () => _i313.PoApprovalBlocProvider(gh<_i285.PoApprovalRepo>()));
     gh.factory<_i202.CreateGateEntryCubit>(
         () => _i202.CreateGateEntryCubit(gh<_i820.GateEntryRepo>()));
     gh.lazySingleton<_i210.GateEntryBlocProvider>(

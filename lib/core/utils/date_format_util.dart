@@ -17,6 +17,7 @@ abstract class _DateTimeFormats {
   static final hhmmss = DateFormat('HH:mm:ss');
   static final dateTimeLabel = DateFormat('MMM d, h:mm a');
   static final currentTimeFormat = DateFormat('dd-MMM-yyyy hh:mm a');
+  static final timeLabel = DateFormat('hh:mm a');
 }
 abstract class DateFormatUtil {
   static DateTime now() => DateTime.now();
@@ -48,6 +49,15 @@ abstract class DateFormatUtil {
     try {
       final dateTime = DateTime.parse(dateStr);
       return DateFormat.jm().format(dateTime); // e.g., 10:00 AM
+    } catch (e) {
+      return '';
+    }
+  }
+
+  static String timeLabelFromStr(String date) {
+    try {
+      final dateTime = DateTime.parse(date);
+      return _DateTimeFormats.timeLabel.format(dateTime);
     } catch (e) {
       return '';
     }

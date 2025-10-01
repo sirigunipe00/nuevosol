@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/auth/presentation/bloc/auth/auth_cubit.dart';
 import 'package:nuevosol/features/auth/presentation/ui/sign_in/sign_in_cubit.dart';
@@ -43,11 +42,14 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
               defaultHeight: 12.0,
               children: [
                 Center(
-                  child: SizedBox(
-                    width: context.sizeOfWidth,
-                    child:
-                    //  const Icon(Icons.person_pin_circle_rounded)
-                    Image.asset('assets/Nuevsol Logo.png'),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.5),
+                    child: SizedBox(
+                      width: context.sizeOfWidth,
+                      child:
+                      //  const Icon(Icons.person_pin_circle_rounded)
+                      Image.asset('assets/Nuevsol_Logo_Transparent.png'),
+                    ),
                   ),
                 ),
                 Text('Login',
@@ -76,18 +78,21 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
                   obscureText: showPswd,
                   suffixIcon: InkWell(
                     onTap: togglePswd,
-                    child: Text(
-                      showPswd ? ' show ' : ' hide ',
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: Colors.transparent,
-                        shadows: [
-                          const Shadow(color: AppColors.haintBlue, offset: Offset(0, -5)),
-                        ],
-                        decorationColor: AppColors.haintBlue,
-                        decoration: TextDecoration.underline,
-                        height: 1.5,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                      child: Text(
+                        showPswd ? ' show ' : ' hide ',
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: Colors.transparent,
+                          shadows: [
+                            const Shadow(color: AppColors.haintBlue, offset: Offset(0, -5)),
+                          ],
+                          decorationColor: AppColors.haintBlue,
+                          decoration: TextDecoration.underline,
+                          height: 1.5,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
                       ),
                     ),
                   ),

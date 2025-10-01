@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/widgets/caption_text.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
+import 'package:nuevosol/core/core.dart';
 
 class AppTextField extends StatelessWidget {
   AppTextField({
@@ -98,7 +98,7 @@ class AppTextField extends StatelessWidget {
               color: const Color(0xFF8391A1),
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              fontFamily: 'Urbanist',
+              fontFamily: 'Quicksand',
             ),
             filled: true,
             fillColor: const Color(0xFFF7F8F9),

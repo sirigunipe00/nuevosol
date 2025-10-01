@@ -15,7 +15,7 @@ class AppProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final role = context.user.roleProfileName;
+    // final role = context.user.roleProfileName;
 
     return AppPageView(
       mode: PageMode.profile, 
@@ -30,11 +30,11 @@ class AppProfilePage extends StatelessWidget {
               'Name', 
               context.user.name,
             ),
-            _ProfileItem(
-              const Icon(Icons.business, color: AppColors.lavender), 
+            const _ProfileItem(
+              Icon(Icons.business, color: AppColors.lavender), 
               'Organization', 
-              role.containsValidValue ? role! : ''
-            ),
+              'Nuevosol'            
+              ),
             
             FutureBuilder(
               future: _appversion(),

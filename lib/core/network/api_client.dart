@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'dart:io';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:nuevosol/core/core.dart';
-import 'package:path/path.dart' show basename;
+import 'package:path/path.dart';
+
 
 /// A class which is responsible to make actual api calls and provide [ApiResponse]s.
 ///
@@ -29,13 +28,6 @@ class ApiClient {
     );
   }
 
-  Future<ApiResponse<T>> put<T>(RequestConfig<T> params) async {
-    return _request(
-      (Uri urlWithParams) => client.put(urlWithParams, headers: params.headers, body: params.body),
-      params,
-    );
-  }
-
   /// Performs HTTP POST request with provided request configuration
   Future<ApiResponse<T>> post<T>(RequestConfig<T> params) async {
     return _request(
@@ -44,15 +36,11 @@ class ApiClient {
     );
   }
 
-  AsyncValueOf<Uint8List> downloadFile(String url) async {
-    try {
-      final request = await HttpClient().getUrl(Uri.parse(url));
-      final response = await request.close();
-      final bytes = await consolidateHttpClientResponseBytes(response);
-      return right(bytes);
-    } catch (e) {
-      return left(Failure(error: e.toString()));
-    }
+    Future<Uint8List> downloadFile(String url) async {
+    final request = await HttpClient().getUrl(Uri.parse(url));
+    final response = await request.close();
+    final bytes = await consolidateHttpClientResponseBytes(response);
+    return bytes;
   }
 
   /// Performs HTTP POST-multipart-request body request with provided request configuration
@@ -111,13 +99,13 @@ class ApiClient {
       
       if (kDebugMode) {
         $logger
-          ..info(uri)
+          ..info(uri)     
           ..info(params.body ?? params.reqParams)
-          ..info(params.headers)
+          ..info('Headers: ${params.headers}')
           ..info('Status Code $statusCode')
           ..info('Response : $resBody');
       }
-      
+
       if (statusCode == HttpStatus.ok) {
         if (resBody.doesNotHaveValue) {
           throw UnExpectedResponseException(resBody);
@@ -132,31 +120,27 @@ class ApiClient {
 
         return result;
       } else {
-        if(statusCode == HttpStatus.notFound || statusCode == HttpStatus.forbidden) {
-             final message = defaultErrorParser(jsonDecode(resBody), Errors.internalServerError);
-          throw ServerException(message);
-        } else if(statusCode == HttpStatus.gatewayTimeout) {
-          throw ServerException(Errors.gatewayTimeout);
-        } else if(statusCode == HttpStatus.unauthorized) {
-          throw ServerException(Errors.invalidcredentials);
-        } else if ((statusCode >= HttpStatus.internalServerError &&
-            statusCode <= HttpStatus.networkConnectTimeoutError) || statusCode == HttpStatus.expectationFailed) {
-          final message = defaultErrorParser(jsonDecode(resBody), Errors.internalServerError);
-          throw ServerException(message);
+        if (statusCode == HttpStatus.unauthorized || statusCode <= HttpStatus.internalServerError) {
+          final res = defaultErrorParser(jsonDecode(resBody), Errors.invalidcredentials);
+          throw BaseApiException(res.error);
         } else if (statusCode >= HttpStatus.badRequest &&
             statusCode <= HttpStatus.clientClosedRequest) {
           throw ClientException(Errors.clientError);
+        } else if ( statusCode <= HttpStatus.networkConnectTimeoutError) {
+          throw ServerException(Errors.internalServerError);
         } else {
           throw UnknownException(Errors.unknown);
         }
       }
-    } on ServerException catch(e, _) {
-      throw BaseApiException(e.message);
+    } on SocketException catch(e,st) {
+      $logger.error('[API client SocketException]',e, st);
+      throw ConnectionException(Errors.connectionIssue);
     } on FormatException catch (e) {
       throw ParseException(e.message);
     } on Exception catch (e, st) {
       $logger.error('[API client SocketException]',e, st);
       if (e is NoInternetException ||
+          e is BaseApiException ||
           e is UnExpectedResponseException ||
           e is UnAuthorizedException ||
           e is ClientException ||

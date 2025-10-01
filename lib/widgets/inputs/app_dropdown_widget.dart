@@ -43,12 +43,12 @@ class AppDropDownWidget<T> extends StatefulWidget {
 }
 
 class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
-  T? _selectedValue;
+  T? selectedValue;
 
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.defaultSelection;
+    selectedValue = widget.defaultSelection;
   }
 
   @override
@@ -57,7 +57,7 @@ class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
     // If defaultSelection changes, update the internal _selectedValue
     if (widget.defaultSelection != oldWidget.defaultSelection) {
       setState(() {
-        _selectedValue = widget.defaultSelection;
+        selectedValue = widget.defaultSelection;
       });
     }
   }

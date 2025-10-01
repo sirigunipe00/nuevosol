@@ -186,9 +186,6 @@ Widget _isValidFile() {
     return const Icon(Icons.broken_image, size: 64, color: Colors.red);
   }
 }
-
-
-
 }
 class FullScreenImageViewer extends StatelessWidget {
   const FullScreenImageViewer({super.key, this.imageUrl, this.base64Data});

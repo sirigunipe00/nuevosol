@@ -1,11 +1,12 @@
 import 'dart:async';
-
+import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nuevosol/core/cubit/base/base_cubit.dart';
 import 'package:nuevosol/core/model/failure.dart';
-import 'package:nuevosol/core/utils/typedefs.dart';
 
 part 'infinite_list_cubit.freezed.dart';
+
+
 
 enum ApiState { initial, loading, success, loadingMore, failed }
 
@@ -15,12 +16,12 @@ class InfiniteListCubit<T, FIP, FMP> extends AppBaseCubit<InfiniteListState<T>> 
     this.requestMore,
   }) : super(InfiniteListState<T>.initial());
 
-  final AsyncValueOf<List<T>> Function(FIP? params, InfiniteListState<T> state) requestInitial;
+  final Future<Either<Failure, List<T>>> Function(FIP? params, InfiniteListState<T> state) requestInitial;
 
-  final AsyncValueOf<List<T>> Function(FMP? params, InfiniteListState<T> state)? requestMore;
+  final Future<Either<Failure, List<T>>> Function(FMP? params, InfiniteListState<T> state)? requestMore;
 
   bool _isFetchInProgress = false;
-  final pageLength = 20;
+  final pageLength = 10;
   Future<void> fetchInitial([FIP? params]) async {
     try {
       emitSafeState(state.copyWith(apiState: ApiState.loading, failure: null));
@@ -55,7 +56,6 @@ class InfiniteListCubit<T, FIP, FMP> extends AppBaseCubit<InfiniteListState<T>> 
         (List<T> r) {
           final hasReachedMax = (r.length < pageLength);
           emitSafeState(state.copyWith(
-            apiState: ApiState.success,
             records: state.records + r,
             hasReachedMax: hasReachedMax,
           ));
@@ -144,3 +144,4 @@ class InfiniteListState<T> with _$InfiniteListState<T> {
 
   bool get isLoadingMore => apiState == ApiState.loadingMore;
 }
+

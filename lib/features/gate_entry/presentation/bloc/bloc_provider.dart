@@ -9,8 +9,6 @@ typedef GateEntriesCubit =
     InfiniteListCubit<GateEntry, Pair<int?, String?>, Pair<int?, String?>>;
 typedef GateEntriesCubitState = InfiniteListState<GateEntry>;
 
-
-
 typedef PurchaseOrders = NetworkRequestCubit<List<PurchaseOrderForm>, String>;
 typedef PurchaseOrdersState = NetworkRequestState<List<PurchaseOrderForm>>;
 
@@ -35,8 +33,6 @@ class GateEntryBlocProvider {
         (params, state) =>
             repo.fetchEntries(state.curLength, params!.first, params.second),
   );
-
-  
 
   PurchaseOrders fetchPONumbers() => PurchaseOrders(
     onRequest: (params, state) => repo.fetchPONumbers(params ?? ''),
