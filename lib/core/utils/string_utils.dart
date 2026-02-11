@@ -31,15 +31,17 @@ class StringUtils {
     }
   }
 
-  static int docStatusInt(String status) {
-    if (status == 'Draft') {
-      return 0;
-    } else if (status == 'Submitted') {
-      return 1;
-    } else {
-      return 0;
-    }
+ static int? docStatusInt(String status) {
+  if (status == 'Draft') {
+    return 0;
+  } else if (status == 'Submitted') {
+    return 1;
+  } else if (status == 'All') {
+    return null;
+  } else {
+    return null;
   }
+}
   static String getFileNameFromUrl(String url) {
     final uri = Uri.parse(url);
     final fileName = uri.pathSegments.isNotEmpty ? uri.pathSegments.last : '';

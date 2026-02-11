@@ -31,7 +31,7 @@ class GateEntry with _$GateEntry {
     @JsonKey(name: 'is_purchase_receipt_created') int? receipt,
     @JsonKey(name: 'vehicle_photo') String? vehiclePhoto,
     @JsonKey(name: 'vendor_invoice_photo') String? invoicePhoto,
-    @JsonKey(name: 'vehicle_back_photo') String? vehicleBackPhoto,
+    @JsonKey(name: 'custom_weighment_slip') String? weighmentPhoto,
     @JsonKey(name:  'custom_supplier') String? customSupplier,
     @JsonKey(name:  'created_time') String? createTime,
     @JsonKey(name:  'by_mobile_app') int? byMobileApp,
@@ -56,7 +56,7 @@ class GateEntry with _$GateEntry {
         includeToJson: false,
         toJson: toNull,
         fromJson: toNull)
-    File? vehicleBackPhotoImg,
+    File? weighmentPhotoImg,
     
   }) = _GateEntry;
   factory GateEntry.fromJson(Map<String, dynamic> json) =>

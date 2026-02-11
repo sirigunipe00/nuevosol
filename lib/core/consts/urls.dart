@@ -4,7 +4,8 @@ final _reqisteredUrl = $sl.get<Urls>(instanceName: 'baseUrl');
 
 class Urls {
 
-  factory Urls.local() => const Urls('http://65.21.176.38:8000/api');
+  factory Urls.nuevosolUat() => const Urls('https://nuevosoluat.easycloud.co.in/api');
+  factory Urls.local() => const Urls('http://192.168.245.63:8000/api');
     factory Urls.live() => const Urls('https://livenuevosol.easycloud.co.in/api');
 
 

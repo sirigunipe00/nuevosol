@@ -77,8 +77,11 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
     final isCreating = formState.view == GateEntryView.create;
     final isCompleted = formState.view == GateEntryView.completed;
     final form = formState.form;
+    final bool isPoSelected = form.purchaseOrder.containsValidValue;
+
 
     final indianFormat = NumberFormat.decimalPattern('en_IN');
+    $logger.devLog('form.........$form');
 
     return SpacedColumn(
       margin: const EdgeInsets.all(12.0),
@@ -146,7 +149,11 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
                     if (order.isNull) return;
                     context.cubit<CreateGateEntryCubit>().onValueChanged(
                       purchaseOrder: order!.name ?? '',
+                      customSupplier: order.supplierName,
                     );
+                    setState(() {
+                      customerForm = SupplierForm(name: order.supplierName);
+                    });
                   },
                   borderColor: AppColors.marigoldDDust,
                 );
@@ -171,123 +178,152 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
             );
           },
         ),
-        Row(
+        Column(
           children: [
-            Expanded(
-              child: BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
-                buildWhen:
-                    (pv, curr) =>
-                        pv.form.vehiclePhoto != curr.form.vehiclePhoto,
-                builder: (_, state) {
-                  return ImageSelectionWidget1(
-                    title: 'Vehicle Photo',
-                    readOnly: isCompleted,
-                    key: ValueKey(state.form.vehiclePhoto),
-                    borderColor: AppColors.marigoldDDust,
-                    defaultVal: state.form.vehiclePhoto,
-                    placeholder: const Icon(
-                      Icons.local_shipping,
-                      size: 64,
-                      color: AppColors.chimneySweep,
-                    ),
-                    onView: () {
-                      final data = Pair(
-                        form.name ?? 'Vehicle Photo',
-                        state.form.vehiclePhoto,
-                      );
-                      AppRoute.newGateEntryPreview.push(context, extra: data);
-                    },
-                    onImage: (file) {
-                      if (file.isNull) {
-                        context
-                            .cubit<CreateGateEntryCubit>()
-                            .clearVehiclePhoto();
-                      } else {
-                        context.cubit<CreateGateEntryCubit>().onValueChanged(
-                          vehiclePhoto: file,
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child:
+                      BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
+                        buildWhen:
+                            (pv, curr) =>
+                                pv.form.vehiclePhoto != curr.form.vehiclePhoto,
+                        builder: (_, state) {
+                          return ImageSelectionWidget1(
+                            title: 'Vehicle Photo',
+                            readOnly: isCompleted,
+                            isRequired: true,
+                            key: ValueKey(state.form.vehiclePhoto),
+                            borderColor: AppColors.marigoldDDust,
+                            defaultVal: state.form.vehiclePhoto,
+                            placeholder: const Icon(
+                              Icons.local_shipping,
+                              size: 64,
+                              color: AppColors.chimneySweep,
+                            ),
+                            onView: () {
+                              final data = Pair(
+                                form.name ?? 'Vehicle Photo',
+                                state.form.vehiclePhoto,
+                              );
+                              AppRoute.newGateEntryPreview.push(
+                                context,
+                                extra: data,
+                              );
+                            },
+                            onImage: (file) {
+                              if (file.isNull) {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .clearVehiclePhoto();
+                              } else {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .onValueChanged(vehiclePhoto: file);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                ),
+                AppSpacer.p12(),
+                Expanded(
+                  child:
+                      BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
+                        buildWhen:
+                            (pv, curr) =>
+                                pv.form.invoicePhoto != curr.form.invoicePhoto,
+                        builder: (context, state) {
+                          return ImageSelectionWidget1(
+                            title: 'Invoice Photo',
+                            readOnly: isCompleted,
+                            isRequired: true,
+                            key: ValueKey(state.form.invoicePhoto),
+                            borderColor: AppColors.marigoldDDust,
+                            defaultVal: state.form.invoicePhoto,
+                            placeholder: const Icon(
+                              Icons.description,
+                              size: 64,
+                              color: AppColors.chimneySweep,
+                            ),
+                            onView: () {
+                              final data = Pair(
+                                form.name ?? 'Vendor Invoice Photo',
+                                state.form.invoicePhoto,
+                              );
+                              AppRoute.newGateEntryPreview.push(
+                                context,
+                                extra: data,
+                              );
+                            },
+                            onImage: (file) {
+                              if (file.isNull) {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .clearInvoicePhoto();
+                              } else {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .onValueChanged(invoicePhoto: file);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                ),
+              ],
             ),
-            AppSpacer.p12(),
-            Expanded(
-              child: BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
-                buildWhen:
-                    (pv, curr) =>
-                        pv.form.invoicePhoto != curr.form.invoicePhoto,
-                builder: (context, state) {
-                  return ImageSelectionWidget1(
-                    title: 'Invoice Photo',
-                    readOnly: isCompleted,
-                    key: ValueKey(state.form.invoicePhoto),
-                    borderColor: AppColors.marigoldDDust,
-                    defaultVal: state.form.invoicePhoto,
-                    placeholder: const Icon(
-                      Icons.description,
-                      size: 64,
-                      color: AppColors.chimneySweep,
-                    ),
-                    onView: () {
-                      final data = Pair(
-                        form.name ?? 'Vendor Invoice Photo',
-                        state.form.invoicePhoto,
-                      );
-                      AppRoute.newGateEntryPreview.push(context, extra: data);
-                    },
-                    onImage: (file) {
-                      if (file.isNull) {
-                        context
-                            .cubit<CreateGateEntryCubit>()
-                            .clearInvoicePhoto();
-                      } else {
-                        context.cubit<CreateGateEntryCubit>().onValueChanged(
-                          invoicePhoto: file,
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
-              // child: BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
-              //   buildWhen:
-              //       (pv, curr) =>
-              //           pv.form.vehicleBackPhoto != curr.form.vehicleBackPhoto,
-              //   builder: (_, state) {
-              //     return ImageSelectionWidget1(
-              //       title: 'Vechicle Back Photo',
-              //       readOnly: isCompleted,
-              //       key: ValueKey(state.form.vehicleBackPhoto),
-              //       borderColor: AppColors.marigoldDDust,
-              //       defaultVal: state.form.vehicleBackPhoto,
-              //       placeholder: const Icon(
-              //         Icons.local_shipping,
-              //         size: 64,
-              //         color: AppColors.chimneySweep,
-              //       ),
-              //       onView: () {
-              //         final data = Pair(
-              //           form.name ?? 'Vechicle Back Photo',
-              //           state.form.vehicleBackPhoto,
-              //         );
-              //         AppRoute.newGateEntryPreview.push(context, extra: data);
-              //       },
-              //       onImage: (file) {
-              //         if (file.isNull) {
-              //           context
-              //               .cubit<CreateGateEntryCubit>()
-              //               .clearVehicleBackPhoto();
-              //         } else {
-              //           context.cubit<CreateGateEntryCubit>().onValueChanged(
-              //             vehicleBackPhoto: file,
-              //           );
-              //         }
-              //       },
-              //     );
-              //   },
-              // ),
+            AppSpacer.p8(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child:
+                      BlocBuilder<CreateGateEntryCubit, CreateGateEntryState>(
+                        buildWhen:
+                            (pv, curr) =>
+                                pv.form.weighmentPhoto !=
+                                curr.form.weighmentPhoto,
+                        builder: (_, state) {
+                          return ImageSelectionWidget1(
+                            title: 'Weighment Slip Photo',
+                            readOnly: isCompleted,
+                            isRequired: false,
+                            key: ValueKey(state.form.weighmentPhoto),
+                            borderColor: AppColors.marigoldDDust,
+                            defaultVal: state.form.weighmentPhoto,
+                            placeholder: const Icon(
+                              Icons.local_shipping,
+                              size: 64,
+                              color: AppColors.chimneySweep,
+                            ),
+                            onView: () {
+                              final data = Pair(
+                                form.name ?? 'Weighment Slip Photo',
+                                state.form.weighmentPhoto,
+                              );
+                              AppRoute.newGateEntryPreview.push(
+                                context,
+                                extra: data,
+                              );
+                            },
+                            onImage: (file) {
+                              if (file.isNull) {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .clearVehicleBackPhoto();
+                              } else {
+                                context
+                                    .cubit<CreateGateEntryCubit>()
+                                    .onValueChanged(weighmentPhoto: file);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                ),
+              ],
             ),
           ],
         ),
@@ -378,17 +414,50 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
               hint: 'Search Supplier',
               key: UniqueKey(),
               items: names,
-              readOnly: isCompleted,
-              defaultSelection:
-                  (context.read<CreateGateEntryCubit>().state.form.customSupplier != null &&
-                          context.read<CreateGateEntryCubit>().state.form
-                              .customSupplier! .isNotEmpty)
-                      ? names.firstWhere(
-                        (g) => g.name ==
-                            context.read<CreateGateEntryCubit>().state.form.customSupplier,
-                        orElse: () => const SupplierForm(),
-                      ): null,
+              readOnly: isCompleted || isPoSelected,
+              defaultSelection: state.maybeWhen(
+                success: (data) {
+                  final selectedSupplier =
+                      context
+                          .read<CreateGateEntryCubit>()
+                          .state
+                          .form
+                          .customSupplier;
 
+                  if (selectedSupplier == null) return null;
+
+                  return data.firstWhere(
+                    (e) => e.name == selectedSupplier,
+                    orElse: () => const SupplierForm(),
+                  );
+                },
+                orElse: () => null,
+              ),
+
+              // defaultSelection:
+              //     (context
+              //                     .read<CreateGateEntryCubit>()
+              //                     .state
+              //                     .form
+              //                     .customSupplier !=
+              //                 null &&
+              //             context
+              //                 .read<CreateGateEntryCubit>()
+              //                 .state
+              //                 .form
+              //                 .customSupplier!
+              //                 .isNotEmpty)
+              //         ? names.firstWhere(
+              //           (g) =>
+              //               g.name ==
+              //               context
+              //                   .read<CreateGateEntryCubit>()
+              //                   .state
+              //                   .form
+              //                   .customSupplier,
+              //           orElse: () => const SupplierForm(),
+              //         )
+              //         : null,
               futureRequest: (query) async {
                 if (query.isEmpty) return names;
 
@@ -441,42 +510,42 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
             );
           },
         ),
-        InputField(
-          title: 'DC/Invoice Quantity',
-          hintText: 'Enter Invoice Quantity',
-          readOnly: isCompleted,
-          initialValue:
-              form.invoiceQuantity != null
-                  ? form.invoiceQuantity.toString()
-                  : '',
-          borderColor: AppColors.marigoldDDust,
-          inputType: const TextInputType.numberWithOptions(decimal: true),
-          onChanged: (qty) {
-            final intValue = int.tryParse(qty);
-            context.cubit<CreateGateEntryCubit>().onValueChanged(
-              invoiceQuantity: intValue,
-            );
-          },
-        ),
-        InputField(
-          title: 'Invoice Amount',
-          hintText: 'Enter Invoice Amount',
-          readOnly: isCompleted,
-          controller: invoiceAmountController,
-          initialValue:
-              form.invoiceAmount != null
-                  ? indianFormat.format(form.invoiceAmount)
-                  : '',
-          borderColor: AppColors.marigoldDDust,
-          inputType: const TextInputType.numberWithOptions(decimal: true),
-          onChanged: (amount) {
-            final cleaned = amount.replaceAll(',', '');
-            final intValue = int.tryParse(cleaned);
-            context.cubit<CreateGateEntryCubit>().onValueChanged(
-              invoiceAmount: intValue,
-            );
-          },
-        ),
+        // InputField(
+        //   title: 'DC/Invoice Quantity',
+        //   hintText: 'Enter Invoice Quantity',
+        //   readOnly: isCompleted,
+        //   initialValue:
+        //       form.invoiceQuantity != null
+        //           ? form.invoiceQuantity.toString()
+        //           : '',
+        //   borderColor: AppColors.marigoldDDust,
+        //   inputType: const TextInputType.numberWithOptions(decimal: true),
+        //   onChanged: (qty) {
+        //     final intValue = int.tryParse(qty);
+        //     context.cubit<CreateGateEntryCubit>().onValueChanged(
+        //       invoiceQuantity: intValue,
+        //     );
+        //   },
+        // ),
+        // InputField(
+        //   title: 'Invoice Amount',
+        //   hintText: 'Enter Invoice Amount',
+        //   readOnly: isCompleted,
+        //   controller: invoiceAmountController,
+        //   initialValue:
+        //       form.invoiceAmount != null
+        //           ? indianFormat.format(form.invoiceAmount)
+        //           : '',
+        //   borderColor: AppColors.marigoldDDust,
+        //   inputType: const TextInputType.numberWithOptions(decimal: true),
+        //   onChanged: (amount) {
+        //     final cleaned = amount.replaceAll(',', '');
+        //     final intValue = int.tryParse(cleaned);
+        //     context.cubit<CreateGateEntryCubit>().onValueChanged(
+        //       invoiceAmount: intValue,
+        //     );
+        //   },
+        // ),
         DateSelectionField(
           title: 'Gate Entry Date',
           filled: true,
@@ -494,9 +563,9 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
         ),
         TimeSelectionField(
           title: 'Gate Entry Time',
-          initialValue: formatTime(form.createTime), 
-          readOnly: true, 
-          onTimeSelect: (_) {}, 
+          initialValue: formatTime(form.createTime),
+          readOnly: true,
+          onTimeSelect: (_) {},
           borderColor: AppColors.marigoldDDust,
           suffixIcon: const Icon(
             Icons.access_time_filled,

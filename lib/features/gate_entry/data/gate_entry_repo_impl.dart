@@ -67,7 +67,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
           return listdata.map((e) => SupplierForm.fromJson(e)).toList();
         },
         reqParams: {
-          'limit': 20,
+          'limit_page_length': 'None',
           'order_by': 'creation desc',
           'doctype': 'Supplier',
           'fields': ['*'],
@@ -92,7 +92,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     formJson['status'] = 'Draft';
 
     Uint8List? vehiclefrontcompressedBytes;
-    // Uint8List? vehiclebackcompressedBytes;
+    Uint8List? WeightmentcompressedBytes;
     Uint8List? invocecompressedBytes;
 
     if (form.vehiclePhotoImg != null) {
@@ -107,17 +107,17 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       );
     }
 
-    // if (form.vehicleBackPhotoImg != null) {
-    //   final filePath = form.vehicleBackPhotoImg!.path;
-    //   vehiclebackcompressedBytes = await FlutterImageCompress.compressWithFile(
-    //     filePath,
-    //     quality: 50,
-    //   );
-    // } else if (form.vehicleBackPhoto != null) {
-    //   vehiclebackcompressedBytes = await fetchAndConvertToBase64(
-    //     form.vehicleBackPhoto ?? '',
-    //   );
-    // }
+    if (form.weighmentPhotoImg != null) {
+      final filePath = form.weighmentPhotoImg!.path;
+      WeightmentcompressedBytes = await FlutterImageCompress.compressWithFile(
+        filePath,
+        quality: 50,
+      );
+    } else if (form.weighmentPhoto != null) {
+      WeightmentcompressedBytes = await fetchAndConvertToBase64(
+        form.weighmentPhoto ?? '',
+      );
+    }
 
     if (form.invoicePhotoImg != null) {
       final filePath = form.invoicePhotoImg!.path;
@@ -152,16 +152,17 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
             invocecompressedBytes == null
                 ? null
                 : base64Encode(invocecompressedBytes),
-        // 'vehicle_back_photo':
-        //     vehiclebackcompressedBytes == null
-        //         ? null
-        //         : base64Encode(vehiclebackcompressedBytes),
+        'custom_weighment_slip':
+            WeightmentcompressedBytes == null
+                ? null
+                : base64Encode(WeightmentcompressedBytes),
         'vehicle_no': form.vehicleNo,
         'invoice_qty': form.invoiceQuantity,
         'supplier': form.customSupplier,
         'created_time': form.createTime,
         'remarks': form.remarks,
         'custom_unit_1': form.customeUnit1,
+        'by_mobile_app': 1,
       //   'custom_unit_2':form.customeUnit2,
       }),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
@@ -193,7 +194,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     ];
 
       final reqParams = {
-      'limit': 20,
+      'limit_page_length': 'None',
       'order_by': 'creation desc',
       'doctype': 'Purchase Order',
       'fields': jsonEncode(['*']),   
@@ -226,19 +227,17 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
   }
 
 
-   Future<Uint8List?> fetchAndConvertToBase64(String relativePath) async {
+    Future<Uint8List?> fetchAndConvertToBase64(String relativePath) async {
     if (p.extension(relativePath).isEmpty) {
       return null;
     }
 
-    final String url = 'http://65.21.176.38:8000$relativePath';
+    final String url = Urls.filepath(relativePath);
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      Uint8List bytes = response.bodyBytes;
-
-      return bytes;
+      return response.bodyBytes;
     } else {
       throw Exception('Failed to load file: ${response.statusCode}');
     }

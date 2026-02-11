@@ -57,8 +57,8 @@ mixin _$GateEntry {
   String? get vehiclePhoto => throw _privateConstructorUsedError;
   @JsonKey(name: 'vendor_invoice_photo')
   String? get invoicePhoto => throw _privateConstructorUsedError;
-  @JsonKey(name: 'vehicle_back_photo')
-  String? get vehicleBackPhoto => throw _privateConstructorUsedError;
+  @JsonKey(name: 'custom_weighment_slip')
+  String? get weighmentPhoto => throw _privateConstructorUsedError;
   @JsonKey(name: 'custom_supplier')
   String? get customSupplier => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_time')
@@ -86,7 +86,7 @@ mixin _$GateEntry {
       includeToJson: false,
       toJson: toNull,
       fromJson: toNull)
-  File? get vehicleBackPhotoImg => throw _privateConstructorUsedError;
+  File? get weighmentPhotoImg => throw _privateConstructorUsedError;
 
   /// Serializes this GateEntry to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -123,7 +123,7 @@ abstract class $GateEntryCopyWith<$Res> {
       @JsonKey(name: 'is_purchase_receipt_created') int? receipt,
       @JsonKey(name: 'vehicle_photo') String? vehiclePhoto,
       @JsonKey(name: 'vendor_invoice_photo') String? invoicePhoto,
-      @JsonKey(name: 'vehicle_back_photo') String? vehicleBackPhoto,
+      @JsonKey(name: 'custom_weighment_slip') String? weighmentPhoto,
       @JsonKey(name: 'custom_supplier') String? customSupplier,
       @JsonKey(name: 'created_time') String? createTime,
       @JsonKey(name: 'by_mobile_app') int? byMobileApp,
@@ -146,7 +146,7 @@ abstract class $GateEntryCopyWith<$Res> {
           includeToJson: false,
           toJson: toNull,
           fromJson: toNull)
-      File? vehicleBackPhotoImg});
+      File? weighmentPhotoImg});
 }
 
 /// @nodoc
@@ -183,7 +183,7 @@ class _$GateEntryCopyWithImpl<$Res, $Val extends GateEntry>
     Object? receipt = freezed,
     Object? vehiclePhoto = freezed,
     Object? invoicePhoto = freezed,
-    Object? vehicleBackPhoto = freezed,
+    Object? weighmentPhoto = freezed,
     Object? customSupplier = freezed,
     Object? createTime = freezed,
     Object? byMobileApp = freezed,
@@ -191,7 +191,7 @@ class _$GateEntryCopyWithImpl<$Res, $Val extends GateEntry>
     Object? customeUnit2 = freezed,
     Object? vehiclePhotoImg = freezed,
     Object? invoicePhotoImg = freezed,
-    Object? vehicleBackPhotoImg = freezed,
+    Object? weighmentPhotoImg = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -270,9 +270,9 @@ class _$GateEntryCopyWithImpl<$Res, $Val extends GateEntry>
           ? _value.invoicePhoto
           : invoicePhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      vehicleBackPhoto: freezed == vehicleBackPhoto
-          ? _value.vehicleBackPhoto
-          : vehicleBackPhoto // ignore: cast_nullable_to_non_nullable
+      weighmentPhoto: freezed == weighmentPhoto
+          ? _value.weighmentPhoto
+          : weighmentPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
       customSupplier: freezed == customSupplier
           ? _value.customSupplier
@@ -302,9 +302,9 @@ class _$GateEntryCopyWithImpl<$Res, $Val extends GateEntry>
           ? _value.invoicePhotoImg
           : invoicePhotoImg // ignore: cast_nullable_to_non_nullable
               as File?,
-      vehicleBackPhotoImg: freezed == vehicleBackPhotoImg
-          ? _value.vehicleBackPhotoImg
-          : vehicleBackPhotoImg // ignore: cast_nullable_to_non_nullable
+      weighmentPhotoImg: freezed == weighmentPhotoImg
+          ? _value.weighmentPhotoImg
+          : weighmentPhotoImg // ignore: cast_nullable_to_non_nullable
               as File?,
     ) as $Val);
   }
@@ -338,7 +338,7 @@ abstract class _$$GateEntryImplCopyWith<$Res>
       @JsonKey(name: 'is_purchase_receipt_created') int? receipt,
       @JsonKey(name: 'vehicle_photo') String? vehiclePhoto,
       @JsonKey(name: 'vendor_invoice_photo') String? invoicePhoto,
-      @JsonKey(name: 'vehicle_back_photo') String? vehicleBackPhoto,
+      @JsonKey(name: 'custom_weighment_slip') String? weighmentPhoto,
       @JsonKey(name: 'custom_supplier') String? customSupplier,
       @JsonKey(name: 'created_time') String? createTime,
       @JsonKey(name: 'by_mobile_app') int? byMobileApp,
@@ -361,7 +361,7 @@ abstract class _$$GateEntryImplCopyWith<$Res>
           includeToJson: false,
           toJson: toNull,
           fromJson: toNull)
-      File? vehicleBackPhotoImg});
+      File? weighmentPhotoImg});
 }
 
 /// @nodoc
@@ -396,7 +396,7 @@ class __$$GateEntryImplCopyWithImpl<$Res>
     Object? receipt = freezed,
     Object? vehiclePhoto = freezed,
     Object? invoicePhoto = freezed,
-    Object? vehicleBackPhoto = freezed,
+    Object? weighmentPhoto = freezed,
     Object? customSupplier = freezed,
     Object? createTime = freezed,
     Object? byMobileApp = freezed,
@@ -404,7 +404,7 @@ class __$$GateEntryImplCopyWithImpl<$Res>
     Object? customeUnit2 = freezed,
     Object? vehiclePhotoImg = freezed,
     Object? invoicePhotoImg = freezed,
-    Object? vehicleBackPhotoImg = freezed,
+    Object? weighmentPhotoImg = freezed,
   }) {
     return _then(_$GateEntryImpl(
       status: freezed == status
@@ -483,9 +483,9 @@ class __$$GateEntryImplCopyWithImpl<$Res>
           ? _value.invoicePhoto
           : invoicePhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      vehicleBackPhoto: freezed == vehicleBackPhoto
-          ? _value.vehicleBackPhoto
-          : vehicleBackPhoto // ignore: cast_nullable_to_non_nullable
+      weighmentPhoto: freezed == weighmentPhoto
+          ? _value.weighmentPhoto
+          : weighmentPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
       customSupplier: freezed == customSupplier
           ? _value.customSupplier
@@ -515,9 +515,9 @@ class __$$GateEntryImplCopyWithImpl<$Res>
           ? _value.invoicePhotoImg
           : invoicePhotoImg // ignore: cast_nullable_to_non_nullable
               as File?,
-      vehicleBackPhotoImg: freezed == vehicleBackPhotoImg
-          ? _value.vehicleBackPhotoImg
-          : vehicleBackPhotoImg // ignore: cast_nullable_to_non_nullable
+      weighmentPhotoImg: freezed == weighmentPhotoImg
+          ? _value.weighmentPhotoImg
+          : weighmentPhotoImg // ignore: cast_nullable_to_non_nullable
               as File?,
     ));
   }
@@ -546,7 +546,7 @@ class _$GateEntryImpl implements _GateEntry {
       @JsonKey(name: 'is_purchase_receipt_created') this.receipt,
       @JsonKey(name: 'vehicle_photo') this.vehiclePhoto,
       @JsonKey(name: 'vendor_invoice_photo') this.invoicePhoto,
-      @JsonKey(name: 'vehicle_back_photo') this.vehicleBackPhoto,
+      @JsonKey(name: 'custom_weighment_slip') this.weighmentPhoto,
       @JsonKey(name: 'custom_supplier') this.customSupplier,
       @JsonKey(name: 'created_time') this.createTime,
       @JsonKey(name: 'by_mobile_app') this.byMobileApp,
@@ -569,7 +569,7 @@ class _$GateEntryImpl implements _GateEntry {
           includeToJson: false,
           toJson: toNull,
           fromJson: toNull)
-      this.vehicleBackPhotoImg});
+      this.weighmentPhotoImg});
 
   factory _$GateEntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$GateEntryImplFromJson(json);
@@ -631,8 +631,8 @@ class _$GateEntryImpl implements _GateEntry {
   @JsonKey(name: 'vendor_invoice_photo')
   final String? invoicePhoto;
   @override
-  @JsonKey(name: 'vehicle_back_photo')
-  final String? vehicleBackPhoto;
+  @JsonKey(name: 'custom_weighment_slip')
+  final String? weighmentPhoto;
   @override
   @JsonKey(name: 'custom_supplier')
   final String? customSupplier;
@@ -668,11 +668,11 @@ class _$GateEntryImpl implements _GateEntry {
       includeToJson: false,
       toJson: toNull,
       fromJson: toNull)
-  final File? vehicleBackPhotoImg;
+  final File? weighmentPhotoImg;
 
   @override
   String toString() {
-    return 'GateEntry(status: $status, name: $name, owner: $owner, creationDate: $creationDate, docStatus: $docStatus, modifiedDate: $modifiedDate, modifiedBy: $modifiedBy, idx: $idx, purchaseOrder: $purchaseOrder, vehicleNo: $vehicleNo, vendorInvoiceDate: $vendorInvoiceDate, vendorInvoiceNo: $vendorInvoiceNo, gateEntryDate: $gateEntryDate, invoiceQuantity: $invoiceQuantity, invoiceAmount: $invoiceAmount, remarks: $remarks, receipt: $receipt, vehiclePhoto: $vehiclePhoto, invoicePhoto: $invoicePhoto, vehicleBackPhoto: $vehicleBackPhoto, customSupplier: $customSupplier, createTime: $createTime, byMobileApp: $byMobileApp, customeUnit1: $customeUnit1, customeUnit2: $customeUnit2, vehiclePhotoImg: $vehiclePhotoImg, invoicePhotoImg: $invoicePhotoImg, vehicleBackPhotoImg: $vehicleBackPhotoImg)';
+    return 'GateEntry(status: $status, name: $name, owner: $owner, creationDate: $creationDate, docStatus: $docStatus, modifiedDate: $modifiedDate, modifiedBy: $modifiedBy, idx: $idx, purchaseOrder: $purchaseOrder, vehicleNo: $vehicleNo, vendorInvoiceDate: $vendorInvoiceDate, vendorInvoiceNo: $vendorInvoiceNo, gateEntryDate: $gateEntryDate, invoiceQuantity: $invoiceQuantity, invoiceAmount: $invoiceAmount, remarks: $remarks, receipt: $receipt, vehiclePhoto: $vehiclePhoto, invoicePhoto: $invoicePhoto, weighmentPhoto: $weighmentPhoto, customSupplier: $customSupplier, createTime: $createTime, byMobileApp: $byMobileApp, customeUnit1: $customeUnit1, customeUnit2: $customeUnit2, vehiclePhotoImg: $vehiclePhotoImg, invoicePhotoImg: $invoicePhotoImg, weighmentPhotoImg: $weighmentPhotoImg)';
   }
 
   @override
@@ -712,8 +712,8 @@ class _$GateEntryImpl implements _GateEntry {
                 other.vehiclePhoto == vehiclePhoto) &&
             (identical(other.invoicePhoto, invoicePhoto) ||
                 other.invoicePhoto == invoicePhoto) &&
-            (identical(other.vehicleBackPhoto, vehicleBackPhoto) ||
-                other.vehicleBackPhoto == vehicleBackPhoto) &&
+            (identical(other.weighmentPhoto, weighmentPhoto) ||
+                other.weighmentPhoto == weighmentPhoto) &&
             (identical(other.customSupplier, customSupplier) ||
                 other.customSupplier == customSupplier) &&
             (identical(other.createTime, createTime) ||
@@ -728,8 +728,8 @@ class _$GateEntryImpl implements _GateEntry {
                 other.vehiclePhotoImg == vehiclePhotoImg) &&
             (identical(other.invoicePhotoImg, invoicePhotoImg) ||
                 other.invoicePhotoImg == invoicePhotoImg) &&
-            (identical(other.vehicleBackPhotoImg, vehicleBackPhotoImg) ||
-                other.vehicleBackPhotoImg == vehicleBackPhotoImg));
+            (identical(other.weighmentPhotoImg, weighmentPhotoImg) ||
+                other.weighmentPhotoImg == weighmentPhotoImg));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -755,7 +755,7 @@ class _$GateEntryImpl implements _GateEntry {
         receipt,
         vehiclePhoto,
         invoicePhoto,
-        vehicleBackPhoto,
+        weighmentPhoto,
         customSupplier,
         createTime,
         byMobileApp,
@@ -763,7 +763,7 @@ class _$GateEntryImpl implements _GateEntry {
         customeUnit2,
         vehiclePhotoImg,
         invoicePhotoImg,
-        vehicleBackPhotoImg
+        weighmentPhotoImg
       ]);
 
   /// Create a copy of GateEntry
@@ -803,7 +803,7 @@ abstract class _GateEntry implements GateEntry {
       @JsonKey(name: 'is_purchase_receipt_created') final int? receipt,
       @JsonKey(name: 'vehicle_photo') final String? vehiclePhoto,
       @JsonKey(name: 'vendor_invoice_photo') final String? invoicePhoto,
-      @JsonKey(name: 'vehicle_back_photo') final String? vehicleBackPhoto,
+      @JsonKey(name: 'custom_weighment_slip') final String? weighmentPhoto,
       @JsonKey(name: 'custom_supplier') final String? customSupplier,
       @JsonKey(name: 'created_time') final String? createTime,
       @JsonKey(name: 'by_mobile_app') final int? byMobileApp,
@@ -826,7 +826,7 @@ abstract class _GateEntry implements GateEntry {
           includeToJson: false,
           toJson: toNull,
           fromJson: toNull)
-      final File? vehicleBackPhotoImg}) = _$GateEntryImpl;
+      final File? weighmentPhotoImg}) = _$GateEntryImpl;
 
   factory _GateEntry.fromJson(Map<String, dynamic> json) =
       _$GateEntryImpl.fromJson;
@@ -888,8 +888,8 @@ abstract class _GateEntry implements GateEntry {
   @JsonKey(name: 'vendor_invoice_photo')
   String? get invoicePhoto;
   @override
-  @JsonKey(name: 'vehicle_back_photo')
-  String? get vehicleBackPhoto;
+  @JsonKey(name: 'custom_weighment_slip')
+  String? get weighmentPhoto;
   @override
   @JsonKey(name: 'custom_supplier')
   String? get customSupplier;
@@ -925,7 +925,7 @@ abstract class _GateEntry implements GateEntry {
       includeToJson: false,
       toJson: toNull,
       fromJson: toNull)
-  File? get vehicleBackPhotoImg;
+  File? get weighmentPhotoImg;
 
   /// Create a copy of GateEntry
   /// with the given fields replaced by the non-null parameter values.

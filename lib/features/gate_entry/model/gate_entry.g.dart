@@ -27,7 +27,7 @@ _$GateEntryImpl _$$GateEntryImplFromJson(Map<String, dynamic> json) =>
       receipt: (json['is_purchase_receipt_created'] as num?)?.toInt(),
       vehiclePhoto: json['vehicle_photo'] as String?,
       invoicePhoto: json['vendor_invoice_photo'] as String?,
-      vehicleBackPhoto: json['vehicle_back_photo'] as String?,
+      weighmentPhoto: json['custom_weighment_slip'] as String?,
       customSupplier: json['custom_supplier'] as String?,
       createTime: json['created_time'] as String?,
       byMobileApp: (json['by_mobile_app'] as num?)?.toInt(),
@@ -35,7 +35,7 @@ _$GateEntryImpl _$$GateEntryImplFromJson(Map<String, dynamic> json) =>
       customeUnit2: json['custom_unit_2'] as String?,
       vehiclePhotoImg: toNull(json['vehiclePhotoImg']),
       invoicePhotoImg: toNull(json['invoicePhotoImg']),
-      vehicleBackPhotoImg: toNull(json['vehicleBackPhotoImg']),
+      weighmentPhotoImg: toNull(json['weighmentPhotoImg']),
     );
 
 Map<String, dynamic> _$$GateEntryImplToJson(_$GateEntryImpl instance) =>
@@ -59,7 +59,7 @@ Map<String, dynamic> _$$GateEntryImplToJson(_$GateEntryImpl instance) =>
       'is_purchase_receipt_created': instance.receipt,
       'vehicle_photo': instance.vehiclePhoto,
       'vendor_invoice_photo': instance.invoicePhoto,
-      'vehicle_back_photo': instance.vehicleBackPhoto,
+      'custom_weighment_slip': instance.weighmentPhoto,
       'custom_supplier': instance.customSupplier,
       'created_time': instance.createTime,
       'by_mobile_app': instance.byMobileApp,

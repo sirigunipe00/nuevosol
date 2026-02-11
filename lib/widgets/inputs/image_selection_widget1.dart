@@ -45,7 +45,7 @@ class _GateEntryImageWidget1State extends State<ImageSelectionWidget1>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CaptionText(title: widget.title),
+        CaptionText(title: widget.title,isRequired: widget.isRequired,),
         AppSpacer.p4(),
         Stack(
           children: [
@@ -139,81 +139,239 @@ class _GateEntryImageWidget1State extends State<ImageSelectionWidget1>
                   ],
                 ),
               ),
+              
             ],
           ],
         ),
+        
       ],
     );
   }
+  String normalizeFileUrl(String rawPath) {
+
+  if (rawPath.startsWith('http')) {
+    return Uri.encodeFull(rawPath);
+  }
+
+
+  final cleanPath = rawPath
+      .replaceFirst('/api/', '/')
+      .replaceFirst(RegExp('^/+'), '');
+
+  return Uri.encodeFull(
+    '${Urls.baseUrl}/$cleanPath',
+  );
+}
 
 Widget _isValidFile() {
-  final val = widget.defaultVal!;
+  final rawVal = widget.defaultVal!;
   try {
-    if (val.startsWith('http')) {
+    if (rawVal.startsWith('http') || rawVal.startsWith('/')) {
+      final url = normalizeFileUrl(rawVal);
+
       return GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => FullScreenImageViewer(imageUrl: val),
+              builder: (_) => FullScreenImageViewer(imageUrl: url),
             ),
           );
         },
         child: Image.network(
-          val,
-          headers: const {
-            'Authorization': 'token YOUR_API_KEY:YOUR_API_SECRET',
-          },
+          url,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) =>
+          errorBuilder: (_, __, ___) =>
               const Icon(Icons.broken_image, size: 64, color: Colors.red),
         ),
       );
     }
 
+    // Base64 case
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => FullScreenImageViewer(base64Data: val),
+            builder: (_) => FullScreenImageViewer(base64Data: rawVal),
           ),
         );
       },
-      child: Image.memory(base64Decode(val), fit: BoxFit.cover),
+      child: Image.memory(
+        base64Decode(rawVal),
+        fit: BoxFit.cover,
+      ),
     );
-  } catch (e) {
+  } catch (_) {
     return const Icon(Icons.broken_image, size: 64, color: Colors.red);
   }
 }
+
+// Widget _isValidFile() {
+//   final val = widget.defaultVal!;
+//   try {
+//     if (val.startsWith('http')) {
+//       return GestureDetector(
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (_) => FullScreenImageViewer(imageUrl: val),
+//             ),
+//           );
+//         },
+//         child: Image.network(
+//           val,
+//           headers: const {
+//             'Authorization': 'token YOUR_API_KEY:YOUR_API_SECRET',
+//           },
+//           fit: BoxFit.cover,
+//           errorBuilder: (context, error, stackTrace) =>
+//               const Icon(Icons.broken_image, size: 64, color: Colors.red),
+//         ),
+//       );
+//     }
+
+//     return GestureDetector(
+//       onTap: () {
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (_) => FullScreenImageViewer(base64Data: val),
+//           ),
+//         );
+//       },
+//       child: Image.memory(base64Decode(val), fit: BoxFit.cover),
+//     );
+//   } catch (e) {
+//     return const Icon(Icons.broken_image, size: 64, color: Colors.red);
+//   }
+// }
 }
-class FullScreenImageViewer extends StatelessWidget {
-  const FullScreenImageViewer({super.key, this.imageUrl, this.base64Data});
+// class FullScreenImageViewer extends StatelessWidget {
+//   const FullScreenImageViewer({super.key, this.imageUrl, this.base64Data});
+//   final String? imageUrl;
+//   final String? base64Data;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       appBar: AppBar(
+//         backgroundColor: Colors.transparent,
+//         iconTheme: const IconThemeData(color: Colors.white),
+//       ),
+//       body: Center(
+//         child: imageUrl != null
+//             ? Image.network(
+//                 imageUrl!,
+                
+//                 headers: const {
+//                   'Authorization': 'token YOUR_API_KEY:YOUR_API_SECRET',
+//                 },
+//                 errorBuilder: (context, error, stackTrace) =>
+//                     const Icon(Icons.broken_image, size: 80, color: Colors.red),
+//               )
+//             : Image.memory(base64Decode(base64Data!)),
+//       ),
+//     );
+//   }
+// }
+class FullScreenImageViewer extends StatefulWidget {
+  const FullScreenImageViewer({
+    super.key,
+    this.imageUrl,
+    this.base64Data,
+  });
+
   final String? imageUrl;
   final String? base64Data;
+
+  @override
+  State<FullScreenImageViewer> createState() => _FullScreenImageViewerState();
+}
+
+class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
+  double _rotationAngle = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          /// Rotate Left
+          IconButton(
+            icon: const Icon(Icons.rotate_left),
+            onPressed: () {
+              setState(() {
+                _rotationAngle -= 90 * (3.1415926535 / 180);
+              });
+            },
+          ),
+
+          /// Rotate Right
+          IconButton(
+            icon: const Icon(Icons.rotate_right),
+            onPressed: () {
+              setState(() {
+                _rotationAngle += 90 * (3.1415926535 / 180);
+              });
+            },
+          ),
+        ],
       ),
       body: Center(
-        child: imageUrl != null
-            ? Image.network(
-                imageUrl!,
-                
-                headers: const {
-                  'Authorization': 'token YOUR_API_KEY:YOUR_API_SECRET',
-                },
-                errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.broken_image, size: 80, color: Colors.red),
-              )
-            : Image.memory(base64Decode(base64Data!)),
+        child: InteractiveViewer(
+          clipBehavior: Clip.none,
+          minScale: 0.5,
+          maxScale: 5.0,
+          panEnabled: true,
+          scaleEnabled: true,
+          child: Transform.rotate(
+            angle: _rotationAngle,
+            child: _buildImage(),
+          ),
+        ),
       ),
     );
   }
+
+  // Widget _buildImage() {
+  //   if (widget.imageUrl != null) {
+  //     return Image.network(
+  //       widget.imageUrl!,
+  //       headers: const {
+  //         'Authorization': 'token YOUR_API_KEY:YOUR_API_SECRET',
+  //       },
+  //       fit: BoxFit.contain,
+  //       errorBuilder: (_, __, ___) =>
+  //           const Icon(Icons.broken_image, size: 80, color: Colors.red),
+  //     );
+  //   }
+
+  //   return Image.memory(
+  //     base64Decode(widget.base64Data!),
+  //     fit: BoxFit.contain,
+  //   );
+  // }
+  Widget _buildImage() {
+  if (widget.imageUrl != null) {
+    return Image.network(
+      widget.imageUrl!,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) =>
+          const Icon(Icons.broken_image, size: 80, color: Colors.red),
+    );
+  }
+
+  return Image.memory(
+    base64Decode(widget.base64Data!),
+    fit: BoxFit.contain,
+  );
+}
+
 }
 

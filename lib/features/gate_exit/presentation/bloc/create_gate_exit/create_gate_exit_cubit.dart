@@ -83,11 +83,22 @@ class CreateGateExitCubit extends AppBaseCubit<CreateGateExitState> {
   }
 
 
- String? getFullUrl(String? path) {
+//  String? getFullUrl(String? path) {
+//   if (path == null || path.isEmpty) return null;
+//   if (path.startsWith('http')) return path;
+//   return 'http://65.21.176.38:8000$path';
+// }
+String? getFullUrl(String? path) {
   if (path == null || path.isEmpty) return null;
+
+  // If backend already sent full URL
   if (path.startsWith('http')) return path;
-  return 'http://65.21.176.38:8000$path';
+
+  // Auto resolve based on bootstrap environment
+  return Urls.filepath(path);
 }
+
+
   void initDetails(Object? entry) {
     shouldAskForConfirmation.value = false;
     if (entry is GateExit) {

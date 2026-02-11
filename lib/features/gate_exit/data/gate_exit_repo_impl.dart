@@ -141,7 +141,7 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
     ];
 
       final reqParams = {
-        'limit': 20,
+        'limit_page_length': 'None',
           'oreder_by': 'create desc',
           'doctype': 'Sales Invoice',
           'fields': ['*'],
@@ -173,18 +173,17 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
       });
     });
   }
-    Future<Uint8List?> fetchAndConvertToBase64(String relativePath) async {
+   Future<Uint8List?> fetchAndConvertToBase64(String relativePath) async {
     if (p.extension(relativePath).isEmpty) {
       return null;
     }
 
-    final String url = 'http://65.21.176.38:8000$relativePath';
+    final String url = Urls.filepath(relativePath);
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      Uint8List bytes = response.bodyBytes;
-      return bytes;
+      return response.bodyBytes;
     } else {
       throw Exception('Failed to load file: ${response.statusCode}');
     }

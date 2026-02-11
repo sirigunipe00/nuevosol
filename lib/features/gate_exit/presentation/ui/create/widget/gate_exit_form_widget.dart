@@ -301,6 +301,7 @@ class _GateExitFormWidgetState extends State<GateExitFormWidget> {
                 builder:
                     (_, state) => ImageSelectionWidget1(
                       title: 'Vehicle Photo',
+                      isRequired: true,
                       borderColor: AppColors.lavender,
                       readOnly: isCompleted,
                       defaultVal: state.form.vehiclePhoto,

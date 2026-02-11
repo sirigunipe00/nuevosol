@@ -5,7 +5,6 @@ import 'package:nuevosol/features/gate_entry/model/gate_entry.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_icons.dart';
 import 'package:nuevosol/styles/app_text_styles.dart';
-import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_view_btn.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 
@@ -41,7 +40,7 @@ class GateEntryWidget extends StatelessWidget {
             ),
             SpacedColumn(
               defaultHeight: 4,
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -53,7 +52,7 @@ class GateEntryWidget extends StatelessWidget {
                   ],
                 ),
                 Text(gateEntry.purchaseOrder ?? '', style: AppTextStyles.titleLarge(context).copyWith(color: AppColors.black)),
-                AppSpacer.p8(),
+                // AppSpacer.p8(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

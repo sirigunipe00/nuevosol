@@ -51,7 +51,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
 
     File? vehiclePhoto,
     File? invoicePhoto,
-    File? vehicleBackPhoto,
+    File? weighmentPhoto,
   }) async {
     shouldAskForConfirmation.value = true;
     final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -62,7 +62,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
 
     final vendorInvoicePhotoBase64 = invoicePhoto ?? form.invoicePhotoImg;
 
-    final vehiclebackPhotos = vehicleBackPhoto ?? form.vehicleBackPhotoImg;
+    final weightmentPhotos = weighmentPhoto ?? form.weighmentPhotoImg;
     final newForm = form.copyWith(
       customSupplier: customSupplier ?? form.customSupplier,
       name: name ?? form.name,
@@ -86,16 +86,28 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
       
       vehiclePhotoImg: vehiclePhotos,
       invoicePhotoImg: vendorInvoicePhotoBase64,
-      vehicleBackPhotoImg: vehiclebackPhotos,
+      weighmentPhotoImg: weightmentPhotos,
     );
 
     emitSafeState(state.copyWith(form: newForm));
   }
-  String? getFullUrl(String? path) {
+//   String? getFullUrl(String? path) {
+//   if (path == null || path.isEmpty) return null;
+//   if (path.startsWith('http')) return path;
+//   return 'http://65.21.176.38:8000$path';
+// }
+String? getFullUrl(String? path) {
   if (path == null || path.isEmpty) return null;
+
+
   if (path.startsWith('http')) return path;
-  return 'http://65.21.176.38:8000$path';
+
+
+  return Urls.filepath(path);
 }
+
+
+
 
   void initDetails(Object? entry) {
     shouldAskForConfirmation.value = false;
@@ -119,7 +131,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
         vendorInvoiceDate: entry.vendorInvoiceDate,
         vehicleNo: entry.vehicleNo,
        vehiclePhoto: getFullUrl(entry.vehiclePhoto),
-       vehicleBackPhoto: getFullUrl(entry.vehicleBackPhoto),
+       weighmentPhoto: getFullUrl(entry.weighmentPhoto),
        invoicePhoto: getFullUrl(entry.invoicePhoto),
         invoiceAmount: entry.invoiceAmount,
         invoiceQuantity: entry.invoiceQuantity,
@@ -164,7 +176,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
   // }
 
   void clearVehicleBackPhoto() {
-    final form = state.form.copyWith(vehicleBackPhoto: null);
+    final form = state.form.copyWith(weighmentPhoto: null);
     emitSafeState(state.copyWith(form: form));
   }
 

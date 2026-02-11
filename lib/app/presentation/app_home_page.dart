@@ -107,19 +107,19 @@ class AppHomePage extends StatelessWidget {
                 
                    
                       // if (BooleanUtls.fromInt(userRoles.approval))
-                        AppFeatureWidget(
-                          icon: FittedBox(
-                            child: AppIcons.poApproval.toWidget(
-                                height: 100, width: 120, fit: BoxFit.contain),
-                          ),
-                          title: FittedBox(
-                            child: Text('PO Approval List',
-                                style:
-                                    AppTextStyles.featureLabelStyle(context)),
-                          ),
-                          featureColor: const Color(0xFF0DB295),
-                          onTap: () => AppRoute.poApprovalList.push(context),
-                        ),
+                        // AppFeatureWidget(
+                        //   icon: FittedBox(
+                        //     child: AppIcons.poApproval.toWidget(
+                        //         height: 100, width: 120, fit: BoxFit.contain),
+                        //   ),
+                        //   title: FittedBox(
+                        //     child: Text('PO Approval List',
+                        //         style:
+                        //             AppTextStyles.featureLabelStyle(context)),
+                        //   ),
+                        //   featureColor: const Color(0xFF0DB295),
+                        //   onTap: () => AppRoute.poApprovalList.push(context),
+                        // ),
                       // // if (BooleanUtls.fromInt(userRoles.dashbaords))
                       //   AppFeatureWidget(
                       //     icon: AppIcons.dashboards.toWidget(
