@@ -4,6 +4,8 @@ import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/core/model/page_view_filters.dart';
 import 'package:nuevosol/features/auth/presentation/bloc/auth/auth_cubit.dart';
 import 'package:nuevosol/features/auth/presentation/ui/sign_in/sign_in_cubit.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/bloc/employee_filters.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart';
@@ -25,12 +27,15 @@ class FrappeApp extends StatelessWidget {
         BlocProvider<SignInCubit>(create: (_) => $sl.get<SignInCubit>()),
         BlocProvider(create: (_) => GateEntryFilterCubit()),
         BlocProvider(create: (_) => GateExitFilterCubit()),
+        BlocProvider(create: (_) => EmployeeFilters()),
         BlocProvider(create: (_) => PoApprovalFiltersCubit()),
       
         BlocProvider(
           create: (_) => GateEntryBlocProvider.get().fetchGateEntries()),
         BlocProvider(
           create: (_) => GateExitBlocProvider.get().fetchGateExit()),
+          BlocProvider(
+          create: (_) => EmployeeBlocProvider.get().fetchEmployeeEntries()),
         BlocProvider(
           create: (_) => GateEntryBlocProvider.get().fetchPONumbers()),
         BlocProvider(create: (_) => GateExitBlocProvider.get().salesInvoiceList()),
@@ -48,6 +53,7 @@ class FrappeApp extends StatelessWidget {
               routerCtxt
                 ..cubit<GateEntriesCubit>().fetchInitial(filters)
                 ..cubit<GateExitCubit>().fetchInitial(filters)
+                ..cubit<EmployeeEntriesCubit>().fetchInitial(filters)
                 ..cubit<PurchaseOrders>().request('')
                 ..cubit<SalesInvoiceList>().request('')
                 ..cubit<PoApprovalCubit>().fetchInitial(PageViewFilters.initial());

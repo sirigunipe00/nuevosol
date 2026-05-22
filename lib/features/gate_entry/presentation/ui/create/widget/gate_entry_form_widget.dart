@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nuevosol/core/core.dart';
@@ -80,7 +81,7 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
     final bool isPoSelected = form.purchaseOrder.containsValidValue;
 
 
-    final indianFormat = NumberFormat.decimalPattern('en_IN');
+    // final indianFormat = NumberFormat.decimalPattern('en_IN');
     $logger.devLog('form.........$form');
 
     return SpacedColumn(
@@ -168,9 +169,19 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           readOnly: isCompleted,
           hintText: 'Enter Your Vehicle Number',
           isRequired: true,
+          inputFormatters: [
+  UpperCaseTextFormatter(),
+
+  FilteringTextInputFormatter.allow(
+    RegExp(r'[A-Z0-9]'),
+  ),
+
+  LengthLimitingTextInputFormatter(10),
+],
           controller: vehicleNo,
           initialValue: form.vehicleNo,
-          inputFormatters: [UpperCaseTextFormatter()],
+          
+        
           borderColor: AppColors.marigoldDDust,
           onChanged: (vehicleNum) {
             context.cubit<CreateGateEntryCubit>().onValueChanged(
@@ -333,6 +344,9 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           readOnly: isCompleted,
           hintText: 'Enter Invoice Number',
           isRequired: true,
+          inputFormatters: [
+    LengthLimitingTextInputFormatter(25),
+  ],
           initialValue: form.vendorInvoiceNo,
           borderColor: AppColors.marigoldDDust,
           onChanged: (invNumber) {
@@ -371,9 +385,10 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           lastDate: DateTime.now(),
         ),
         AppDropDownWidget<String>(
-          title: 'Unit Type',
-          hint: 'Select Unit Type',
+          title: 'Company Name',
+          hint: 'Select Company Name',
           readOnly: isCompleted,
+          isMandatory: true,
           // color: AppColors.black,
           items: Dropdownoptions.untis,
           defaultSelection: form.customeUnit1,

@@ -10,6 +10,8 @@ abstract class _AppRoutePaths {
   static const newGateEntryPreview = '/home/gateentry/newGateEntry/preview';
   static const gateExit = '/home/gateexit';
   static const newGateExit = '/home/gateexit/newGateExit';
+  static const employeeTracker = '/home/employeeTracker';
+  static const newEmployeeTracker = '/home/employeeTracker/newEmployeeTracker';
   static const newGateExitPreview = '/home/gateexit/newGateExit/preview';
   static const gateRegistration = '/home/gateRegistration';
   static const newGateRegistration = '/home/gateRegistration/newGateRegistration';
@@ -36,6 +38,8 @@ enum AppRoute {
   gateRegistration(_AppRoutePaths.gateRegistration),
   newGateRegistration(_AppRoutePaths.newGateRegistration),
   newGateRegistrationPreview(_AppRoutePaths.newGateRegistrationPreview),
+  employeeTracker(_AppRoutePaths.employeeTracker),
+  newEmployeeTracker(_AppRoutePaths.newEmployeeTracker),
   dipatchGaylord(_AppRoutePaths.dipatchGaylord),
   dispatchGaylordPreview(_AppRoutePaths.dispatchGaylordPreview),
   poApprovalList(_AppRoutePaths.poApprovalList),

@@ -208,6 +208,21 @@ String? getFullUrl(String? path) {
             state.copyWith(isLoading: false, error: l, isSuccess: false),
           ),
           (r) {
+            if (r.first.isEmpty) {
+              print('Error: ${r.first}');
+        emitSafeState(
+          state.copyWith(
+            isLoading: false,
+            isSuccess: false,
+            error:  const Failure(
+              title: 'Validation Error',
+              error: 'Failed to create gate entry',
+              
+            ),
+          ),
+        );
+        return;
+      }
             shouldAskForConfirmation.value = false;
             final docstatus = r.second;
             emitSafeState(
@@ -282,16 +297,56 @@ String? getFullUrl(String? path) {
     else if (form.invoicePhotoImg.isNull &&
         form.invoicePhoto.doesNotHaveValue) {
       return optionOf(const Pair('Missing VendorInvoice Photo', 0));
+    }  else if (form.customeUnit1.isNull ||
+        (form.customeUnit1?.trim().isEmpty ?? true)) {
+      return optionOf(const Pair('Missing Company Name', 0));
     } else if (form.vendorInvoiceDate.isNull ||
         (form.vendorInvoiceDate?.trim().isEmpty ?? true)) {
       return optionOf(const Pair('Missing VendorInvoice Date', 0));
-    } else if (form.vendorInvoiceNo.isNull ||
-        (form.vendorInvoiceNo?.trim().isEmpty ?? true)) {
-      return optionOf(const Pair('Missing VendorInvoice No', 0));
-    } else if (form.vehicleNo.isNull ||
-        (form.vehicleNo?.trim().isEmpty ?? true)) {
-      return optionOf(const Pair('Missing Vehicle Number', 0));
-    }
+    } else if ((form.vendorInvoiceNo?.length ?? 0) > 25) {
+  return optionOf(
+    const Pair(
+      'Invoice Number should not exceed 25 characters',
+      0,
+    ),
+  );
+} else if (form.vehicleNo.isNull ||
+    (form.vehicleNo?.trim().isEmpty ?? true)) {
+
+  return optionOf(
+    const Pair('Missing Vehicle Number', 0),
+  );
+
+} else if ((form.vehicleNo?.length ?? 0) < 8 ||
+           (form.vehicleNo?.length ?? 0) > 10) {
+
+  return optionOf(
+    const Pair(
+      'Vehicle Number must be between 8 and 10 characters',
+      0,
+    ),
+  );
+
+} else {
+
+  final lastFour =
+      form.vehicleNo!.substring(
+        form.vehicleNo!.length - 4,
+      );
+
+  final isLastFourDigits = RegExp(
+    r'^[0-9]{4}$',
+  ).hasMatch(lastFour);
+
+  if (!isLastFourDigits) {
+    return optionOf(
+      const Pair(
+        'In Vehicle No Last 4 characters must be numbers',
+        0,
+      ),
+    );
+  }
+}
 
     return const None();
   }

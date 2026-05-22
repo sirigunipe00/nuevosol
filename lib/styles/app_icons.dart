@@ -16,6 +16,7 @@ class AppIcons {
   static const bgFrame4 = AppIcon('$basePath/bg_frame4.png');
   static const bgFrame5 = AppIcon('$basePath/bg_frame5.png');
   static const bgFrame6 = AppIcon('$basePath/bg_frame6.png');
+  static const gatePass = AppIcon('$basePath/signing_contract.png');
   static const helloCuate = AppIcon('$basePath/hello_cuate.svg');
   static const settingsCuate = AppIcon('$basePath/settings_cuate.svg');
 

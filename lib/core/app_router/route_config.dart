@@ -9,6 +9,10 @@ import 'package:nuevosol/app/presentation/app_splash_scrn.dart';
 import 'package:nuevosol/app/presentation/app_update_blocprovider.dart';
 import 'package:nuevosol/app/widgets/app_scaffold_widget.dart';
 import 'package:nuevosol/features/auth/presentation/ui/authentication_scrn.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/ui/employee_list.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/ui/new_employee.dart';
 import 'package:nuevosol/features/gate_entry/model/gate_entry.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/create_gate_entry_cubit/create_gateentry_cubit.dart';
@@ -155,33 +159,43 @@ class AppRouterConfig {
                       ),
                     ],
                   ),
-                  // GoRoute(
-                  //   path: _getPath(AppRoute.gateRegistration),
-                  //   builder: (ctxt, state) {
-                  //     return const GateRegistrationListScrn();
-                  //   },
-                  //   routes: [
-                  //     GoRoute(
-                  //       path: _getPath(AppRoute.newGateRegistration),
-                  //       builder: (_, state) {
-                  //         final blocprovider =
-                  //             GateRegistrationBlocProvider.get();
-                  //         return MultiBlocProvider(
-                  //           providers: [
-                  //             BlocProvider(
-                  //                 create: (_) =>
-                  //                     blocprovider.employeeList()..request()),
-                  //             BlocProvider(
-                  //               create: (_) => $sl.get<GateRegistrationCubit>()
-                  //                 ..initDetails(state.extra),
-                  //             ),
-                  //           ],
-                  //           child: const NewGateRegistration(),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
+                  GoRoute(
+                    path: _getPath(AppRoute.employeeTracker),
+                    builder: (ctxt, state) {
+                      final filters = Pair( StringUtils.docStatusInt('Draft'),null,);
+                      return BlocProvider(create:
+                            (context) => EmployeeBlocProvider.get().fetchEmployeeEntries()..fetchInitial(filters),
+                        child: const EmployeeListScrn(),
+                      );
+                    },
+                    routes: [
+                      GoRoute(
+                        path: _getPath(AppRoute.newEmployeeTracker),
+                        builder: (_, state) {
+                          final blocprovider =
+                              EmployeeBlocProvider.get();
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.fetchEmployeeList()..request()),
+                              BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.fetchReasonExit()..request()),
+                              BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.getLocation()..request()),
+                              BlocProvider(
+                                create: (_) => $sl.get<CreateEmployeeCubit>()
+                                  ..initDetails(state.extra),
+                              ),
+                            ],
+                            child: const NewEmployee(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   // GoRoute(
                   //     path: _getPath(AppRoute.dipatchGaylord),
                   //     builder: (ctxt, state) {

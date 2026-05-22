@@ -79,15 +79,15 @@ class AppHomePage extends StatelessWidget {
                         ),
                       // if (BooleanUtls.fromInt(userRoles.registration))
                         // AppFeatureWidget(
-                        //   icon: AppIcons.registration.toWidget(
+                        //   icon: AppIcons.gatePass.toWidget(
                         //       height: 100, width: 120, fit: BoxFit.contain),
                         //   title: FittedBox(
-                        //     child: Text('Visitors Registration',
+                        //     child: Text('Gate Pass',
                         //         style:
                         //             AppTextStyles.featureLabelStyle(context)),
                         //   ),
                         //   featureColor: AppColors.registration,
-                        //   onTap: () => AppRoute.gateRegistration.push(context),
+                        //   onTap: () => AppRoute.employeeTracker.push(context),
                         // ),
                      
                         // AppFeatureWidget(

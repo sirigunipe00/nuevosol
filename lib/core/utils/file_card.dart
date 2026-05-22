@@ -96,7 +96,7 @@ class ReportsViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('file url: ---:$urls');
+
     return Scaffold(
       appBar: SimpleAppBar(title: title),
       body: PhotoViewGallery.builder(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
@@ -92,14 +93,14 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     formJson['status'] = 'Draft';
 
     Uint8List? vehiclefrontcompressedBytes;
-    Uint8List? WeightmentcompressedBytes;
+    Uint8List? weightmentcompressedBytes;
     Uint8List? invocecompressedBytes;
 
     if (form.vehiclePhotoImg != null) {
       final filePath = form.vehiclePhotoImg!.path;
       vehiclefrontcompressedBytes = await FlutterImageCompress.compressWithFile(
         filePath,
-        quality: 50,
+        quality: 30,
       );
     } else if (form.vehiclePhoto != null) {
       vehiclefrontcompressedBytes = await fetchAndConvertToBase64(
@@ -109,12 +110,12 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
 
     if (form.weighmentPhotoImg != null) {
       final filePath = form.weighmentPhotoImg!.path;
-      WeightmentcompressedBytes = await FlutterImageCompress.compressWithFile(
+      weightmentcompressedBytes = await FlutterImageCompress.compressWithFile(
         filePath,
-        quality: 50,
+        quality: 30,
       );
     } else if (form.weighmentPhoto != null) {
-      WeightmentcompressedBytes = await fetchAndConvertToBase64(
+      weightmentcompressedBytes = await fetchAndConvertToBase64(
         form.weighmentPhoto ?? '',
       );
     }
@@ -123,7 +124,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       final filePath = form.invoicePhotoImg!.path;
       invocecompressedBytes = await FlutterImageCompress.compressWithFile(
         filePath,
-        quality: 50,
+        quality: 30,
       );
     } else if (form.invoicePhoto != null) {
       invocecompressedBytes = await fetchAndConvertToBase64(
@@ -133,11 +134,26 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
 
     final config = RequestConfig(
       url: Urls.createGateEntry,
-      parser: (json) {
-        final data = json['message']['data']['name'] as String;
-        return Pair(data, '');
-      },
+     parser: (json) {
+        final messageObj = json['message'] as Map<String, dynamic>;
 
+
+        if (messageObj['status'] == 400) {
+          log('Server returned an error: ${messageObj['message']}');
+          final errorText = messageObj['message']?.toString()?? 'Gate entry creation failed';
+          return Pair('__SERVER_ERROR__', errorText);
+        }
+
+
+        if (messageObj.containsKey('data') && messageObj['data'] != null) {
+          final data = messageObj['data'] as Map<String, dynamic>;
+          final name = data['name'] as String;
+          return Pair( messageObj['message']?.toString() ?? '', name);
+        }
+
+        // 3. Fallback for any other unexpected payload variations
+        return const Pair('__SERVER_ERROR__', 'An unexpected response structure was received.');
+      },
       body: jsonEncode({
         'po_number': form.purchaseOrder,
         'invoice_amount': form.invoiceAmount,
@@ -153,9 +169,9 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
                 ? null
                 : base64Encode(invocecompressedBytes),
         'custom_weighment_slip':
-            WeightmentcompressedBytes == null
+            weightmentcompressedBytes == null
                 ? null
-                : base64Encode(WeightmentcompressedBytes),
+                : base64Encode(weightmentcompressedBytes),
         'vehicle_no': form.vehicleNo,
         'invoice_qty': form.invoiceQuantity,
         'supplier': form.customSupplier,
@@ -172,12 +188,12 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
 
     final response = await post(config);
     return response.processAsync((r) async {
-      return right(r.data!);
+      final first = r.data?.first;
+      final second = r.data?.second;
+      return right(Pair(first?.toString() ?? '', second?.toString() ?? ''));
     });
   }
- 
-
-  @override
+ @override
   AsyncValueOf<List<PurchaseOrderForm>> fetchPONumbers(String name) async {
     return await executeSafely(() async {
     
