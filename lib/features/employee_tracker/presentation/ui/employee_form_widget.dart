@@ -7,15 +7,10 @@ import 'package:nuevosol/features/employee_tracker/model/location_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
-import 'package:nuevosol/features/gate_entry/presentation/bloc/create_gate_entry_cubit/create_gateentry_cubit.dart';
 import 'package:nuevosol/styles/app_color.dart';
-import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
-import 'package:nuevosol/widgets/drop_down_options.dart';
-import 'package:nuevosol/widgets/input_filed.dart';
 import 'package:nuevosol/widgets/inputs/app_dropdown_widget.dart';
 import 'package:nuevosol/widgets/inputs/compact_listtile.dart';
-import 'package:nuevosol/widgets/inputs/date_selection_field.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 
 class EmployeeFormWidget extends StatefulWidget {
@@ -37,6 +32,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
   EmployeeList? employeeList;
   ReasonExitType? reasonForm;
   LocationList? locationList;
+  
   @override
   void initState() {
     super.initState();
@@ -48,97 +44,99 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     final isCreating = formState.view == EmployeeView.create;
     final isCompleted = formState.view == EmployeeView.completed;
     final form = formState.form;
+
+
     return SpacedColumn(
       margin: const EdgeInsets.all(12.0),
       defaultHeight: 8,
       children: [
-//         Container(
-//   padding: const EdgeInsets.all(16),
-//   decoration: BoxDecoration(
-//     color: Colors.white,
-//     borderRadius: BorderRadius.circular(16),
-//     border: Border.all(
-//       color: Colors.grey.shade300,
-//     ),
-//   ),
-//   child: Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
+        Container(
+  padding: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(16),
+    border: Border.all(
+      color: Colors.grey.shade300,
+    ),
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
 
-//       const Row(
-//         children: const [
-//           Icon(
-//             Icons.badge_outlined,
-//             color: Colors.green,
-//             size: 24,
-//           ),
-//           SizedBox(width: 8),
-//           Text(
-//             'Employee Details',
-//             style: TextStyle(
-//               fontSize: 20,
-//               fontWeight: FontWeight.w700,
-//             ),
-//           ),
-//         ],
-//       ),
+      const Row(
+        children:  [
+          Icon(
+            Icons.badge_outlined,
+            color: Colors.green,
+            size: 24,
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Employee Details',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
 
-//       const SizedBox(height: 24),
+      const SizedBox(height: 24),
 
-//       Row(
-//         children: [
-//           Expanded(
-//             child: _buildEmployeeItem(
-//               'Employee ID',
-//               ''
-//               // context.user.employeeId ?? '',
-//             ),
-//           ),
-//           Expanded(
-//             child: _buildEmployeeItem(
-//               'Employee Name',
-//               ''
-//               // context.user.employeeName ?? '',
-//             ),
-//           ),
-//         ],
-//       ),
+      Row(
+        children: [
+          Expanded(
+            child: _buildEmployeeItem(
+              'Employee ID',
+              ''
+              // context.user.employeeId ?? '',
+            ),
+          ),
+          Expanded(
+            child: _buildEmployeeItem(
+              'Employee Name',
+              ''
+              // context.user.employeeName ?? '',
+            ),
+          ),
+        ],
+      ),
 
-//       const SizedBox(height: 20),
+      const SizedBox(height: 20),
 
-//       Row(
-//         children: [
-//           Expanded(
-//             child: _buildEmployeeItem(
-//               'HOD',
-//               ''
-//               // context.user.hod ?? '',
-//             ),
-//           ),
-//           Expanded(
-//             child: _buildEmployeeItem(
-//               'Department',
-//               ''
-//               // context.user.department ?? '',
-//             ),
-//           ),
-//         ],
-//       ),
+      Row(
+        children: [
+          Expanded(
+            child: _buildEmployeeItem(
+              'HOD',
+              ''
+              // context.user.hod ?? '',
+            ),
+          ),
+          Expanded(
+            child: _buildEmployeeItem(
+              'Department',
+              ''
+              // context.user.department ?? '',
+            ),
+          ),
+        ],
+      ),
 
-//       const SizedBox(height: 20),
+      const SizedBox(height: 20),
 
-//       Divider(color: Colors.grey.shade300),
+      Divider(color: Colors.grey.shade300),
 
-//       const SizedBox(height: 12),
+      const SizedBox(height: 12),
 
-//       _buildEmployeeItem(
-//         'Company',
-//         ''
-//         // context.user.company ?? '',
-//       ),
-//     ],
-//   ),
-// ),
+      _buildEmployeeItem(
+        'Company',
+        ''
+        // context.user.company ?? '',
+      ),
+    ],
+  ),
+),
       //  BlocBuilder<EmployeeListCubit, EmployeeListState>(
       //     builder: (_, state) {
       //       return state.maybeWhen(
@@ -258,502 +256,731 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
       //       );
       //     },
       //   ),
-        BlocBuilder<ReasonExitCubit, ReasonExitState>(
-          buildWhen: (previous, current) => previous != current,
+       Container(
+  padding: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(20),
+    border: Border.all(
+      color: AppColors.registration.withOpacity(0.2),
+    ),
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
 
-          builder: (_, state) {
-            final allData = state.maybeWhen(
-              orElse: () => <ReasonExitType>[],
-              success: (data) => data,
-            );
+      Row(
+        children: [
+          const Icon(
+            Icons.directions_walk,
+            color: AppColors.registration,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Movement Details',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
 
-            final names = allData.toList();
+      const SizedBox(height: 24),
 
-            return AppDropDownWidget<ReasonExitType>(
-              title: 'Reason of Gate Exit',
-              hint: 'Search Reason',
-              key: UniqueKey(),
-              items: names,
-              readOnly: isCompleted ,
-              defaultSelection: state.maybeWhen(
-                success: (data) {
-                  final selectedReason =
-                      context
-                          .read<CreateEmployeeCubit>()
-                          .state
-                          .form
-                          .reasonOfGateExit;
 
-                  if (selectedReason == null) return null;
+      BlocBuilder<ReasonExitCubit, ReasonExitState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (_, state) {
+          final allData = state.maybeWhen(
+            orElse: () => <ReasonExitType>[],
+            success: (data) => data,
+          );
 
-                  return data.firstWhere(
-                    (e) => e.name == selectedReason,
-                    orElse: () => const ReasonExitType(),
-                  );
-                },
-                orElse: () => null,
+          final names = allData.toList();
+
+          return AppDropDownWidget<ReasonExitType>(
+            title: 'Reason of Gate Exit',
+            hint: 'Select Movement',
+            key: UniqueKey(),
+            items: names,
+            readOnly: isCompleted,
+            defaultSelection: state.maybeWhen(
+              success: (data) {
+                final selectedReason = context
+                    .read<CreateEmployeeCubit>()
+                    .state
+                    .form
+                    .reasonOfGateExit;
+
+                if (selectedReason == null) return null;
+
+                return data.firstWhere(
+                  (e) => e.name == selectedReason,
+                  orElse: () => const ReasonExitType(),
+                );
+              },
+              orElse: () => null,
+            ),
+            futureRequest: (query) async {
+              if (query.isEmpty) return names;
+
+              return names.where((item) {
+                final orderNo = item.name?.toLowerCase() ?? '';
+                final reason = item.reason?.toLowerCase() ?? '';
+                final search = query.toLowerCase();
+
+                return orderNo.contains(search) ||
+                    reason.contains(search);
+              }).toList();
+            },
+            headerBuilder: (_, item, __) => Text(
+              item.name ?? '',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
               ),
-
-              // defaultSelection:
-              //     (context
-              //                     .read<CreateGateEntryCubit>()
-              //                     .state
-              //                     .form
-              //                     .customSupplier !=
-              //                 null &&
-              //             context
-              //                 .read<CreateGateEntryCubit>()
-              //                 .state
-              //                 .form
-              //                 .customSupplier!
-              //                 .isNotEmpty)
-              //         ? names.firstWhere(
-              //           (g) =>
-              //               g.name ==
-              //               context
-              //                   .read<CreateGateEntryCubit>()
-              //                   .state
-              //                   .form
-              //                   .customSupplier,
-              //           orElse: () => const SupplierForm(),
-              //         )
-              //         : null,
-              futureRequest: (query) async {
-                if (query.isEmpty) return names;
-
-                return names.where((item) {
-                  final orderNo = item.name?.toLowerCase() ?? '';
-                  final reason = item.reason?.toLowerCase() ?? '';
-                  final search = query.toLowerCase();
-
-                  return orderNo.contains(search) ||
-                      reason.contains(search);
-                }).toList();
-              },
-
-              headerBuilder:
-                  (_, item, __) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-
-              listItemBuilder:
-                  (_, item, __, ___) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-
-
-                      const Divider(height: 8),
-                    ],
-                  ),
-
-              onSelected: (selected) {
-                setState(() {
-                  reasonForm = selected;
-
-                  context.cubit<CreateEmployeeCubit>().onValueChanged(
-                    reasonOfGateExit: selected!.name,
+            ),
+            listItemBuilder: (_, item, __, ___) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                item.name ?? '',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            onSelected: (selected) {
+              context.cubit<CreateEmployeeCubit>().onValueChanged(
+                    reasonOfGateExit: selected?.name,
+                    movementType: null,
                   );
-                });
-              },
-              borderColor: AppColors.registration,
-            );
-          },
-        ),
-        AppDropDownWidget<String>(
-          title: 'Movement Type',
-          hint: 'Select Movement Type',
-          readOnly: isCompleted,
-          // color: AppColors.black,
-          items: Dropdownoptions.movementType,
-          defaultSelection: form.movementType,
-          headerBuilder: (_, item, __) => Text(item),
-          listItemBuilder: (_, item, __, ___) => CompactListTile(title: item),
-          futureRequest: (searchText) async {
-            const all = Dropdownoptions.movementType;
-            if (searchText.trim().isEmpty) return all;
-            return all
-                .where(
-                  (item) => item.toLowerCase().contains(
-                    searchText.trim().toLowerCase(),
-                  ),
-                )
-                .toList();
-          },
-          onSelected: (selected) {
-            context.cubit<CreateEmployeeCubit>().onValueChanged(
-              movementType: selected,
-            );
-          },
-          borderColor: AppColors.registration,
-        ),
-       
-        BlocBuilder<LocationCubit, LocationState>(
-          buildWhen: (previous, current) => previous != current,
+            },
+            borderColor: AppColors.registration,
+          );
+        },
+      ),
 
-          builder: (_, state) {
-            final allData = state.maybeWhen(
-              orElse: () => <LocationList>[],
-              success: (data) => data,
-            );
+      const SizedBox(height: 20),
+      
 
-            final names = allData.toList();
 
-            return AppDropDownWidget<LocationList>(
-              title: 'From Location',
-              hint: 'Search Location',
-              key: UniqueKey(),
-              items: names,
-              readOnly: isCompleted ,
-              defaultSelection: state.maybeWhen(
-                success: (data) {
-                  final selectedReason =
-                      context
+
+
+
+BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
+  builder: (_, empState) {
+    final selectedReason = empState.form.reasonOfGateExit ?? '';
+
+    List<String> movementTypes;
+    if (selectedReason.toLowerCase() == 'inter plant movement') {
+      movementTypes = [
+        '(Inter Plant) Exit - In',
+        '(Inter Plant) Exit - In & Exit - In',
+      ];
+    } else if (selectedReason.toLowerCase() == 'personal work') {
+      movementTypes = [
+        '(Personal Work) Exit',
+        '(Personal Work) Exit - In',
+      ];
+    } else {
+      movementTypes = [
+        '(Inter Plant) Exit - In',
+        '(Inter Plant) Exit - In & Exit - In',
+        '(Personal Work) Exit',
+        '(Personal Work) Exit - In',
+      ];
+    }
+
+    return AppDropDownWidget<String>(
+      key: ValueKey(selectedReason), 
+      title: 'Movement Type',
+      hint: 'Select Movement Type',
+      readOnly: isCompleted,
+      borderColor: AppColors.registration,
+      items: movementTypes,
+      defaultSelection:
+          movementTypes.contains(empState.form.movementType)
+              ? empState.form.movementType
+              : null,
+      headerBuilder: (_, item, __) => Text(item),
+      listItemBuilder: (_, item, __, ___) => CompactListTile(title: item),
+      futureRequest: (searchText) async {
+        if (searchText.trim().isEmpty) return movementTypes;
+        return movementTypes
+            .where((item) => item.toLowerCase().contains(
+                  searchText.trim().toLowerCase(),
+                ))
+            .toList();
+      },
+      onSelected: (selected) {
+        context.cubit<CreateEmployeeCubit>().onValueChanged(
+          movementType: selected,
+          expectedReturnDateTime: null,
+        );
+      },
+    );
+  },
+),
+      const SizedBox(height: 20),
+
+
+      Row(
+        children: [
+          Expanded(
+            child: BlocBuilder<LocationCubit, LocationState>(
+              buildWhen: (previous, current) =>
+                  previous != current,
+              builder: (_, state) {
+                final allData = state.maybeWhen(
+                  orElse: () => <LocationList>[],
+                  success: (data) => data,
+                );
+
+                final names = allData.toList();
+
+                return AppDropDownWidget<LocationList>(
+                  title: 'From Location',
+                  hint: 'Select Location',
+                  key: UniqueKey(),
+                  items: names,
+                  readOnly: isCompleted,
+                  defaultSelection: state.maybeWhen(
+                    success: (data) {
+                      final selectedReason = context
                           .read<CreateEmployeeCubit>()
                           .state
                           .form
                           .fromLocation;
 
-                  if (selectedReason == null) return null;
+                      if (selectedReason == null) return null;
 
-                  return data.firstWhere(
-                    (e) => e.name == selectedReason,
-                    orElse: () => const LocationList(),
-                  );
-                },
-                orElse: () => null,
-              ),
-
-              // defaultSelection:
-              //     (context
-              //                     .read<CreateGateEntryCubit>()
-              //                     .state
-              //                     .form
-              //                     .customSupplier !=
-              //                 null &&
-              //             context
-              //                 .read<CreateGateEntryCubit>()
-              //                 .state
-              //                 .form
-              //                 .customSupplier!
-              //                 .isNotEmpty)
-              //         ? names.firstWhere(
-              //           (g) =>
-              //               g.name ==
-              //               context
-              //                   .read<CreateGateEntryCubit>()
-              //                   .state
-              //                   .form
-              //                   .customSupplier,
-              //           orElse: () => const SupplierForm(),
-              //         )
-              //         : null,
-              futureRequest: (query) async {
-                if (query.isEmpty) return names;
-
-                return names.where((item) {
-                  final orderNo = item.name?.toLowerCase() ?? '';
-                  final reason = item.location?.toLowerCase() ?? '';
-                  final search = query.toLowerCase();
-
-                  return orderNo.contains(search) ||
-                      reason.contains(search);
-                }).toList();
-              },
-
-              headerBuilder:
-                  (_, item, __) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                      return data.firstWhere(
+                        (e) => e.name == selectedReason,
+                        orElse: () => const LocationList(),
+                      );
+                    },
+                    orElse: () => null,
                   ),
+                  futureRequest: (query) async {
+                    if (query.isEmpty) return names;
 
-              listItemBuilder:
-                  (_, item, __, ___) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'From Location : ${item.name ?? ''}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    return names.where((item) {
+                      final orderNo =
+                          item.name?.toLowerCase() ?? '';
+                      final reason =
+                          item.location?.toLowerCase() ?? '';
+                      final search = query.toLowerCase();
 
-
-                      const Divider(height: 8),
-                    ],
+                      return orderNo.contains(search) ||
+                          reason.contains(search);
+                    }).toList();
+                  },
+                  headerBuilder: (_, item, __) => Text(
+                    item.name ?? '',
                   ),
-
-              onSelected: (selected) {
-                setState(() {
-                  locationList = selected;
-
-                  context.cubit<CreateEmployeeCubit>().onValueChanged(
-                    fromLocation: selected!.name,
-                  );
-                });
+                  listItemBuilder:
+                      (_, item, __, ___) => Text(
+                    item.name ?? '',
+                  ),
+                  onSelected: (selected) {
+                    context
+                        .read<CreateEmployeeCubit>()
+                        .onValueChanged(
+                          fromLocation: selected?.name,
+                        );
+                  },
+                  borderColor: AppColors.registration,
+                );
               },
-              borderColor: AppColors.registration,
-            );
-          },
-        ),
-        BlocBuilder<LocationCubit, LocationState>(
-          buildWhen: (previous, current) => previous != current,
+            ),
+          ),
 
-          builder: (_, state) {
-            final allData = state.maybeWhen(
-              orElse: () => <LocationList>[],
-              success: (data) => data,
-            );
+          const SizedBox(width: 14),
 
-            final names = allData.toList();
+          Expanded(
+            child: BlocBuilder<LocationCubit, LocationState>(
+              buildWhen: (previous, current) =>
+                  previous != current,
+              builder: (_, state) {
+                final allData = state.maybeWhen(
+                  orElse: () => <LocationList>[],
+                  success: (data) => data,
+                );
 
-            return AppDropDownWidget<LocationList>(
-              title: 'From Location',
-              hint: 'Search Location',
-              key: UniqueKey(),
-              items: names,
-              readOnly: isCompleted ,
-              defaultSelection: state.maybeWhen(
-                success: (data) {
-                  final selectedReason =
-                      context
+                final names = allData.toList();
+
+                return AppDropDownWidget<LocationList>(
+                  title: 'To Location',
+                  hint: 'Select Location',
+                  key: UniqueKey(),
+                  items: names,
+                  readOnly: isCompleted,
+                  defaultSelection: state.maybeWhen(
+                    success: (data) {
+                      final selectedReason = context
                           .read<CreateEmployeeCubit>()
                           .state
                           .form
                           .toLocation;
 
-                  if (selectedReason == null) return null;
+                      if (selectedReason == null) return null;
 
-                  return data.firstWhere(
-                    (e) => e.name == selectedReason,
-                    orElse: () => const LocationList(),
-                  );
-                },
-                orElse: () => null,
+                      return data.firstWhere(
+                        (e) => e.name == selectedReason,
+                        orElse: () => const LocationList(),
+                      );
+                    },
+                    orElse: () => null,
+                  ),
+                  futureRequest: (query) async {
+                    if (query.isEmpty) return names;
+
+                    return names.where((item) {
+                      final orderNo =
+                          item.name?.toLowerCase() ?? '';
+                      final reason =
+                          item.location?.toLowerCase() ?? '';
+                      final search = query.toLowerCase();
+
+                      return orderNo.contains(search) ||
+                          reason.contains(search);
+                    }).toList();
+                  },
+                  headerBuilder: (_, item, __) => Text(
+                    item.name ?? '',
+                  ),
+                  listItemBuilder:
+                      (_, item, __, ___) => Text(
+                    item.name ?? '',
+                  ),
+                  onSelected: (selected) {
+                    context
+                        .read<CreateEmployeeCubit>()
+                        .onValueChanged(
+                          toLocation: selected?.name,
+                        );
+                  },
+                  borderColor: AppColors.registration,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
+  buildWhen: (prev, curr) =>
+      prev.form.fromLocation != curr.form.fromLocation ||
+      prev.form.toLocation != curr.form.toLocation ||
+      prev.form.movementType != curr.form.movementType ||
+      prev.form.expectedExitDateTime != curr.form.expectedExitDateTime ||
+      prev.form.expectedReturnDateTime != curr.form.expectedReturnDateTime,
+  builder: (_, empState) {
+    final form = empState.form;
+    final movementType = form.movementType ?? '';
+    final fromLocation = form.fromLocation ?? '';
+    final toLocation = form.toLocation ?? '';
+    final exitDateTime = form.expectedExitDateTime ?? '';
+    final returnDateTime = form.expectedReturnDateTime ?? '';
+
+    final showReturnField =
+        movementType == '(Inter Plant) Exit - In & Exit - In' ||
+        movementType == '(Personal Work) Exit - In';
+
+    // final showSummary = fromLocation.isNotEmpty || toLocation.isNotEmpty;
+    // final showSummary = movementType.isNotEmpty;
+
+    // if (!showSummary) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        children: [
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    const Text(
+                      'ORIGIN',
+                      style:  TextStyle(
+                        fontSize: 11,
+                        color: Colors.black,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      fromLocation.isNotEmpty ? fromLocation : '—',
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.registration,
+                      ),
+                    ),
+                  ],
+                ),
+                const Icon(Icons.arrow_forward, color: Colors.grey, size: 20),
+                Column(
+                  children: [
+                    const Text(
+                      'DESTINATION',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.black,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      toLocation.isNotEmpty ? toLocation : '—',
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.registration,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const Divider(height: 1),
+
+
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.access_time,
+                        color: AppColors.registration, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      'Exit Timing',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                if (fromLocation.isNotEmpty)
+                  Text(
+                    '$fromLocation (Exit)',
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Expected Exit Date & Time',
+                  style: TextStyle(
+                      fontSize: 13, color: Colors.black),
+                ),
+                const SizedBox(height: 6),
+
+
+                GestureDetector(
+                  onTap: isCompleted
+                      ? null
+                      : () async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date == null || !context.mounted) return;
+
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (time == null) return;
+
+                          final combined = DateTime(
+                            date.year, date.month, date.day,
+                            time.hour, time.minute,
+                          );
+
+                          context
+                              .cubit<CreateEmployeeCubit>()
+                              .onValueChanged(
+                                expectedExitDateTime: DateFormat(
+                                        'yyyy-MM-dd HH:mm:ss')
+                                    .format(combined),
+                              );
+                        },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: exitDateTime.isNotEmpty
+                            ? AppColors.registration
+                            : Colors.grey.shade300,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      color: isCompleted
+                          ? Colors.grey.shade50
+                          : Colors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            exitDateTime.isNotEmpty
+                                ? DFU.ddMMyyyyHHmmssFromStr(exitDateTime)
+                                : 'Select Date & Time',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: exitDateTime.isNotEmpty
+                                  ? Colors.black
+                                  : Colors.grey.shade400,
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.calendar_month_outlined,
+                          color: Colors.grey.shade400,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+
+          if (showReturnField) ...[
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.access_time,
+                          color: AppColors.registration, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Entry Timing',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  if (toLocation.isNotEmpty)
+                    Text(
+                      '$toLocation (Entry)',
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Expected Entry Date & Time',
+                    style: TextStyle(
+                        fontSize: 13, color: Colors.black),
+                  ),
+                  const SizedBox(height: 6),
+
+
+                  GestureDetector(
+                    onTap: isCompleted
+                        ? null
+                        : () async {
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (date == null || !context.mounted) return;
+
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            if (time == null) return;
+
+                            final combined = DateTime(
+                              date.year, date.month, date.day,
+                              time.hour, time.minute,
+                            );
+
+                            context
+                                .cubit<CreateEmployeeCubit>()
+                                .onValueChanged(
+                                  expectedReturnDateTime: DateFormat(
+                                          'yyyy-MM-dd HH:mm:ss')
+                                      .format(combined),
+                                );
+                          },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: returnDateTime.isNotEmpty
+                              ? AppColors.registration
+                              : Colors.grey.shade300,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: isCompleted
+                            ? Colors.grey.shade50
+                            : Colors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              returnDateTime.isNotEmpty
+                                  ? DFU.ddMMyyyyHHmmssFromStr(returnDateTime)
+                                  : 'Select Date & Time',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: returnDateTime.isNotEmpty
+                                    ? Colors.black
+                                    : Colors.grey.shade400,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.calendar_month_outlined,
+                            color: Colors.grey.shade400,
+                            size: 18,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
+            ),
+          ],
+        ],
+      ),
+    );
+  },
+),
 
-              // defaultSelection:
-              //     (context
-              //                     .read<CreateGateEntryCubit>()
-              //                     .state
-              //                     .form
-              //                     .customSupplier !=
-              //                 null &&
-              //             context
-              //                 .read<CreateGateEntryCubit>()
-              //                 .state
-              //                 .form
-              //                 .customSupplier!
-              //                 .isNotEmpty)
-              //         ? names.firstWhere(
-              //           (g) =>
-              //               g.name ==
-              //               context
-              //                   .read<CreateGateEntryCubit>()
-              //                   .state
-              //                   .form
-              //                   .customSupplier,
-              //           orElse: () => const SupplierForm(),
-              //         )
-              //         : null,
-              futureRequest: (query) async {
-                if (query.isEmpty) return names;
+        //   DateSelectionField(
+        //   title: 'Send for Approval Date Time',
+        //   hintText: 'Select Date',
+        //   isRequired: true,
+        //   initialValue: DFU.ddMMyyyyFromStr(form.sendForApprovalDateTime ?? ''),
+        //   readOnly: isCompleted,
+        //   // startDate: DFU.now().subtract(const Duration(days: 60)),
+        //   // endDate: DFU.now(),
+        //   onDateSelect: (date) {
+        //     setState(() {
+        //       if (formState.form.docstatus == 0) {
+        //         context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //           sendForApprovalDateTime: DateFormat('yyyy-MM-dd').format(date),
+        //         );
+        //       } else {
+        //         context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //           sendForApprovalDateTime: DateFormat('dd-MM-yyyy').format(date),
+        //         );
+        //       }
+        //     });
+        //   },
+        //   borderColor: AppColors.registration,
+        //   suffixIcon: const Icon(
+        //     Icons.calendar_month_outlined,
+        //     color: AppColors.chimneySweep,
+        //   ),
+        //   firstDate: DateTime(2000),
+        //   lastDate: DateTime.now(),
+        // ),
+        // DateSelectionField(
+        //   title: 'Approval Date Time',
+        //   hintText: 'Select Date',
+        //   isRequired: true,
+        //   initialValue: DFU.ddMMyyyyFromStr(form.approvedDateTime ?? ''),
+        //   readOnly: isCompleted,
+        //   // startDate: DFU.now().subtract(const Duration(days: 60)),
+        //   // endDate: DFU.now(),
+        //   onDateSelect: (date) {
+        //     setState(() {
+        //       if (formState.form.docstatus == 0) {
+        //         context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //           approvedDateTime: DateFormat('yyyy-MM-dd').format(date),
+        //         );
+        //       } else {
+        //         context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //           approvedDateTime: DateFormat('dd-MM-yyyy').format(date),
+        //         );
+        //       }
+        //     });
+        //   },
+        //   borderColor: AppColors.registration,
+        //   suffixIcon: const Icon(
+        //     Icons.calendar_month_outlined,
+        //     color: AppColors.chimneySweep,
+        //   ),
+        //   firstDate: DateTime(2000),
+        //   lastDate: DateTime.now(),
+        // ),
 
-                return names.where((item) {
-                  final orderNo = item.name?.toLowerCase() ?? '';
-                  final reason = item.location?.toLowerCase() ?? '';
-                  final search = query.toLowerCase();
-
-                  return orderNo.contains(search) ||
-                      reason.contains(search);
-                }).toList();
-              },
-
-              headerBuilder:
-                  (_, item, __) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-
-              listItemBuilder:
-                  (_, item, __, ___) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'To Location : ${item.name ?? ''}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-
-
-                      const Divider(height: 8),
-                    ],
-                  ),
-
-              onSelected: (selected) {
-                setState(() {
-                  locationList = selected;
-
-                  context.cubit<CreateEmployeeCubit>().onValueChanged(
-                    toLocation: selected!.name,
-                  );
-                });
-              },
-              borderColor: AppColors.registration,
-            );
-          },
-        ),
-        DateSelectionField(
-          title: 'Expected Exit Date',
-          hintText: 'Select Date',
-          isRequired: true,
-          initialValue: DFU.ddMMyyyyFromStr(form.expectedExitDateTime ?? ''),
-          readOnly: isCompleted,
-          // startDate: DFU.now().subtract(const Duration(days: 60)),
-          // endDate: DFU.now(),
-          onDateSelect: (date) {
-            setState(() {
-              if (formState.form.docstatus == 0) {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  expectedExitDateTime: DateFormat('yyyy-MM-dd').format(date),
-                );
-              } else {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  expectedExitDateTime: DateFormat('dd-MM-yyyy').format(date),
-                );
-              }
-            });
-          },
-          borderColor: AppColors.registration,
-          suffixIcon: const Icon(
-            Icons.calendar_month_outlined,
-            color: AppColors.chimneySweep,
-          ),
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
-        ),
-
-        InputField(
-          title: 'Expected Duration (Min)',
-          hintText: 'Enter Duration',
-          readOnly: isCompleted,
-          initialValue:
-              form.expectedDurationMin != null
-                  ? form.expectedDurationMin.toString()
-                  : '',
-          borderColor: AppColors.registration,
-          onChanged: (qty) {
-            final intValue = int.tryParse(qty);
-            context.cubit<CreateEmployeeCubit>().onValueChanged(
-              expectedDurationMin: intValue,
-            );
-          },
-        ),
-          DateSelectionField(
-          title: 'Send for Approval Date Time',
-          hintText: 'Select Date',
-          isRequired: true,
-          initialValue: DFU.ddMMyyyyFromStr(form.sendForApprovalDateTime ?? ''),
-          readOnly: isCompleted,
-          // startDate: DFU.now().subtract(const Duration(days: 60)),
-          // endDate: DFU.now(),
-          onDateSelect: (date) {
-            setState(() {
-              if (formState.form.docstatus == 0) {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  sendForApprovalDateTime: DateFormat('yyyy-MM-dd').format(date),
-                );
-              } else {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  sendForApprovalDateTime: DateFormat('dd-MM-yyyy').format(date),
-                );
-              }
-            });
-          },
-          borderColor: AppColors.registration,
-          suffixIcon: const Icon(
-            Icons.calendar_month_outlined,
-            color: AppColors.chimneySweep,
-          ),
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
-        ),
-        DateSelectionField(
-          title: 'Approval Date Time',
-          hintText: 'Select Date',
-          isRequired: true,
-          initialValue: DFU.ddMMyyyyFromStr(form.approvedDateTime ?? ''),
-          readOnly: isCompleted,
-          // startDate: DFU.now().subtract(const Duration(days: 60)),
-          // endDate: DFU.now(),
-          onDateSelect: (date) {
-            setState(() {
-              if (formState.form.docstatus == 0) {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  approvedDateTime: DateFormat('yyyy-MM-dd').format(date),
-                );
-              } else {
-                context.cubit<CreateEmployeeCubit>().onValueChanged(
-                  approvedDateTime: DateFormat('dd-MM-yyyy').format(date),
-                );
-              }
-            });
-          },
-          borderColor: AppColors.registration,
-          suffixIcon: const Icon(
-            Icons.calendar_month_outlined,
-            color: AppColors.chimneySweep,
-          ),
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
-        ),
-
-        InputField(
-          title: 'Approved By',
-          hintText: 'Enter Approver',
-          readOnly: isCompleted,
-          controller: approver,
-          initialValue:
-              form.approvedBy != null
-                  ? form.approvedBy.toString()
-                  : '',
-          borderColor: AppColors.registration,
-          onChanged: (qty) {
-            context.cubit<CreateEmployeeCubit>().onValueChanged(
-              approvedBy: qty,
-            );
-          },
-        ),
-        InputField(
-          title: 'Reject Reason',
-          hintText: 'Enter Reason',
-          controller: reason,
-          readOnly: isCompleted,
-          initialValue:
-              form.rejectReason,
-          borderColor: AppColors.registration,
-          onChanged: (qty) {
-            context.cubit<CreateEmployeeCubit>().onValueChanged(
-              rejectReason: qty,
-            );
-          },
-        ),
+        // InputField(
+        //   title: 'Approved By',
+        //   hintText: 'Enter Approver',
+        //   readOnly: isCompleted,
+        //   controller: approver,
+        //   initialValue:
+        //       form.approvedBy != null
+        //           ? form.approvedBy.toString()
+        //           : '',
+        //   borderColor: AppColors.registration,
+        //   onChanged: (qty) {
+        //     context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //       approvedBy: qty,
+        //     );
+        //   },
+        // ),
+        // InputField(
+        //   title: 'Reject Reason',
+        //   hintText: 'Enter Reason',
+        //   controller: reason,
+        //   readOnly: isCompleted,
+        //   initialValue:
+        //       form.rejectReason,
+        //   borderColor: AppColors.registration,
+        //   onChanged: (qty) {
+        //     context.cubit<CreateEmployeeCubit>().onValueChanged(
+        //       rejectReason: qty,
+        //     );
+        //   },
+        // ),
        
         if (isCreating) ...[
           BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
@@ -761,7 +988,8 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                 (_, state) => AppButton(
                   label: isCreating ? 'Save' : 'Submit',
                   isLoading: state.isLoading,
-                  bgColor: AppColors.haintBlue,
+                  bgColor: AppColors.registration,
+                  width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.all(12.0),
                   onPressed: context.cubit<CreateEmployeeCubit>().save,
                 ),
@@ -776,9 +1004,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     children: [
       Text(
         title,
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.grey.shade600,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.black,
         ),
       ),
       const SizedBox(height: 4),
@@ -792,36 +1020,20 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     ],
   );
 }
-
-  // Future<List<PurchaseOrder>> _onSearch(
-  //   List<PurchaseOrder> data,
-  //   String query,
-  // ) async {
-  //   final filterData = data.where((e) => e.poNumber.contains(query)).toList();
-  //   return filterData;
-  // }
-
-  //   Future<List<PurchaseOrderForm>> _onSearch(
-  //     List<PurchaseOrderForm> data, String query) async {
-  //   final filterData = data
-  //       .where((e) => (e.name ?? '').toLowerCase().contains(query.toLowerCase()))
-  //       .toList();
-  //   return filterData;
-  // }
 }
 
 String? formatTime(String? backendTime) {
   if (backendTime == null || backendTime.isEmpty) return null;
 
   try {
-    // Parse ISO 8601 string into DateTime
+
     final dateTime = DateTime.parse(backendTime);
 
-    // Format as HH:mm (24hr) or hh:mm a (12hr with AM/PM)
+
     return DateFormat('HH:mm').format(dateTime);
-    // return DateFormat('hh:mm a').format(dateTime); // if you want AM/PM
+
   } catch (e) {
-    // If parsing fails, just return original
+
     return backendTime;
   }
 }

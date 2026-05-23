@@ -37,6 +37,14 @@ abstract class DateFormatUtil {
   static String hhmmss(DateTime dateTime) => _DateTimeFormats.hhmmss.format(dateTime);
   static String ddMMyyyyHHmmss(DateTime dateTime) => _DateTimeFormats.ddMMyyyyHHmmss.format(dateTime);
     static String dateTimeLabel(DateTime dateTime) => _DateTimeFormats.dateTimeLabel.format(dateTime);
+    static String ddMMyyyyHHmmssFromStr(String date) {
+  try {
+    final dateTime = DateTime.parse(date);
+    return DateFormat('dd/MM/yyyy, hh:mm a').format(dateTime); // 24/11/2026, 03:15 PM
+  } catch (e) {
+    return date;
+  }
+}
    static String ddMMyyyyFromStr(String date) {
     try {
       final dateTime = DateTime.parse(date);

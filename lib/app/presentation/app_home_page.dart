@@ -78,17 +78,17 @@ class AppHomePage extends StatelessWidget {
                           onTap: () => AppRoute.gateExit.push(context),
                         ),
                       // if (BooleanUtls.fromInt(userRoles.registration))
-                        // AppFeatureWidget(
-                        //   icon: AppIcons.gatePass.toWidget(
-                        //       height: 100, width: 120, fit: BoxFit.contain),
-                        //   title: FittedBox(
-                        //     child: Text('Gate Pass',
-                        //         style:
-                        //             AppTextStyles.featureLabelStyle(context)),
-                        //   ),
-                        //   featureColor: AppColors.registration,
-                        //   onTap: () => AppRoute.employeeTracker.push(context),
-                        // ),
+                        AppFeatureWidget(
+                          icon: AppIcons.gatePass.toWidget(
+                              height: 100, width: 120, fit: BoxFit.contain),
+                          title: FittedBox(
+                            child: Text('Gate Pass',
+                                style:
+                                    AppTextStyles.featureLabelStyle(context)),
+                          ),
+                          featureColor: AppColors.registration,
+                          onTap: () => AppRoute.employeeTracker.push(context),
+                        ),
                      
                         // AppFeatureWidget(
                         //   icon: AppIcons.gayLord.toWidget(
