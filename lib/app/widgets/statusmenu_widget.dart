@@ -31,7 +31,7 @@ class _StatusMenuWidgetState extends State<StatusMenuWidget> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
       isDense: true,
-      isExpanded: false,
+      isExpanded: true,
       value: _selectedDuration,
       dropdownColor: AppColors.white,
       decoration: InputDecoration(

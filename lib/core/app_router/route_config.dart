@@ -162,7 +162,7 @@ class AppRouterConfig {
                   GoRoute(
                     path: _getPath(AppRoute.employeeTracker),
                     builder: (ctxt, state) {
-                      final filters = Pair( StringUtils.docStatusInt('Draft'),null,);
+                      final filters = Pair( StringUtils.docStatusEmployee('Draft'),null,);
                       return BlocProvider(create:
                             (context) => EmployeeBlocProvider.get().fetchEmployeeEntries()..fetchInitial(filters),
                         child: const EmployeeListScrn(),

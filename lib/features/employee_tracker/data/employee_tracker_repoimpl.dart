@@ -16,13 +16,17 @@ class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
  @override
   AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     int start,
-    int? docStatus,
+    String? docStatus,
     String? search,
   ) async {
     final filters = <List<dynamic>>[];
 
-    if (docStatus != null && docStatus != 2) {
-      filters.add(['docstatus', '=', docStatus]);
+    // if (docStatus != null && docStatus != '2') {
+    //   filters.add(['docstatus', '=', docStatus]);
+    // }
+    if (docStatus != null && docStatus.isNotEmpty && docStatus != '5') {
+      filters..add(['workflow_state', '=', docStatus])
+      ..add(['docstatus', '!=', 2]);
     }
 
     if (search != null && search.isNotEmpty) {

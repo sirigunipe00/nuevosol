@@ -345,8 +345,9 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           hintText: 'Enter Invoice Number',
           isRequired: true,
           inputFormatters: [
-    LengthLimitingTextInputFormatter(25),
-  ],
+            UpperCaseTextFormatter(),
+            LengthLimitingTextInputFormatter(25),
+           ],
           initialValue: form.vendorInvoiceNo,
           borderColor: AppColors.marigoldDDust,
           onChanged: (invNumber) {

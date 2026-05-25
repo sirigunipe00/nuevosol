@@ -30,6 +30,26 @@ class StringUtils {
       return 'Draft';
     }
   }
+    static String docStatusEmployee(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'pending for approval':
+        return 'pending for approval';
+      case 'rejected':
+        return 'rejected';
+      case 'approved':
+        return 'approved';
+      case 'send for approval':
+        return 'send for approval';
+      case 'draft':
+        return 'draft';
+      case 'submitted':
+      return '1';
+      case 'all':
+        return '5';
+      default:
+        return '';
+    }
+  }
 
  static int? docStatusInt(String status) {
   if (status == 'Draft') {

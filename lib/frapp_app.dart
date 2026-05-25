@@ -49,11 +49,12 @@ class FrappeApp extends StatelessWidget {
             // loading: () => AppRoute.initial.go(routerCtxt),
             authenticated: () {
               final filters = Pair(StringUtils.docStatusInt('Draft'), null);
+              final filterEmployee = Pair(StringUtils.docStatusEmployee('Draft'),null);
 
               routerCtxt
                 ..cubit<GateEntriesCubit>().fetchInitial(filters)
                 ..cubit<GateExitCubit>().fetchInitial(filters)
-                ..cubit<EmployeeEntriesCubit>().fetchInitial(filters)
+                ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
                 ..cubit<PurchaseOrders>().request('')
                 ..cubit<SalesInvoiceList>().request('')
                 ..cubit<PoApprovalCubit>().fetchInitial(PageViewFilters.initial());

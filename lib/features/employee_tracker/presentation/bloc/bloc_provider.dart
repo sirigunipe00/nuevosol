@@ -8,7 +8,7 @@ import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 
 
 typedef EmployeeEntriesCubit =
-    InfiniteListCubit<EmployeeTracker, Pair<int?, String?>, Pair<int?, String?>>;
+    InfiniteListCubit<EmployeeTracker, Pair<String?, String?>, Pair<String?, String?>>;
 typedef EmployeeEntriesCubitState = InfiniteListState<EmployeeTracker>;
 typedef EmployeeListCubit = NetworkRequestCubit<List<EmployeeList>, String>;
 typedef EmployeeListState = NetworkRequestState<List<EmployeeList>>;

@@ -9,7 +9,7 @@ import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 abstract interface class EmployeeRepo {
 AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     int start,
-    int? docStatus,
+    String? docStatus,
     String? search,
   );  
     AsyncValueOf<List<EmployeeList>> fetchEmployeeList(String name);

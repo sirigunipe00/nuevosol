@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nuevosol/core/core.dart';
-import 'package:nuevosol/doc_status_widget.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_icons.dart';
+import 'package:nuevosol/styles/app_text_styles.dart';
 
 
 class EmployeeWidget extends StatelessWidget {
@@ -174,12 +174,24 @@ class EmployeeWidget extends StatelessWidget {
                           ),
                         ),
                       ),
+                       Text(
+                  employee.docstatus == 2 ? 'Cancelled' : employee.workflowState ?? '',
+                  style: AppTextStyles.titleLarge(context).copyWith(
+                    color: _getStatusColor(
+                      employee.docstatus == 2
+                          ? 'Cancelled'
+                          : employee.workflowState ?? '',
+                    ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
 
 
-                      DocStatusWidget(
-                        status: StringUtils.docStatus(
-                            employee.docstatus ?? 0),
-                      ),
+                      // DocStatusWidget(
+                      //   status: StringUtils.docStatus(
+                      //       employee.docstatus ?? 0),
+                      // ),
                     ],
                   ),
                 ],
@@ -189,5 +201,19 @@ class EmployeeWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+Color _getStatusColor(String? status) {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return Colors.green;
+    case 'rejected':
+      return Colors.red;
+    case 'pending from approval':
+      return Colors.orange;
+    case 'send for approval':
+      return Colors.grey;
+    default:
+      return Colors.blue;
   }
 }

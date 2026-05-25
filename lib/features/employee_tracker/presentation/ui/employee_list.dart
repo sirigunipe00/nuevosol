@@ -40,12 +40,12 @@ class EmployeeListScrn extends StatelessWidget {
         context.cubit<EmployeeFilters>().onChangeStatus(value);
         fetchInital(context);
       },
-      status: const ['All', 'Draft', 'Submitted'],
+      status: const ['All', 'Draft', 'Send For Approval','Pending For Approval', 'Approved', 'Rejected'],
       child: RefreshIndicator(
         onRefresh: (){
           final filters = context.read<EmployeeFilters>().state;
           return context.cubit<EmployeeEntriesCubit>().fetchInitial(
-            Pair(StringUtils.docStatusInt(filters.status), filters.query),
+            Pair(StringUtils.docStatusEmployee(filters.status), filters.query),
           );
         },
         child: InfiniteListViewWidget<EmployeeEntriesCubit, EmployeeTracker>(
@@ -71,14 +71,14 @@ class EmployeeListScrn extends StatelessWidget {
   void fetchInital(BuildContext context) {
     final filter = context.read<EmployeeFilters>().state;
     context.cubit<EmployeeEntriesCubit>().fetchInitial(
-      Pair(StringUtils.docStatusInt(filter.status), filter.query),
+      Pair(StringUtils.docStatusEmployee(filter.status), filter.query),
     );
   }
 
   void fetchMore(BuildContext context) {
     final filter = context.read<EmployeeFilters>().state;
     context.cubit<EmployeeEntriesCubit>().fetchMore(
-      Pair(StringUtils.docStatusInt(filter.status), filter.query),
+      Pair(StringUtils.docStatusEmployee(filter.status), filter.query),
     );
   }
 }
