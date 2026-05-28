@@ -9,8 +9,8 @@ class AppMaterialTheme {
   static final darkTheme = _buildTheme(darkColorScheme);
 
   static ThemeData _buildTheme(ColorScheme scheme) => ThemeData(
-        fontFamily: 'Quicksand',
-        textTheme: GoogleFonts.quicksandTextTheme(),
+        fontFamily: 'Manrope',
+        textTheme: GoogleFonts.manropeTextTheme(),
         colorScheme: scheme,
         cardTheme: CardThemeData(
           shape: RoundedRectangleBorder(

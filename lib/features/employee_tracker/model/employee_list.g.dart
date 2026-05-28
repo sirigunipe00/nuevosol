@@ -10,10 +10,16 @@ _$EmployeeListImpl _$$EmployeeListImplFromJson(Map<String, dynamic> json) =>
     _$EmployeeListImpl(
       name: json['name'] as String?,
       employeeName: json['employee_name'] as String?,
+      department: json['department'] as String?,
+      company: json['company'] as String?,
+      reportsTo: json['reports_to'] as String?,
     );
 
 Map<String, dynamic> _$$EmployeeListImplToJson(_$EmployeeListImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
       'employee_name': instance.employeeName,
+      'department': instance.department,
+      'company': instance.company,
+      'reports_to': instance.reportsTo,
     };

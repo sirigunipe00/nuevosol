@@ -12,7 +12,7 @@ import 'package:nuevosol/features/auth/presentation/ui/authentication_scrn.dart'
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/ui/employee_list.dart';
-import 'package:nuevosol/features/employee_tracker/presentation/ui/new_employee.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/ui/create/new_employee.dart';
 import 'package:nuevosol/features/gate_entry/model/gate_entry.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_entry/presentation/bloc/create_gate_entry_cubit/create_gateentry_cubit.dart';

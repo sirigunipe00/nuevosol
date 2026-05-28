@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CreateEmployeeState {
   EmployeeTracker get form => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isApproveLoading => throw _privateConstructorUsedError;
+  bool get isRejectLoading => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
   EmployeeView get view => throw _privateConstructorUsedError;
   String? get successMsg => throw _privateConstructorUsedError;
@@ -39,6 +41,8 @@ abstract class $CreateEmployeeStateCopyWith<$Res> {
   $Res call(
       {EmployeeTracker form,
       bool isLoading,
+      bool isApproveLoading,
+      bool isRejectLoading,
       bool isSuccess,
       EmployeeView view,
       String? successMsg,
@@ -65,6 +69,8 @@ class _$CreateEmployeeStateCopyWithImpl<$Res, $Val extends CreateEmployeeState>
   $Res call({
     Object? form = null,
     Object? isLoading = null,
+    Object? isApproveLoading = null,
+    Object? isRejectLoading = null,
     Object? isSuccess = null,
     Object? view = null,
     Object? successMsg = freezed,
@@ -78,6 +84,14 @@ class _$CreateEmployeeStateCopyWithImpl<$Res, $Val extends CreateEmployeeState>
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isApproveLoading: null == isApproveLoading
+          ? _value.isApproveLoading
+          : isApproveLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isRejectLoading: null == isRejectLoading
+          ? _value.isRejectLoading
+          : isRejectLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       isSuccess: null == isSuccess
           ? _value.isSuccess
@@ -134,6 +148,8 @@ abstract class _$$CreateEmployeeStateImplCopyWith<$Res>
   $Res call(
       {EmployeeTracker form,
       bool isLoading,
+      bool isApproveLoading,
+      bool isRejectLoading,
       bool isSuccess,
       EmployeeView view,
       String? successMsg,
@@ -160,6 +176,8 @@ class __$$CreateEmployeeStateImplCopyWithImpl<$Res>
   $Res call({
     Object? form = null,
     Object? isLoading = null,
+    Object? isApproveLoading = null,
+    Object? isRejectLoading = null,
     Object? isSuccess = null,
     Object? view = null,
     Object? successMsg = freezed,
@@ -173,6 +191,14 @@ class __$$CreateEmployeeStateImplCopyWithImpl<$Res>
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isApproveLoading: null == isApproveLoading
+          ? _value.isApproveLoading
+          : isApproveLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isRejectLoading: null == isRejectLoading
+          ? _value.isRejectLoading
+          : isRejectLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       isSuccess: null == isSuccess
           ? _value.isSuccess
@@ -200,6 +226,8 @@ class _$CreateEmployeeStateImpl implements _CreateEmployeeState {
   const _$CreateEmployeeStateImpl(
       {required this.form,
       required this.isLoading,
+      required this.isApproveLoading,
+      required this.isRejectLoading,
       required this.isSuccess,
       required this.view,
       this.successMsg,
@@ -209,6 +237,10 @@ class _$CreateEmployeeStateImpl implements _CreateEmployeeState {
   final EmployeeTracker form;
   @override
   final bool isLoading;
+  @override
+  final bool isApproveLoading;
+  @override
+  final bool isRejectLoading;
   @override
   final bool isSuccess;
   @override
@@ -220,7 +252,7 @@ class _$CreateEmployeeStateImpl implements _CreateEmployeeState {
 
   @override
   String toString() {
-    return 'CreateEmployeeState(form: $form, isLoading: $isLoading, isSuccess: $isSuccess, view: $view, successMsg: $successMsg, error: $error)';
+    return 'CreateEmployeeState(form: $form, isLoading: $isLoading, isApproveLoading: $isApproveLoading, isRejectLoading: $isRejectLoading, isSuccess: $isSuccess, view: $view, successMsg: $successMsg, error: $error)';
   }
 
   @override
@@ -231,6 +263,10 @@ class _$CreateEmployeeStateImpl implements _CreateEmployeeState {
             (identical(other.form, form) || other.form == form) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.isApproveLoading, isApproveLoading) ||
+                other.isApproveLoading == isApproveLoading) &&
+            (identical(other.isRejectLoading, isRejectLoading) ||
+                other.isRejectLoading == isRejectLoading) &&
             (identical(other.isSuccess, isSuccess) ||
                 other.isSuccess == isSuccess) &&
             (identical(other.view, view) || other.view == view) &&
@@ -240,8 +276,8 @@ class _$CreateEmployeeStateImpl implements _CreateEmployeeState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, form, isLoading, isSuccess, view, successMsg, error);
+  int get hashCode => Object.hash(runtimeType, form, isLoading,
+      isApproveLoading, isRejectLoading, isSuccess, view, successMsg, error);
 
   /// Create a copy of CreateEmployeeState
   /// with the given fields replaced by the non-null parameter values.
@@ -257,6 +293,8 @@ abstract class _CreateEmployeeState implements CreateEmployeeState {
   const factory _CreateEmployeeState(
       {required final EmployeeTracker form,
       required final bool isLoading,
+      required final bool isApproveLoading,
+      required final bool isRejectLoading,
       required final bool isSuccess,
       required final EmployeeView view,
       final String? successMsg,
@@ -266,6 +304,10 @@ abstract class _CreateEmployeeState implements CreateEmployeeState {
   EmployeeTracker get form;
   @override
   bool get isLoading;
+  @override
+  bool get isApproveLoading;
+  @override
+  bool get isRejectLoading;
   @override
   bool get isSuccess;
   @override

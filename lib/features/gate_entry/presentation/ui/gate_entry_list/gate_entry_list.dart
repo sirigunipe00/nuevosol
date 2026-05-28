@@ -65,7 +65,7 @@ class GateEntryListScrn extends StatelessWidget {
           emptyListText: 'No GateEntries Found',
         ),
       ),
-    );
+    );                                                    
   }
 
   void fetchInital(BuildContext context) {

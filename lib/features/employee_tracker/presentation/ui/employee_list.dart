@@ -10,16 +10,23 @@ import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_icons.dart';
 import 'package:nuevosol/widgets/infinite_list_widget.dart';
 
-class EmployeeListScrn extends StatelessWidget {
+class EmployeeListScrn extends StatefulWidget {
   const EmployeeListScrn({super.key});
 
-  //  @override
-  //   void initState() {
-  //     status = 'Draft';
-  //     context.read<GateExitFilterCubit>().onChangeStatus('Draft');
-  //     context.read<GateExitFilterCubit>().onSearch(null);
-  //     super.initState();
-  //   }
+  @override
+  State<EmployeeListScrn> createState() => _EmployeeListScrnState();
+}
+
+class _EmployeeListScrnState extends State<EmployeeListScrn> {
+  String? status;
+   @override
+    void initState() {
+      status = 'Draft';
+      context.read<EmployeeFilters>().onChangeStatus('Draft');
+      context.read<EmployeeFilters>().onSearch(null);
+      super.initState();
+    }
+
   @override
   Widget build(BuildContext context) {
     return AppPageView2<EmployeeFilters>(
@@ -40,7 +47,7 @@ class EmployeeListScrn extends StatelessWidget {
         context.cubit<EmployeeFilters>().onChangeStatus(value);
         fetchInital(context);
       },
-      status: const ['All', 'Draft', 'Send For Approval','Pending For Approval', 'Approved', 'Rejected'],
+      status: const ['All', 'Draft','Pending For Approval', 'Approved', 'Rejected'],
       child: RefreshIndicator(
         onRefresh: (){
           final filters = context.read<EmployeeFilters>().state;

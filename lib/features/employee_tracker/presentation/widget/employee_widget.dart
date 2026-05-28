@@ -30,7 +30,6 @@ class EmployeeWidget extends StatelessWidget {
         ),
         child: Stack(
           children: [
-
             Positioned.fill(
               left: context.sizeOfWidth * 0.3,
               child: Image(
@@ -38,18 +37,15 @@ class EmployeeWidget extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         employee.name ?? '',
                         style: const TextStyle(
@@ -58,7 +54,6 @@ class EmployeeWidget extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-
                       Text(
                         DFU.ddMMyyyyFromStr(employee.creation ?? ''),
                         style: TextStyle(
@@ -69,10 +64,7 @@ class EmployeeWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 4),
-
-
+                  const SizedBox(height: 2),
                   Text(
                     employee.employeeName ?? '',
                     style: TextStyle(
@@ -81,13 +73,10 @@ class EmployeeWidget extends StatelessWidget {
                       color: Colors.grey.shade900,
                     ),
                   ),
-
-                  const SizedBox(height: 16),
-
-
-                  Row(
+                  Divider(color: Colors.grey.shade300,thickness: 0.1),
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -111,7 +100,6 @@ class EmployeeWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12),
                         child: Icon(
@@ -120,9 +108,7 @@ class EmployeeWidget extends StatelessWidget {
                           size: 18,
                         ),
                       ),
-
-
-                      Column(
+                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -147,14 +133,10 @@ class EmployeeWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 16),
-
-
+                  const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       GestureDetector(
                         onTap: onTap,
                         child: Container(
@@ -162,7 +144,7 @@ class EmployeeWidget extends StatelessWidget {
                               horizontal: 28, vertical: 10),
                           decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: const Text(
                             'View',
@@ -174,7 +156,7 @@ class EmployeeWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                       Text(
+                  Text(
                   employee.docstatus == 2 ? 'Cancelled' : employee.workflowState ?? '',
                   style: AppTextStyles.titleLarge(context).copyWith(
                     color: _getStatusColor(
@@ -183,7 +165,7 @@ class EmployeeWidget extends StatelessWidget {
                           : employee.workflowState ?? '',
                     ),
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 15,
                   ),
                 ),
 

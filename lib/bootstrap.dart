@@ -26,6 +26,9 @@ Future<void> bootstrap(void Function() runApp) async {
       await register<Urls>(Urls.nuevosolUat(), instanceName: 'baseUrl');
     } 
 
+
+    
+
     await Firebase.initializeApp(
         name: 'nuevosol', options: DefaultFirebaseOptions.android);
 

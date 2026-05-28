@@ -17,4 +17,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     AsyncValueOf<List<LocationList>> locationList(String name);
 
   AsyncValueOf<Pair<String, String>> createEmployee(EmployeeTracker form);
+   AsyncValueOf<Pair<String, String>> updateEmployee(EmployeeTracker form);
+   AsyncValueOf<Pair<String,String>> approveEmployee(EmployeeTracker form);
+   AsyncValueOf<Pair<String,String>> rejectEmployee(EmployeeTracker form);
 }

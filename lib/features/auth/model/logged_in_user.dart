@@ -26,6 +26,7 @@ class LoggedInUser with _$LoggedInUser {
     String? phone,
     String? location,
     String? bio,
+    @JsonKey(name: 'roles') List<String>? role,
     @JsonKey(name: 'mobile_no') String? mobileNo,
     @JsonKey(name: 'otp_verified') bool? isOtpVerfied,
     @JsonKey(name: 'role_status') UserRoles? roles,
@@ -34,5 +35,6 @@ class LoggedInUser with _$LoggedInUser {
   factory LoggedInUser.fromJson(Map<String, dynamic> json) =>
       _$LoggedInUserFromJson(json);
 }
+
 
 

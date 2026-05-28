@@ -10,13 +10,14 @@ import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 
 part 'create_employee_cubit.freezed.dart';
 
-enum EmployeeView { create, edit, completed }
+enum EmployeeView { create, edit, completed, reject }
 
 extension ActionType on EmployeeView {
   String toName() {
     return switch (this) {
       EmployeeView.create => 'Create',
       EmployeeView.edit => 'Submit',
+      EmployeeView.reject => 'Reject',
       EmployeeView.completed => 'Submitted',
     };
   }
@@ -117,8 +118,11 @@ void initDetails(Object? entry) {
       final updatedForm = form.copyWith(
         name: entry.name,
         creation: entry.creation,
+        hod: entry.hod,
+        employeeNo: entry.employeeNo,
         owner: entry.owner,
         docstatus: entry.docstatus,
+        workflowState: entry.workflowState,
         modifiedBy: entry.modifiedBy,
         company: entry.company,
         expectedDurationMin: entry.expectedDurationMin,
@@ -150,7 +154,8 @@ void initDetails(Object? entry) {
       );
 
       final status = entry.docstatus;
-
+       final workflowState = entry.workflowState?.toLowerCase().trim() ?? '';
+      final isPendingApproval = workflowState == 'pending for approval';
       final isSubmitted = StringUtils.equalsIgnoreCase(
         StringUtils.docStatus(status!),
         'Submitted',
@@ -161,7 +166,7 @@ void initDetails(Object? entry) {
       );
 
       final mode =
-          (isSubmitted || isCancelled)
+          (isSubmitted || isCancelled || isPendingApproval)
               ? EmployeeView.completed
               : EmployeeView.edit;
       emitSafeState(state.copyWith(form: updatedForm, view: mode));
@@ -177,11 +182,13 @@ void initDetails(Object? entry) {
         EmployeeView.create => EmployeeView.edit,
         EmployeeView.edit ||
         EmployeeView.completed => EmployeeView.completed,
+        EmployeeView.reject => EmployeeView.completed,
       };
 
       final status = switch (state.view) {
         EmployeeView.create => 'Draft',
         EmployeeView.edit || EmployeeView.completed => 'Submitted',
+        EmployeeView.reject => 'Rejected',
       };
 
       if (state.view == EmployeeView.create) {
@@ -192,41 +199,88 @@ void initDetails(Object? entry) {
             state.copyWith(isLoading: false, error: l, isSuccess: false),
           ),
           (r) {
+             shouldAskForConfirmation.value = false;
+  final recordName = r.second;
+  final message = r.first;
+  emitSafeState(
+    state.copyWith(
+      isLoading: false,
+      isSuccess: true,
+      form: state.form.copyWith(name: recordName),
+      successMsg: '$message\n $recordName', // combine here
+      view: nextMode,
+    ),
+  );
+},
+        );
+      }
+       else {
+        final response = await repo.updateEmployee(state.form);
+
+        return response.fold(
+          (l) => emitSafeState(state.copyWith(isLoading: false, error: l)),
+          (r) {
             shouldAskForConfirmation.value = false;
-            final docstatus = r.second;
+            final recordName = r.second;
             emitSafeState(
               state.copyWith(
                 isLoading: false,
                 isSuccess: true,
-                form: state.form.copyWith(status: status, name: docstatus),
-                successMsg: r.first,
-                view: nextMode,
+                form: state.form.copyWith(docstatus: 1),
+                successMsg: '${r.first}\n$recordName',
+                view: EmployeeView.completed,
               ),
             );
           },
         );
       }
-      //  else {
-      //   final response = await repo.submitGateEntry(state.form);
-
-      //   return response.fold(
-      //     (l) => emitSafeState(state.copyWith(isLoading: false, error: l)),
-      //     (r) {
-      //       shouldAskForConfirmation.value = false;
-      //       emitSafeState(
-      //         state.copyWith(
-      //           isLoading: false,
-      //           isSuccess: true,
-      //           form: state.form.copyWith(docStatus: 1),
-      //           successMsg: r.first,
-      //           view: EmployeeView.completed,
-      //         ),
-      //       );
-      //     },
-      //   );
-      // }
     }, _emitError);
   }
+  void approve() async {
+  emitSafeState(state.copyWith(isApproveLoading: true));
+  final formToSend = state.form;
+  final response = await repo.approveEmployee(formToSend);
+  response.fold(
+    (l) => emitSafeState(state.copyWith(isApproveLoading: false, error: l)),
+    (r) {
+      shouldAskForConfirmation.value = false;
+      emitSafeState(state.copyWith(
+        // isLoading: false,
+        isApproveLoading: false,
+        isSuccess: true,
+        successMsg: '${r.first}\n${r.second}',
+        form: state.form.copyWith(workflowState: 'Approved'),
+        view: EmployeeView.completed,
+      ));
+    },
+  );
+}
+
+void reject(String reason) async {
+  if (reason.trim().isEmpty) {
+    emitSafeState(state.copyWith(
+      error: const Failure(error: 'Reject reason is required', title: 'Validation'),
+    ));
+    return;
+  }
+  emitSafeState(state.copyWith(isRejectLoading: true));
+  final updatedForm = state.form.copyWith(rejectReason: reason);
+  final response = await repo.rejectEmployee(updatedForm);
+  response.fold(
+    (l) => emitSafeState(state.copyWith(isRejectLoading: false, error: l)),
+    (r) {
+      shouldAskForConfirmation.value = false;
+      emitSafeState(state.copyWith(
+        // isLoading: false,
+         isRejectLoading: false,
+        isSuccess: true,
+        successMsg: '${r.first}\n${r.second}',
+        form: state.form.copyWith(workflowState: 'Rejected'),
+        view: EmployeeView.reject,
+      ));
+    },
+  );
+}
 
   void _emitError(Pair<String, int?> error) {
     final failure = Failure(
@@ -252,8 +306,8 @@ void initDetails(Object? entry) {
     final form = state.form;
 
 
-    if (form.employeeNo == null && form.employeeNo?.trim().isEmpty == true) {
-      return optionOf(const Pair('Select Employee No', 0));
+    if (form.employeeName == null && form.employeeName?.trim().isEmpty == true) {
+      return optionOf(const Pair('Select Employee Name', 0));
     } else 
     if (form.reasonOfGateExit == null && form.reasonOfGateExit?.trim().isEmpty == true) {
       return optionOf(const Pair('Missing Reason for Gate Exit', 0));
@@ -278,6 +332,8 @@ class CreateEmployeeState with _$CreateEmployeeState {
   const factory CreateEmployeeState({
     required EmployeeTracker form,
     required bool isLoading,
+    required bool isApproveLoading,
+    required bool isRejectLoading,
     required bool isSuccess,
     required EmployeeView view,
 
@@ -286,14 +342,12 @@ class CreateEmployeeState with _$CreateEmployeeState {
   }) = _CreateEmployeeState;
 
   factory CreateEmployeeState.initial() {
-    // final now = DateTime.now();
-    // final creationDate = DFU.friendlyFormat(DFU.now());
-    // final entryDate = DFU.ddMMyyyy(DFU.now());
-
     return const CreateEmployeeState(
       form: EmployeeTracker(),
       view: EmployeeView.create,
       isLoading: false,
+      isApproveLoading: false,
+      isRejectLoading: false,
       isSuccess: false,
     );
   }

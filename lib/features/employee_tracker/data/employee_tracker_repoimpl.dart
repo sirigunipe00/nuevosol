@@ -55,57 +55,196 @@ class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
     final response = await get(requestConfig);
     return response.process((r) => right(r.data!));
   }
-   @override
-  AsyncValueOf<Pair<String, String>> createEmployee(EmployeeTracker form) async {
-    final formJson = form.toJson();
+  @override
+AsyncValueOf<Pair<String, String>> createEmployee(
+    EmployeeTracker form) async {
 
-    formJson['status'] = 'Draft';
+  final config = RequestConfig(
+    url: Urls.createEmployee,
+
+    parser: (json) {
+
+      final message =
+          json['message'] as String? ?? '';
+
+      final data =
+          json['data']
+              as Map<String, dynamic>?;
+
+      final name =
+          data?['name'] as String? ?? '';
+
+      return Pair(message, name);
+    },
+
+    body: jsonEncode({
+      'employee': form.employeeNo,
+      'hod': form.hod,
+      'department': form.department,
+      'reason_of_gate_exit':
+          form.reasonOfGateExit,
+      'from_location': form.fromLocation,
+      'to_location': form.toLocation,
+      'movement_type': form.movementType,
+      'expected_exit_date_time':
+          form.expectedExitDateTime,
+      'expected_return_date_time':
+          form.expectedReturnDateTime,
+    }),
+
+    headers: {
+      HttpHeaders.contentTypeHeader:
+          'application/json',
+    },
+  );
+
+  final response = await post(config);
+
+  return response.processAsync((r) async {
+    return right(r.data!);
+  });
+}
+  @override
+AsyncValueOf<Pair<String, String>> updateEmployee(
+    EmployeeTracker form) async {
+
+  final config = RequestConfig(
+    url: Urls.createEmployee,
+
+    parser: (json) {
+
+      final message =
+          json['message'] as String? ?? '';
+
+      final data =
+          json['data']
+              as Map<String, dynamic>?;
+
+      final name =
+          data?['name'] as String? ?? '';
+
+      return Pair(message, name);
+    },
+
+    body: jsonEncode({
+      'gate_pass_id': form.name,
+      'state': 'Pending For Approval',
+      'employee': form.employeeName,
+      'hod': form.hod,
+      'department': form.department,
+      'reason_of_gate_exit':
+          form.reasonOfGateExit,
+      'from_location': form.fromLocation,
+      'to_location': form.toLocation,
+      'movement_type': form.movementType,
+      'expected_exit_date_time':
+          form.expectedExitDateTime,
+      'expected_return_date_time':
+          form.expectedReturnDateTime,
+    }),
+    
+
+    headers: {
+      HttpHeaders.contentTypeHeader:
+          'application/json',
+    },
+    
+  );
+  $logger.devLog('employee....$config');
+
+  final response = await post(config);
+
+  return response.processAsync((r) async {
+    return right(r.data!);
+  });
+}
+@override
+AsyncValueOf<Pair<String,String>> approveEmployee(EmployeeTracker form) async {
+  $logger.devLog('approving employee with name: $form');
+
+  return await executeSafely(() async {
+
+  final config = RequestConfig(
+    url: Urls.approveGatePass,
+    body: jsonEncode({
+      'gate_pass_id': form.name,
+    }),
+    parser: (json) {
+      final message = json['message'] as String? ?? 'Approved';
+      final data = json['data']['gate_pass_id'] as String? ?? '';
+      return Pair(message, data);
+    },
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+  );
+  final response = await post(config);
+      $logger.devLog(response);
+      return response.process((r) => right(Pair(r.data!.first, r.data!.second)));
+});
+}
+
+@override
+AsyncValueOf<Pair<String, String>> rejectEmployee(EmployeeTracker form) async {
+  return await executeSafely(() async {
+
+  $logger.devLog('rejecting employee with name: $form');
+
+  final config = RequestConfig(
+    url: Urls.rejectGatePass,
+    body: jsonEncode({
+      'gate_pass_id': form.name,
+      'reject_reason': form.rejectReason,
+    }),
+    parser: (json) {
+      final message = json['message'] as String? ?? 'Rejected';
+      final data = json['data']['gate_pass_id'] as String?  ?? '';
+      return Pair(message, data);
+    },
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+  );
+  final response = await post(config);
+      $logger.devLog(response);
+      return response.process((r) => right(Pair(r.data!.first, r.data!.second)));
+});
+}
+  //  @override
+  // AsyncValueOf<Pair<String, String>> createEmployee(EmployeeTracker form) async {
+  //   final formJson = form.toJson();
+
+  //   formJson['status'] = 'Draft';
 
 
-    final config = RequestConfig(
-      url: Urls.createGateEntry,
-      parser: (json) {
-        final data = json['message']['data']['name'] as String;
-        return Pair(data, '');
-      },
+  //   final config = RequestConfig(
+  //     url: Urls.createEmployee,
+  //     parser: (json) {
+  //       final data = json['message']['data']['name'] as String;
+  //       return Pair(data, '');
+  //     },
 
-      body: jsonEncode({
-        // 'po_number': form.purchaseOrder,
-        // 'invoice_amount': form.invoiceAmount,
-      //   'invoice_date': form.vendorInvoiceDate,
-      //   'entry_date': form.gateEntryDate,
-      //   'vendor_invoice_no': form.vendorInvoiceNo,
-      //   'vehicle_photo':
-      //       vehiclefrontcompressedBytes == null
-      //           ? null
-      //           : base64Encode(vehiclefrontcompressedBytes),
-      //   'invoice_photo':
-      //       invocecompressedBytes == null
-      //           ? null
-      //           : base64Encode(invocecompressedBytes),
-      //   'custom_weighment_slip':
-      //       weightmentcompressedBytes == null
-      //           ? null
-      //           : base64Encode(weightmentcompressedBytes),
-      //   'vehicle_no': form.vehicleNo,
-      //   'invoice_qty': form.invoiceQuantity,
-      //   'supplier': form.customSupplier,
-      //   'created_time': form.createTime,
-      //   'remarks': form.remarks,
-      //   'custom_unit_1': form.customeUnit1,
-      //   'by_mobile_app': 1,
-      // //   'custom_unit_2':form.customeUnit2,
-      }),
-      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-    );
+  //     body: jsonEncode({
+  //       'employee': form.employeeName,
+  //       'hod': form.hod,
+  //       'department': form.department,
+  //       'reason_of_gate_exit': form.reasonOfGateExit,
+  //       'from_location': form.fromLocation,
+  //       'to_location': form.toLocation,
+  //       'movement_type': form.movementType,
+  //       'expected_exit_date_time': form.expectedExitDateTime,
+  //       'expected_return_date_time':form.expectedReturnDateTime,
+  //     }),
+  //     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+  //   );
 
-    $logger.devLog('requestConfig.....$config');
+  //   $logger.devLog('requestConfig.....$config');
 
-    final response = await post(config);
-    return response.processAsync((r) async {
-      return right(r.data!);
-    });
-  }
+  //   final response = await post(config);
+  //   return response.processAsync((r) async {
+  //     return right(r.data!);
+  //   });
+  // }
     @override
   AsyncValueOf<List<ReasonExitType>> reasonExit(String name) async {
     return await executeSafely(() async {

@@ -34,9 +34,22 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
       final requestConfig = RequestConfig(
         url: Urls.getUsers,
         parser: (res) {
-          final data = res['message']['data'] as List<dynamic>;
-          return LoggedInUser.fromJson(data.first);
-        },
+  final message = res['message'] as Map<String, dynamic>;
+  final data = message['data'] as List<dynamic>;
+  
+  final userData = Map<String, dynamic>.from(
+    data.first as Map<String, dynamic>,
+  );
+  
+  // Merge top-level roles into the user object
+  userData['roles'] = message['roles'];
+  
+  return LoggedInUser.fromJson(userData);
+},
+        // parser: (res) {
+        //   final data = res['message']['data'] as List<dynamic>;
+        //   return LoggedInUser.fromJson(data.first);
+        // },
         body: jsonEncode({'usr' : username, 'pwd' : pswd}),
       );
 
@@ -75,6 +88,10 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
         return left(const Failure(error: 'No user details found'));
       }
       final userData = jsonDecode(userSource!) as Map<String, dynamic>;
+
+    
+
+    print('Stored user roles: ${userData['roles']}');
       final user = LoggedInUser.fromJson(userData);
       return right(user);
     } on Exception catch (e, st) {

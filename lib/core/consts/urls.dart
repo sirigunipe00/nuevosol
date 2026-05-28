@@ -5,7 +5,7 @@ final _reqisteredUrl = $sl.get<Urls>(instanceName: 'baseUrl');
 class Urls {
 
   factory Urls.nuevosolUat() => const Urls('https://nuevosoluat.easycloud.co.in/api');
-  factory Urls.local() => const Urls('http://192.168.245.63:8000/api');
+  factory Urls.local() => const Urls('http://192.168.0.127:8000/api');
     factory Urls.live() => const Urls('https://livenuevosol.easycloud.co.in/api');
 
 
@@ -30,6 +30,9 @@ static String filepath(String path) {
   static final appVersion = '$cusWs/easy_common.api.get_app_version';
 
   // static final companyName = '$jsonWs/Company';
+  static final createEmployee = '$cusWs/nuevosol.gatepass_api.create_employee_gate_pass';
+  static final rejectGatePass = '$cusWs/nuevosol.gatepass_api.reject_employee_gate_pass';
+  static final approveGatePass = '$cusWs/nuevosol.gatepass_api.approve_employee_gate_pass';
   static final createGateEntry = '$cusWs/nuevosol.gate_api.createGateEntry';
   // static final submitGateEntry = '$cusWs/shaktihormann.api.submit_gate_entry';
   static final createGateExit = '$cusWs/nuevosol.gate_api.createGateExit';

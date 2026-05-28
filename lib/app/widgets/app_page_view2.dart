@@ -12,7 +12,7 @@ import 'package:nuevosol/widgets/inputs/simple_search_bar.dart';
 enum PageMode2 {
   gateentry('Gate Entry'),
   gateexit('Gate Exit'),
-  employeeTracker('Employee Tracker'),
+  employeeTracker('Gate Pass'),
   dipatchGaylord('Dispatch Gaylord'),
   poapprovallist('PO Approval List'),
   dashbaords('Dashbaords');
@@ -60,7 +60,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
     final hintText = switch (mode) {
       PageMode2.gateentry => 'Search Gate Entry - ID',
       PageMode2.gateexit => 'Search Gate Exit - ID',
-      PageMode2.employeeTracker => 'Search Employee - ID',
+      PageMode2.employeeTracker => 'Search Gate Pass - ID',
       PageMode2.dipatchGaylord => 'Serach Delivery Note - ID',
       PageMode2.poapprovallist => 'Search PO - ID',
       PageMode2.dashbaords => '',

@@ -68,7 +68,8 @@ class TitleStatusAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
-          child: DocStatusWidget(status: status),
+          child: Text(context.user.firstName.toString(), style: AppTextStyles.titleMedium(context, AppColors.black)
+        ),
         ),
       ],
     );

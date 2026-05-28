@@ -25,6 +25,7 @@ _$LoggedInUserImpl _$$LoggedInUserImplFromJson(Map<String, dynamic> json) =>
       phone: json['phone'] as String?,
       location: json['location'] as String?,
       bio: json['bio'] as String?,
+      role: (json['roles'] as List<dynamic>?)?.map((e) => e as String).toList(),
       mobileNo: json['mobile_no'] as String?,
       isOtpVerfied: json['otp_verified'] as bool?,
       roles: json['role_status'] == null
@@ -51,6 +52,7 @@ Map<String, dynamic> _$$LoggedInUserImplToJson(_$LoggedInUserImpl instance) =>
       'phone': instance.phone,
       'location': instance.location,
       'bio': instance.bio,
+      'roles': instance.role,
       'mobile_no': instance.mobileNo,
       'otp_verified': instance.isOtpVerfied,
       'role_status': instance.roles,
