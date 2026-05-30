@@ -44,6 +44,10 @@ class StringUtils {
         return 'draft';
       case 'submitted':
       return '1';
+      case 'movement ongoing':
+        return 'movement ongoing';
+      case 'closed':
+      return 'closed';
       case 'all':
         return '5';
       default:

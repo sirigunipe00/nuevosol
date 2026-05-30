@@ -2,7 +2,9 @@ import 'package:nuevosol/core/model/pair.dart';
 import 'package:nuevosol/core/utils/typedefs.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
+import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
 import 'package:nuevosol/features/employee_tracker/model/location_list.dart';
+import 'package:nuevosol/features/employee_tracker/model/qr_code.dart';
 import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 
 
@@ -20,4 +22,6 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
    AsyncValueOf<Pair<String, String>> updateEmployee(EmployeeTracker form);
    AsyncValueOf<Pair<String,String>> approveEmployee(EmployeeTracker form);
    AsyncValueOf<Pair<String,String>> rejectEmployee(EmployeeTracker form);
+   AsyncValueOf<List<EventTracking>> fetchTracking(String name);
+   AsyncValueOf<QrCodeModel>   qrData(String qrCode,String actualDateTime,String employeePhoto);
 }

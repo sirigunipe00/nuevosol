@@ -9,6 +9,7 @@ import 'package:nuevosol/app/presentation/app_splash_scrn.dart';
 import 'package:nuevosol/app/presentation/app_update_blocprovider.dart';
 import 'package:nuevosol/app/widgets/app_scaffold_widget.dart';
 import 'package:nuevosol/features/auth/presentation/ui/authentication_scrn.dart';
+import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/ui/employee_list.dart';
@@ -172,6 +173,7 @@ class AppRouterConfig {
                       GoRoute(
                         path: _getPath(AppRoute.newEmployeeTracker),
                         builder: (_, state) {
+                          final form = state.extra as EmployeeTracker?;
                           final blocprovider =
                               EmployeeBlocProvider.get();
                           return MultiBlocProvider(
@@ -185,6 +187,9 @@ class AppRouterConfig {
                               BlocProvider(
                                   create: (_) =>
                                       blocprovider.getLocation()..request()),
+                                       BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.getEventTracking()..request(form?.name ?? '')),
                               BlocProvider(
                                 create: (_) => $sl.get<CreateEmployeeCubit>()
                                   ..initDetails(state.extra),

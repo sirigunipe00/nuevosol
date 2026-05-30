@@ -1,0 +1,2 @@
+/Users/sai/Desktop/Flutter Projects Keerthi/nuevosol/android/app/.cxx/Debug/1t2g5t1n/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/sai/Desktop/Flutter Projects Keerthi/nuevosol/android/app/.cxx/Debug/1t2g5t1n/armeabi-v7a/CMakeFiles/rebuild_cache.dir

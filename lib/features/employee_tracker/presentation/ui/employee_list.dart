@@ -47,7 +47,7 @@ class _EmployeeListScrnState extends State<EmployeeListScrn> {
         context.cubit<EmployeeFilters>().onChangeStatus(value);
         fetchInital(context);
       },
-      status: const ['All', 'Draft','Pending For Approval', 'Approved', 'Rejected'],
+      status: const ['All', 'Draft','Pending For Approval', 'Approved', 'Rejected','Movement Ongoing','Closed'],
       child: RefreshIndicator(
         onRefresh: (){
           final filters = context.read<EmployeeFilters>().state;

@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:nuevosol/features/employee_tracker/data/employee_tracker_repo.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
+import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
 import 'package:nuevosol/features/employee_tracker/model/location_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 
@@ -18,6 +19,8 @@ typedef ReasonExitState = NetworkRequestState<List<ReasonExitType>>;
 typedef LocationCubit = NetworkRequestCubit<List<LocationList>, String>;
 typedef LocationState = NetworkRequestState<List<LocationList>>;
 
+typedef EventTrackingCubit = NetworkRequestCubit<List<EventTracking>, String>;
+typedef EventTrackingState = NetworkRequestState<List<EventTracking>>;
 
 @lazySingleton
 class EmployeeBlocProvider {
@@ -43,5 +46,8 @@ class EmployeeBlocProvider {
   );
   LocationCubit getLocation() => LocationCubit(
     onRequest: (params, state) => repo.locationList(params ?? ''),
+  );
+  EventTrackingCubit getEventTracking() => EventTrackingCubit(
+    onRequest: (params, state) => repo.fetchTracking(params ?? ''),
   );
 }

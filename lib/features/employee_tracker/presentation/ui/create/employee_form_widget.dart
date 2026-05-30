@@ -9,6 +9,7 @@ import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/ui/approve_reject_btn.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/widget/employee_qr_pass_widget.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
@@ -61,6 +62,11 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
         form.workflowState?.toLowerCase().trim() == 'pending for approval';
     final canApprove = isHod && isPendingApproval;
 
+    //     final isSecurity = (context.user.role ?? []).any(
+    //   (r) => r.toString().toLowerCase().contains('security'),
+    // );
+    // final actualExitDateTime = form.expectedReturnDateTime ?? '';
+
     log('Form State: ${form}');
 
     return SpacedColumn(
@@ -82,7 +88,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Row(
-                  children:  [
+                  children: [
                     Icon(Icons.cancel_outlined, color: Colors.red),
                     SizedBox(width: 8),
                     Text(
@@ -956,22 +962,110 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
         //   firstDate: DateTime(2000),
         //   lastDate: DateTime.now(),
         // ),
+        // Card(
+        //   color: Colors.white,
+        //   elevation: 0,
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(12),
+        //     side: BorderSide.none,
+        //   ),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(16),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         const Row(
+        //           children: [
+        //             Icon(
+        //               Icons.access_time,
+        //               color: AppColors.registration,
+        //               size: 20,
+        //             ),
+        //             SizedBox(width: 8),
+        //             Text(
+        //               'Exit Timing',
+        //               style: TextStyle(
+        //                 fontSize: 16,
+        //                 fontWeight: FontWeight.w700,
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //         const SizedBox(height: 12),
+        //         if (form.fromLocation != null && form.fromLocation!.isNotEmpty)
+        //           Text(
+        //             '${form.fromLocation} (Exit)',
+        //             style: const TextStyle(
+        //               fontSize: 15,
+        //               fontWeight: FontWeight.w600,
+        //             ),
+        //           ),
+        //         const SizedBox(height: 6),
+        //         RichText(
+        //           text: const TextSpan(
+        //             text: 'Actual Exit Date & Time ',
+        //             style: TextStyle(fontSize: 13, color: Colors.black),
+        //             children: [
+        //               TextSpan(
+        //                 text: '*',
+        //                 style: TextStyle(
+        //                   color: Colors.red,
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //         const SizedBox(height: 6),
 
-        // InputField(
-        //   title: 'Approved By',
-        //   hintText: 'Enter Approver',
-        //   readOnly: isCompleted,
-        //   controller: approver,
-        //   initialValue:
-        //       form.approvedBy != null
-        //           ? form.approvedBy.toString()
-        //           : '',
-        //   borderColor: AppColors.registration,
-        //   onChanged: (qty) {
-        //     context.cubit<CreateEmployeeCubit>().onValueChanged(
-        //       approvedBy: qty,
-        //     );
-        //   },
+        //         const SizedBox(height: 6),
+
+        //         Container(
+        //           width: double.infinity,
+        //           padding: const EdgeInsets.symmetric(
+        //             horizontal: 16,
+        //             vertical: 14,
+        //           ),
+        //           decoration: BoxDecoration(
+        //             border: Border.all(
+        //               color:
+        //                   form.expectedReturnDateTime != null
+        //                       ? AppColors.registration
+        //                       : Colors.grey.shade300,
+        //             ),
+        //             borderRadius: BorderRadius.circular(10),
+        //             color: Colors.grey.shade50,
+        //           ),
+        //           child: Row(
+        //             children: [
+        //               Expanded(
+        //                 child: Text(
+        //                   form.expectedReturnDateTime != null
+        //                       ? DFU.ddMMyyyyHHmmssFromStr(
+        //                         form.expectedReturnDateTime.toString(),
+        //                       )
+        //                       : '-- / --',
+        //                   style: TextStyle(
+        //                     fontSize: 15,
+        //                     fontWeight: FontWeight.w500,
+        //                     color:
+        //                         form.expectedReturnDateTime != null
+        //                             ? Colors.black
+        //                             : Colors.grey.shade400,
+        //                   ),
+        //                 ),
+        //               ),
+        //               Icon(
+        //                 Icons.calendar_month_outlined,
+        //                 color: Colors.grey.shade400,
+        //                 size: 18,
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
         // ),
         // InputField(
         //   title: 'Reject Reason',
@@ -987,6 +1081,10 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
         //     );
         //   },
         // ),
+        BlocProvider(
+          create: (_) =>  context.read<EventTrackingCubit>(),
+          child: const EmployeeGatePassQRSection(),
+        ),
         if (canApprove) ...[
           const ApproveRejectButtons(),
         ] else if (!isReadOnly) ...[

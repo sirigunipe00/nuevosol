@@ -185,11 +185,11 @@ void initDetails(Object? entry) {
         EmployeeView.reject => EmployeeView.completed,
       };
 
-      final status = switch (state.view) {
-        EmployeeView.create => 'Draft',
-        EmployeeView.edit || EmployeeView.completed => 'Submitted',
-        EmployeeView.reject => 'Rejected',
-      };
+      // final status = switch (state.view) {
+      //   EmployeeView.create => 'Draft',
+      //   EmployeeView.edit || EmployeeView.completed => 'Submitted',
+      //   EmployeeView.reject => 'Rejected',
+      // };
 
       if (state.view == EmployeeView.create) {
         final response = await repo.createEmployee(state.form);
@@ -321,7 +321,15 @@ void reject(String reason) async {
       return optionOf(const Pair('Missing To Location', 0));
     } else if (form.expectedExitDateTime == null && form.expectedExitDateTime?.trim().isEmpty == true) {
       return optionOf(const Pair('Missing Expected Exit Date', 0));
-    } 
+    } else if (
+      form.movementType == '(Inter Plant) Exit - In & Exit - In' &&
+      (form.expectedReturnDateTime == null ||
+          form.expectedReturnDateTime!.trim().isEmpty)
+    ) {
+      return optionOf(
+        const Pair('Missing Expected Return Date & Time', 0),
+      );
+    }
 
     return const None();
   }
