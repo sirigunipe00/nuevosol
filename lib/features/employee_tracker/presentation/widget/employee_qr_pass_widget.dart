@@ -10,6 +10,7 @@ import 'package:nuevosol/features/employee_tracker/model/qr_code.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/styles/app_color.dart';
+import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class EmployeeGatePassQRSection extends StatefulWidget {
@@ -836,19 +837,67 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     super.dispose();
   }
 
-  void _onQRDetect(BarcodeCapture capture) {
-    if (_step != _ScanStep.scanQR) return;
-    final barcode = capture.barcodes.firstOrNull;
-    if (barcode?.rawValue == null) return;
+  // void _onQRDetect(BarcodeCapture capture) {
+  //   if (_step != _ScanStep.scanQR) return;
+  //   final barcode = capture.barcodes.firstOrNull;
+  //   if (barcode?.rawValue == null) return;
 
-    _qrController.stop();
+  //   _qrController.stop();
 
-    setState(() {
-      _scannedGatePassId = barcode!.rawValue;
-      _step = _ScanStep.capturePhoto;
-    });
-    _initCamera();
-  }
+  //   setState(() {
+  //     _scannedGatePassId = barcode!.rawValue;
+  //     _step = _ScanStep.capturePhoto;
+  //   });
+  //   _initCamera();
+  // }
+  Future<void> _onQRDetect(BarcodeCapture capture) async {
+  if (_step != _ScanStep.scanQR) return;
+
+  final barcode = capture.barcodes.firstOrNull;
+  if (barcode?.rawValue == null) return;
+
+  _qrController.stop();
+
+  final gatePassId = barcode!.rawValue!;
+
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('QR Scanned Successfully'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Scanned Gate Pass'),
+          const SizedBox(height: 10),
+          Text(
+            gatePassId,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(dialogContext),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+
+  if (!mounted) return;
+
+  setState(() {
+    _scannedGatePassId = gatePassId;
+    _step = _ScanStep.capturePhoto;
+  });
+
+  await _initCamera();
+}
 
   Future<void> _initCamera() async {
     final cameras = await availableCameras();
@@ -940,14 +989,43 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     }
   }
 
-  void _handleSuccess(QrCodeModel result) {
-    setState(() {
-      _apiResult = result;
-      _isSubmitting = false;
-    });
+void _handleSuccess(QrCodeModel result) async {
+  setState(() {
+    _apiResult = result;
+    _isSubmitting = false;
+  });
 
-    widget.onScanComplete(result);
-  }
+  widget.onScanComplete(result);
+
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Gate Pass Verified'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(result.message ?? 'Verification Successful'),
+          const SizedBox(height: 12),
+
+          Text(
+            'Gate Pass ID: ${result.gatePassId ?? ''}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -1479,39 +1557,41 @@ class _CameraPreviewBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 24),
-            GestureDetector(
-              onTap: onCapture,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: capturing ? Colors.grey.shade300 : Colors.white,
-                  border: Border.all(color: AppColors.registration, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.registration.withOpacity(0.25),
-                      blurRadius: 12,
-                    ),
-                  ],
+
+            Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: onCapture,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: capturing ? Colors.grey.shade300 : Colors.white,
+                    border: Border.all(color: AppColors.registration, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.registration.withOpacity(0.25),
+                        blurRadius: 12,
+                      ),
+                    ],
+                  ),
+                  child:
+                      capturing
+                          ? const Padding(
+                            padding: EdgeInsets.all(18),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                          : const Icon(
+                            Icons.camera_alt_rounded,
+                            color: AppColors.registration,
+                            size: 30,
+                          ),
                 ),
-                child:
-                    capturing
-                        ? const Padding(
-                          padding: EdgeInsets.all(18),
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : const Icon(
-                          Icons.camera_alt_rounded,
-                          color: AppColors.registration,
-                          size: 30,
-                        ),
               ),
             ),
-            const SizedBox(width: 24),
-            const SizedBox(width: 60),
+
           ],
         ),
         const SizedBox(height: 8),

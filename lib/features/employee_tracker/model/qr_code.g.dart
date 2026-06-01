@@ -8,6 +8,7 @@ part of 'qr_code.dart';
 
 _$QrCodeModelImpl _$$QrCodeModelImplFromJson(Map<String, dynamic> json) =>
     _$QrCodeModelImpl(
+      message: json['message'] as String?,
       gatePassId: json['gate_pass_id'] as String?,
       scanNo: (json['scan_no'] as num?)?.toInt(),
       totalScans: (json['total_scans'] as num?)?.toInt(),
@@ -22,6 +23,7 @@ _$QrCodeModelImpl _$$QrCodeModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$QrCodeModelImplToJson(_$QrCodeModelImpl instance) =>
     <String, dynamic>{
+      'message': instance.message,
       'gate_pass_id': instance.gatePassId,
       'scan_no': instance.scanNo,
       'total_scans': instance.totalScans,

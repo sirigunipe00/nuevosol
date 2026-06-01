@@ -8,6 +8,7 @@ part 'qr_code.g.dart';
 @freezed
 class QrCodeModel with _$QrCodeModel {
   const factory QrCodeModel({
+    String? message,
   @JsonKey(name: 'gate_pass_id')
    String? gatePassId,
 

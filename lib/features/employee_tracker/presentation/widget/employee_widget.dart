@@ -93,7 +93,7 @@ class EmployeeWidget extends StatelessWidget {
                           Text(
                             employee.fromLocation ?? '—',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Colors.black,
                             ),
@@ -124,7 +124,7 @@ class EmployeeWidget extends StatelessWidget {
                           Text(
                             employee.toLocation ?? '—',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: Colors.black,
                             ),

@@ -15,7 +15,7 @@ class EmployeeTracker with _$EmployeeTracker {
     @JsonKey(name: 'docstatus') int? docstatus,
     @JsonKey(name: 'idx') int? idx,
     @JsonKey(name: 'workflow_state') String? workflowState,
-    @JsonKey(name: 'employee_no') String? employeeNo,
+    @JsonKey(name: 'employee_id') String? employeeNo,
     @JsonKey(name: 'hod') String? hod,
     @JsonKey(name: 'company') String? company,
     @JsonKey(name: 'employee_name') String? employeeName,

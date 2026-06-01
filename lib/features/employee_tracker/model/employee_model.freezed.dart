@@ -37,7 +37,7 @@ mixin _$EmployeeTracker {
   int? get idx => throw _privateConstructorUsedError;
   @JsonKey(name: 'workflow_state')
   String? get workflowState => throw _privateConstructorUsedError;
-  @JsonKey(name: 'employee_no')
+  @JsonKey(name: 'employee_id')
   String? get employeeNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'hod')
   String? get hod => throw _privateConstructorUsedError;
@@ -118,7 +118,7 @@ abstract class $EmployeeTrackerCopyWith<$Res> {
       @JsonKey(name: 'docstatus') int? docstatus,
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'workflow_state') String? workflowState,
-      @JsonKey(name: 'employee_no') String? employeeNo,
+      @JsonKey(name: 'employee_id') String? employeeNo,
       @JsonKey(name: 'hod') String? hod,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'employee_name') String? employeeName,
@@ -370,7 +370,7 @@ abstract class _$$EmployeeTrackerImplCopyWith<$Res>
       @JsonKey(name: 'docstatus') int? docstatus,
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'workflow_state') String? workflowState,
-      @JsonKey(name: 'employee_no') String? employeeNo,
+      @JsonKey(name: 'employee_id') String? employeeNo,
       @JsonKey(name: 'hod') String? hod,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'employee_name') String? employeeName,
@@ -615,7 +615,7 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
       @JsonKey(name: 'docstatus') this.docstatus,
       @JsonKey(name: 'idx') this.idx,
       @JsonKey(name: 'workflow_state') this.workflowState,
-      @JsonKey(name: 'employee_no') this.employeeNo,
+      @JsonKey(name: 'employee_id') this.employeeNo,
       @JsonKey(name: 'hod') this.hod,
       @JsonKey(name: 'company') this.company,
       @JsonKey(name: 'employee_name') this.employeeName,
@@ -676,7 +676,7 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
   @JsonKey(name: 'workflow_state')
   final String? workflowState;
   @override
-  @JsonKey(name: 'employee_no')
+  @JsonKey(name: 'employee_id')
   final String? employeeNo;
   @override
   @JsonKey(name: 'hod')
@@ -907,7 +907,7 @@ abstract class _EmployeeTracker implements EmployeeTracker {
       @JsonKey(name: 'docstatus') final int? docstatus,
       @JsonKey(name: 'idx') final int? idx,
       @JsonKey(name: 'workflow_state') final String? workflowState,
-      @JsonKey(name: 'employee_no') final String? employeeNo,
+      @JsonKey(name: 'employee_id') final String? employeeNo,
       @JsonKey(name: 'hod') final String? hod,
       @JsonKey(name: 'company') final String? company,
       @JsonKey(name: 'employee_name') final String? employeeName,
@@ -975,7 +975,7 @@ abstract class _EmployeeTracker implements EmployeeTracker {
   @JsonKey(name: 'workflow_state')
   String? get workflowState;
   @override
-  @JsonKey(name: 'employee_no')
+  @JsonKey(name: 'employee_id')
   String? get employeeNo;
   @override
   @JsonKey(name: 'hod')

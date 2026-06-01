@@ -20,6 +20,7 @@ QrCodeModel _$QrCodeModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$QrCodeModel {
+  String? get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'gate_pass_id')
   String? get gatePassId => throw _privateConstructorUsedError;
   @JsonKey(name: 'scan_no')
@@ -58,7 +59,8 @@ abstract class $QrCodeModelCopyWith<$Res> {
       _$QrCodeModelCopyWithImpl<$Res, QrCodeModel>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'gate_pass_id') String? gatePassId,
+      {String? message,
+      @JsonKey(name: 'gate_pass_id') String? gatePassId,
       @JsonKey(name: 'scan_no') int? scanNo,
       @JsonKey(name: 'total_scans') int? totalScans,
       @JsonKey(name: 'location') String? location,
@@ -85,6 +87,7 @@ class _$QrCodeModelCopyWithImpl<$Res, $Val extends QrCodeModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? message = freezed,
     Object? gatePassId = freezed,
     Object? scanNo = freezed,
     Object? totalScans = freezed,
@@ -97,6 +100,10 @@ class _$QrCodeModelCopyWithImpl<$Res, $Val extends QrCodeModel>
     Object? workflowState = freezed,
   }) {
     return _then(_value.copyWith(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
       gatePassId: freezed == gatePassId
           ? _value.gatePassId
           : gatePassId // ignore: cast_nullable_to_non_nullable
@@ -150,7 +157,8 @@ abstract class _$$QrCodeModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'gate_pass_id') String? gatePassId,
+      {String? message,
+      @JsonKey(name: 'gate_pass_id') String? gatePassId,
       @JsonKey(name: 'scan_no') int? scanNo,
       @JsonKey(name: 'total_scans') int? totalScans,
       @JsonKey(name: 'location') String? location,
@@ -175,6 +183,7 @@ class __$$QrCodeModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? message = freezed,
     Object? gatePassId = freezed,
     Object? scanNo = freezed,
     Object? totalScans = freezed,
@@ -187,6 +196,10 @@ class __$$QrCodeModelImplCopyWithImpl<$Res>
     Object? workflowState = freezed,
   }) {
     return _then(_$QrCodeModelImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
       gatePassId: freezed == gatePassId
           ? _value.gatePassId
           : gatePassId // ignore: cast_nullable_to_non_nullable
@@ -235,7 +248,8 @@ class __$$QrCodeModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$QrCodeModelImpl implements _QrCodeModel {
   const _$QrCodeModelImpl(
-      {@JsonKey(name: 'gate_pass_id') this.gatePassId,
+      {this.message,
+      @JsonKey(name: 'gate_pass_id') this.gatePassId,
       @JsonKey(name: 'scan_no') this.scanNo,
       @JsonKey(name: 'total_scans') this.totalScans,
       @JsonKey(name: 'location') this.location,
@@ -249,6 +263,8 @@ class _$QrCodeModelImpl implements _QrCodeModel {
   factory _$QrCodeModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$QrCodeModelImplFromJson(json);
 
+  @override
+  final String? message;
   @override
   @JsonKey(name: 'gate_pass_id')
   final String? gatePassId;
@@ -282,7 +298,7 @@ class _$QrCodeModelImpl implements _QrCodeModel {
 
   @override
   String toString() {
-    return 'QrCodeModel(gatePassId: $gatePassId, scanNo: $scanNo, totalScans: $totalScans, location: $location, activity: $activity, actualDateTime: $actualDateTime, durationMin: $durationMin, employeePhoto: $employeePhoto, completed: $completed, workflowState: $workflowState)';
+    return 'QrCodeModel(message: $message, gatePassId: $gatePassId, scanNo: $scanNo, totalScans: $totalScans, location: $location, activity: $activity, actualDateTime: $actualDateTime, durationMin: $durationMin, employeePhoto: $employeePhoto, completed: $completed, workflowState: $workflowState)';
   }
 
   @override
@@ -290,6 +306,7 @@ class _$QrCodeModelImpl implements _QrCodeModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$QrCodeModelImpl &&
+            (identical(other.message, message) || other.message == message) &&
             (identical(other.gatePassId, gatePassId) ||
                 other.gatePassId == gatePassId) &&
             (identical(other.scanNo, scanNo) || other.scanNo == scanNo) &&
@@ -315,6 +332,7 @@ class _$QrCodeModelImpl implements _QrCodeModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      message,
       gatePassId,
       scanNo,
       totalScans,
@@ -344,7 +362,8 @@ class _$QrCodeModelImpl implements _QrCodeModel {
 
 abstract class _QrCodeModel implements QrCodeModel {
   const factory _QrCodeModel(
-          {@JsonKey(name: 'gate_pass_id') final String? gatePassId,
+          {final String? message,
+          @JsonKey(name: 'gate_pass_id') final String? gatePassId,
           @JsonKey(name: 'scan_no') final int? scanNo,
           @JsonKey(name: 'total_scans') final int? totalScans,
           @JsonKey(name: 'location') final String? location,
@@ -359,6 +378,8 @@ abstract class _QrCodeModel implements QrCodeModel {
   factory _QrCodeModel.fromJson(Map<String, dynamic> json) =
       _$QrCodeModelImpl.fromJson;
 
+  @override
+  String? get message;
   @override
   @JsonKey(name: 'gate_pass_id')
   String? get gatePassId;
