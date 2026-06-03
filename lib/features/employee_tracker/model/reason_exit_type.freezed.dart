@@ -25,12 +25,8 @@ mixin _$ReasonExitType {
   @JsonKey(name: 'reason_of_gate_exit_types')
   String? get reason => throw _privateConstructorUsedError;
 
-  /// Serializes this ReasonExitType to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ReasonExitType
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ReasonExitTypeCopyWith<ReasonExitType> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,8 +52,6 @@ class _$ReasonExitTypeCopyWithImpl<$Res, $Val extends ReasonExitType>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ReasonExitType
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,8 +92,6 @@ class __$$ReasonExitTypeImplCopyWithImpl<$Res>
       _$ReasonExitTypeImpl _value, $Res Function(_$ReasonExitTypeImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ReasonExitType
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -150,13 +142,11 @@ class _$ReasonExitTypeImpl implements _ReasonExitType {
             (identical(other.reason, reason) || other.reason == reason));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name, reason);
 
-  /// Create a copy of ReasonExitType
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ReasonExitTypeImplCopyWith<_$ReasonExitTypeImpl> get copyWith =>
@@ -186,11 +176,8 @@ abstract class _ReasonExitType implements ReasonExitType {
   @override
   @JsonKey(name: 'reason_of_gate_exit_types')
   String? get reason;
-
-  /// Create a copy of ReasonExitType
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ReasonExitTypeImplCopyWith<_$ReasonExitTypeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

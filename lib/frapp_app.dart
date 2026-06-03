@@ -47,22 +47,44 @@ class FrappeApp extends StatelessWidget {
           state.maybeWhen(
             orElse: () => AppRoute.initial.go(routerCtxt),
             // loading: () => AppRoute.initial.go(routerCtxt),
-            authenticated: () {
-              final filters = Pair(StringUtils.docStatusInt('Draft'), null);
-              final filterEmployee = Pair(StringUtils.docStatusEmployee('Draft'),null);
+           authenticated: () {
+  final userRoles = routerCtxt.user.role ?? [];
 
-              routerCtxt
-                ..cubit<GateEntriesCubit>().fetchInitial(filters)
-                ..cubit<GateExitCubit>().fetchInitial(filters)
-                ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
-                ..cubit<PurchaseOrders>().request('')
-                ..cubit<SalesInvoiceList>().request('')
-                ..cubit<PoApprovalCubit>().fetchInitial(PageViewFilters.initial());
-                // ..cubit<GateRegistrationsCubit>().fetchInitial(PageListFilters.initial())
-                // ..cubit<DispatchCubit>().fetchInitial(PageListFilters.initial())
-                
-              AppRoute.home.go(routerCtxt);
-            },
+  final issecurity = userRoles.any((r) {
+    final role = r.toString().toLowerCase();
+
+    return role.contains('nepl-unit-1-gate') ||
+        role.contains('nepl-unit-2-gate') ||
+        role.contains('nmpl-unit-1-gate') ||
+        role.contains('nmpl-unit-2-gate') ||
+        role.contains('head office gate');
+  });
+
+  final filters = Pair(
+    StringUtils.docStatusInt('Draft'),
+    null,
+  );
+
+  final employeeStatus =
+      issecurity ? 'Approved' : 'Draft';
+
+  final filterEmployee = Pair(
+    StringUtils.docStatusEmployee(employeeStatus),
+    null,
+  );
+
+  routerCtxt
+    ..cubit<GateEntriesCubit>().fetchInitial(filters)
+    ..cubit<GateExitCubit>().fetchInitial(filters)
+    ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
+    ..cubit<PurchaseOrders>().request('')
+    ..cubit<SalesInvoiceList>().request('')
+    ..cubit<PoApprovalCubit>().fetchInitial(
+      PageViewFilters.initial(),
+    );
+
+  AppRoute.home.go(routerCtxt);
+},
             unAuthenticated: () => AppRoute.login.go(routerCtxt),
           );
         },

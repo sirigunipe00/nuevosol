@@ -13,6 +13,7 @@ class EventTracking with _$EventTracking {
     @JsonKey(name: 'actual_date_time') String? actualDateTime,
     @JsonKey(name: 'activity') String? activity,
     @JsonKey(name: 'location') String? location,
+    @JsonKey(name: 'expected_date_time') String? expectedDateTime,
   }) = _EventTracking;
 factory EventTracking.fromJson(Map<String, dynamic> json) => _$EventTrackingFromJson(json);
 }

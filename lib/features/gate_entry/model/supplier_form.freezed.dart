@@ -25,12 +25,8 @@ mixin _$SupplierForm {
   @JsonKey(name: 'supplier_group')
   String? get supplierGruop => throw _privateConstructorUsedError;
 
-  /// Serializes this SupplierForm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of SupplierForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $SupplierFormCopyWith<SupplierForm> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,8 +52,6 @@ class _$SupplierFormCopyWithImpl<$Res, $Val extends SupplierForm>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of SupplierForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,8 +92,6 @@ class __$$SupplierFormImplCopyWithImpl<$Res>
       _$SupplierFormImpl _value, $Res Function(_$SupplierFormImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of SupplierForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -151,13 +143,11 @@ class _$SupplierFormImpl implements _SupplierForm {
                 other.supplierGruop == supplierGruop));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name, supplierGruop);
 
-  /// Create a copy of SupplierForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SupplierFormImplCopyWith<_$SupplierFormImpl> get copyWith =>
@@ -186,11 +176,8 @@ abstract class _SupplierForm implements SupplierForm {
   @override
   @JsonKey(name: 'supplier_group')
   String? get supplierGruop;
-
-  /// Create a copy of SupplierForm
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$SupplierFormImplCopyWith<_$SupplierFormImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -32,12 +32,8 @@ mixin _$PoOrderItemsForm {
   @JsonKey(name: 'net_amount', defaultValue: 0.0)
   double get netAmount => throw _privateConstructorUsedError;
 
-  /// Serializes this PoOrderItemsForm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of PoOrderItemsForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $PoOrderItemsFormCopyWith<PoOrderItemsForm> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -67,8 +63,6 @@ class _$PoOrderItemsFormCopyWithImpl<$Res, $Val extends PoOrderItemsForm>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PoOrderItemsForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,8 +127,6 @@ class __$$PoOrderItemsFormImplCopyWithImpl<$Res>
       $Res Function(_$PoOrderItemsFormImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PoOrderItemsForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -227,14 +219,12 @@ class _$PoOrderItemsFormImpl implements _PoOrderItemsForm {
                 other.netAmount == netAmount));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, status, itemName, quantity, rate, amount, netAmount);
 
-  /// Create a copy of PoOrderItemsForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PoOrderItemsFormImplCopyWith<_$PoOrderItemsFormImpl> get copyWith =>
@@ -280,11 +270,8 @@ abstract class _PoOrderItemsForm implements PoOrderItemsForm {
   @override
   @JsonKey(name: 'net_amount', defaultValue: 0.0)
   double get netAmount;
-
-  /// Create a copy of PoOrderItemsForm
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$PoOrderItemsFormImplCopyWith<_$PoOrderItemsFormImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -26,12 +26,8 @@ mixin _$PoApprovalAttachments {
   @JsonKey(name: 'file_url', defaultValue: '')
   String? get fileUrl => throw _privateConstructorUsedError;
 
-  /// Serializes this PoApprovalAttachments to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of PoApprovalAttachments
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $PoApprovalAttachmentsCopyWith<PoApprovalAttachments> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -58,8 +54,6 @@ class _$PoApprovalAttachmentsCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PoApprovalAttachments
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -102,8 +96,6 @@ class __$$PoApprovalAttachmentsImplCopyWithImpl<$Res>
       $Res Function(_$PoApprovalAttachmentsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PoApprovalAttachments
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,13 +147,11 @@ class _$PoApprovalAttachmentsImpl implements _PoApprovalAttachments {
             (identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, fileName, fileUrl);
 
-  /// Create a copy of PoApprovalAttachments
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PoApprovalAttachmentsImplCopyWith<_$PoApprovalAttachmentsImpl>
@@ -191,11 +181,8 @@ abstract class _PoApprovalAttachments implements PoApprovalAttachments {
   @override
   @JsonKey(name: 'file_url', defaultValue: '')
   String? get fileUrl;
-
-  /// Create a copy of PoApprovalAttachments
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$PoApprovalAttachmentsImplCopyWith<_$PoApprovalAttachmentsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

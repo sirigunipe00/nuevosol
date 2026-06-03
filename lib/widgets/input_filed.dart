@@ -89,7 +89,7 @@ class InputField extends StatelessWidget {
               suffixIcon: suffixIcon,
               counterText: '',
               filled: readOnly, 
-              fillColor: readOnly ? AppColors.himlayaPeeks : Colors.white,
+              fillColor: readOnly ? AppColors.white : Colors.white,
 
             ),
             obscuringCharacter: '*',

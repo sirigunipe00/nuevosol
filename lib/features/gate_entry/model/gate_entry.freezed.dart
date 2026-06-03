@@ -88,12 +88,8 @@ mixin _$GateEntry {
       fromJson: toNull)
   File? get weighmentPhotoImg => throw _privateConstructorUsedError;
 
-  /// Serializes this GateEntry to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of GateEntry
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $GateEntryCopyWith<GateEntry> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -159,8 +155,6 @@ class _$GateEntryCopyWithImpl<$Res, $Val extends GateEntry>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of GateEntry
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -372,8 +366,6 @@ class __$$GateEntryImplCopyWithImpl<$Res>
       _$GateEntryImpl _value, $Res Function(_$GateEntryImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of GateEntry
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -732,7 +724,7 @@ class _$GateEntryImpl implements _GateEntry {
                 other.weighmentPhotoImg == weighmentPhotoImg));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -766,9 +758,7 @@ class _$GateEntryImpl implements _GateEntry {
         weighmentPhotoImg
       ]);
 
-  /// Create a copy of GateEntry
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$GateEntryImplCopyWith<_$GateEntryImpl> get copyWith =>
@@ -926,11 +916,8 @@ abstract class _GateEntry implements GateEntry {
       toJson: toNull,
       fromJson: toNull)
   File? get weighmentPhotoImg;
-
-  /// Create a copy of GateEntry
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$GateEntryImplCopyWith<_$GateEntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

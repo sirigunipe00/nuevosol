@@ -160,15 +160,44 @@ class AppRouterConfig {
                       ),
                     ],
                   ),
-                  GoRoute(
-                    path: _getPath(AppRoute.employeeTracker),
-                    builder: (ctxt, state) {
-                      final filters = Pair( StringUtils.docStatusEmployee('Draft'),null,);
-                      return BlocProvider(create:
-                            (context) => EmployeeBlocProvider.get().fetchEmployeeEntries()..fetchInitial(filters),
-                        child: const EmployeeListScrn(),
-                      );
-                    },
+                 GoRoute(
+  path: _getPath(AppRoute.employeeTracker),
+  builder: (ctxt, state) {
+    final userRoles = ctxt.user.role ?? [];
+
+    final issecurity = userRoles.any((r) {
+      final role = r.toString().toLowerCase();
+
+      return role.contains('nepl-unit-1-gate') ||
+          role.contains('nepl-unit-2-gate') ||
+          role.contains('nmpl-unit-1-gate') ||
+          role.contains('nmpl-unit-2-gate') ||
+          role.contains('head office gate');
+    });
+
+    final isHod = userRoles.any(
+  (r) => r.toString().toLowerCase().contains('hod (hr)'),
+);
+
+final defaultStatus = isHod
+    ? 'Pending For Approval'
+    : issecurity
+        ? 'Approved'
+        : 'Draft';
+
+    final filters = Pair(
+      StringUtils.docStatusEmployee(defaultStatus),
+      null,
+    );
+
+    return BlocProvider(
+      create: (context) =>
+          EmployeeBlocProvider.get()
+            .fetchEmployeeEntries()
+            ..fetchInitial(filters),
+      child: const EmployeeListScrn(),
+    );
+  },
                     routes: [
                       GoRoute(
                         path: _getPath(AppRoute.newEmployeeTracker),

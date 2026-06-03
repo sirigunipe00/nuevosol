@@ -42,12 +42,8 @@ mixin _$QrCodeModel {
   @JsonKey(name: 'workflow_state')
   String? get workflowState => throw _privateConstructorUsedError;
 
-  /// Serializes this QrCodeModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of QrCodeModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $QrCodeModelCopyWith<QrCodeModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -82,8 +78,6 @@ class _$QrCodeModelCopyWithImpl<$Res, $Val extends QrCodeModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of QrCodeModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -178,8 +172,6 @@ class __$$QrCodeModelImplCopyWithImpl<$Res>
       _$QrCodeModelImpl _value, $Res Function(_$QrCodeModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of QrCodeModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -328,7 +320,7 @@ class _$QrCodeModelImpl implements _QrCodeModel {
                 other.workflowState == workflowState));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -344,9 +336,7 @@ class _$QrCodeModelImpl implements _QrCodeModel {
       completed,
       workflowState);
 
-  /// Create a copy of QrCodeModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$QrCodeModelImplCopyWith<_$QrCodeModelImpl> get copyWith =>
@@ -410,11 +400,8 @@ abstract class _QrCodeModel implements QrCodeModel {
   @override
   @JsonKey(name: 'workflow_state')
   String? get workflowState;
-
-  /// Create a copy of QrCodeModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$QrCodeModelImplCopyWith<_$QrCodeModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

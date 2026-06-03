@@ -23,9 +23,7 @@ mixin _$CreateGateEntryState {
   String? get successMsg => throw _privateConstructorUsedError;
   Failure? get error => throw _privateConstructorUsedError;
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $CreateGateEntryStateCopyWith<CreateGateEntryState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,8 +57,6 @@ class _$CreateGateEntryStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,8 +95,6 @@ class _$CreateGateEntryStateCopyWithImpl<$Res,
     ) as $Val);
   }
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GateEntryCopyWith<$Res> get form {
@@ -109,8 +103,6 @@ class _$CreateGateEntryStateCopyWithImpl<$Res,
     });
   }
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FailureCopyWith<$Res>? get error {
@@ -154,8 +146,6 @@ class __$$CreateGateEntryStateImplCopyWithImpl<$Res>
       $Res Function(_$CreateGateEntryStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -244,9 +234,7 @@ class _$CreateGateEntryStateImpl implements _CreateGateEntryState {
   int get hashCode => Object.hash(
       runtimeType, form, isLoading, isSuccess, view, successMsg, error);
 
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$CreateGateEntryStateImplCopyWith<_$CreateGateEntryStateImpl>
@@ -276,11 +264,8 @@ abstract class _CreateGateEntryState implements CreateGateEntryState {
   String? get successMsg;
   @override
   Failure? get error;
-
-  /// Create a copy of CreateGateEntryState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$CreateGateEntryStateImplCopyWith<_$CreateGateEntryStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

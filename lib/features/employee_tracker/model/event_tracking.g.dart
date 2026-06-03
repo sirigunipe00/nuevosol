@@ -13,6 +13,7 @@ _$EventTrackingImpl _$$EventTrackingImplFromJson(Map<String, dynamic> json) =>
       actualDateTime: json['actual_date_time'] as String?,
       activity: json['activity'] as String?,
       location: json['location'] as String?,
+      expectedDateTime: json['expected_date_time'] as String?,
     );
 
 Map<String, dynamic> _$$EventTrackingImplToJson(_$EventTrackingImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$EventTrackingImplToJson(_$EventTrackingImpl instance) =>
       'actual_date_time': instance.actualDateTime,
       'activity': instance.activity,
       'location': instance.location,
+      'expected_date_time': instance.expectedDateTime,
     };

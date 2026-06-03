@@ -16,84 +16,126 @@ import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
   const EmployeeRepoImpl(super.client);
 
-  @override
-  AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
-    int start,
-    String? docStatus,
-    String? search,
-  ) async {
-    final filters = <List<dynamic>>[];
-    final orFilters = <List<dynamic>>[];
+ @override
+AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
+  int start,
+  String? docStatus,
+  String? search,
+) async {
+  final filters = <List<dynamic>>[];
+  final orFilters = <List<dynamic>>[];
 
-    // if (docStatus != null && docStatus != '2') {
-    //   filters.add(['docstatus', '=', docStatus]);
-    // }
-    if (docStatus != null && docStatus.isNotEmpty && docStatus != '5') {
-      filters
-        ..add(['workflow_state', '=', docStatus])
-        ..add(['docstatus', '!=', 2]);
-    }
+  if (docStatus != null && docStatus.isNotEmpty && docStatus != '5') {
+    filters
+      ..add(['workflow_state', '=', docStatus])
+      ..add(['docstatus', '!=', 2]);
+  }
 
-    if (search != null && search.isNotEmpty) {
-      filters.add(['name', 'like', '%$search%']);
-    }
-    final userRole = $sl.get<LoggedInUser>();
+  if (search != null && search.isNotEmpty) {
+    filters.add(['name', 'like', '%$search%']);
+  }
 
+  final userRole = $sl.get<LoggedInUser>();
+
+  /// HOD CHECK
+  final isHod = userRole.role!.any(
+    (e) => e.toString().toLowerCase().contains('hod (hr)'),
+  );
+  
+
+  /// ONLY APPLY GATE FILTERS IF NOT HOD
+  if (!isHod) {
     final isUnit1GateNEPL = userRole.role!.any(
       (e) => e.toString().toLowerCase().contains('nepl-unit-1-gate'),
     );
+
     final isUnit2GateNEPL = userRole.role!.any(
       (e) => e.toString().toLowerCase().contains('nepl-unit-2-gate'),
     );
+
     final isUnit1GateNMPL = userRole.role!.any(
       (e) => e.toString().toLowerCase().contains('nmpl-unit-1-gate'),
     );
+
     final isUnit2GateNMPL = userRole.role!.any(
       (e) => e.toString().toLowerCase().contains('nmpl-unit-2-gate'),
     );
+
+    final headOffice = userRole.role!.any(
+      (e) => e.toString().toLowerCase().contains('head office gate'),
+    );
+
     if (isUnit1GateNEPL) {
       orFilters
         ..add(['from_location', '=', 'NEPL-U1'])
         ..add(['to_location', '=', 'NEPL-U1']);
     }
+
     if (isUnit2GateNEPL) {
       orFilters
         ..add(['from_location', '=', 'NEPL-U2'])
         ..add(['to_location', '=', 'NEPL-U2']);
     }
+
     if (isUnit1GateNMPL) {
       orFilters
         ..add(['from_location', '=', 'NMPL-U1'])
         ..add(['to_location', '=', 'NMPL-U1']);
     }
+
     if (isUnit2GateNMPL) {
       orFilters
         ..add(['from_location', '=', 'NMPL-U2'])
         ..add(['to_location', '=', 'NMPL-U2']);
     }
-    final requestConfig = RequestConfig(
-      url: Urls.getList,
-      parser: (json) {
-        final data = json['message'] as List<dynamic>;
-        return data.map((e) => EmployeeTracker.fromJson(e)).toList();
-      },
-      reqParams: {
-        'filters': jsonEncode(filters),
-        'limit_start': start,
-        'limit': 20,
-        'or_filters': jsonEncode(orFilters),
-        'order_by': 'creation desc',
-        'doctype': 'Employee Gate Pass',
-        'fields': jsonEncode(['*']),
-      },
-      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-    );
 
-    $logger.devLog('requestConfig....$requestConfig');
+    if (headOffice) {
+      orFilters
+        ..add(['from_location', '=', 'Head Office Gate'])
+        ..add(['to_location', '=', 'Head Office Gate']);
+    }
+    final isSecurity =
+    isUnit1GateNEPL ||
+    isUnit2GateNEPL ||
+    isUnit1GateNMPL ||
+    isUnit2GateNMPL ||
+    headOffice;
 
-    final response = await get(requestConfig);
-    return response.process((r) => right(r.data!));
+    if (!isSecurity && !isHod) {
+      filters.add(['owner', '=', userRole.email]);
+    }
+    
+  
   }
+
+  final requestConfig = RequestConfig(
+    url: Urls.getList,
+    parser: (json) {
+      final data = json['message'] as List<dynamic>;
+      return data.map((e) => EmployeeTracker.fromJson(e)).toList();
+    },
+    reqParams: {
+      'filters': jsonEncode(filters),
+      'limit_start': start,
+      'limit': 20,
+
+      /// SEND ONLY IF EXISTS
+      if (orFilters.isNotEmpty)
+        'or_filters': jsonEncode(orFilters),
+
+      'order_by': 'creation desc',
+      'doctype': 'Employee Gate Pass',
+      'fields': jsonEncode(['*']),
+    },
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+  );
+
+  final response = await get(requestConfig);
+
+  return response.process((r) => right(r.data!));
+}
 
   @override
   AsyncValueOf<Pair<String, String>> createEmployee(
@@ -113,7 +155,7 @@ class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
       },
 
       body: jsonEncode({
-        'employee': form.employeeNo,
+        'employee_id': form.employeeNo,
         'hod': form.hod,
         'department': form.department,
         'reason_of_gate_exit': form.reasonOfGateExit,
@@ -128,6 +170,7 @@ class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
     );
 
     final response = await post(config);
+    $logger.devLog('config.....$config');
 
     return response.processAsync((r) async {
       return right(r.data!);
@@ -219,7 +262,7 @@ class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
       body: jsonEncode({
         'gate_pass_id': form.name,
         'state': 'Pending For Approval',
-        'employee': form.employeeName,
+        'employee': form.employeeNo,
         'hod': form.hod,
         'department': form.department,
         'reason_of_gate_exit': form.reasonOfGateExit,

@@ -30,13 +30,11 @@ mixin _$EmployeeList {
   String? get company => throw _privateConstructorUsedError;
   @JsonKey(name: 'reports_to')
   String? get reportsTo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'reports_to_name')
+  String? get reportsToName => throw _privateConstructorUsedError;
 
-  /// Serializes this EmployeeList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmployeeList
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmployeeListCopyWith<EmployeeList> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,7 +50,8 @@ abstract class $EmployeeListCopyWith<$Res> {
       @JsonKey(name: 'employee_name') String? employeeName,
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
-      @JsonKey(name: 'reports_to') String? reportsTo});
+      @JsonKey(name: 'reports_to') String? reportsTo,
+      @JsonKey(name: 'reports_to_name') String? reportsToName});
 }
 
 /// @nodoc
@@ -65,8 +64,6 @@ class _$EmployeeListCopyWithImpl<$Res, $Val extends EmployeeList>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmployeeList
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +72,7 @@ class _$EmployeeListCopyWithImpl<$Res, $Val extends EmployeeList>
     Object? department = freezed,
     Object? company = freezed,
     Object? reportsTo = freezed,
+    Object? reportsToName = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -97,6 +95,10 @@ class _$EmployeeListCopyWithImpl<$Res, $Val extends EmployeeList>
           ? _value.reportsTo
           : reportsTo // ignore: cast_nullable_to_non_nullable
               as String?,
+      reportsToName: freezed == reportsToName
+          ? _value.reportsToName
+          : reportsToName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -114,7 +116,8 @@ abstract class _$$EmployeeListImplCopyWith<$Res>
       @JsonKey(name: 'employee_name') String? employeeName,
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
-      @JsonKey(name: 'reports_to') String? reportsTo});
+      @JsonKey(name: 'reports_to') String? reportsTo,
+      @JsonKey(name: 'reports_to_name') String? reportsToName});
 }
 
 /// @nodoc
@@ -125,8 +128,6 @@ class __$$EmployeeListImplCopyWithImpl<$Res>
       _$EmployeeListImpl _value, $Res Function(_$EmployeeListImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmployeeList
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +136,7 @@ class __$$EmployeeListImplCopyWithImpl<$Res>
     Object? department = freezed,
     Object? company = freezed,
     Object? reportsTo = freezed,
+    Object? reportsToName = freezed,
   }) {
     return _then(_$EmployeeListImpl(
       name: freezed == name
@@ -157,6 +159,10 @@ class __$$EmployeeListImplCopyWithImpl<$Res>
           ? _value.reportsTo
           : reportsTo // ignore: cast_nullable_to_non_nullable
               as String?,
+      reportsToName: freezed == reportsToName
+          ? _value.reportsToName
+          : reportsToName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -169,7 +175,8 @@ class _$EmployeeListImpl implements _EmployeeList {
       @JsonKey(name: 'employee_name') this.employeeName,
       @JsonKey(name: 'department') this.department,
       @JsonKey(name: 'company') this.company,
-      @JsonKey(name: 'reports_to') this.reportsTo});
+      @JsonKey(name: 'reports_to') this.reportsTo,
+      @JsonKey(name: 'reports_to_name') this.reportsToName});
 
   factory _$EmployeeListImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmployeeListImplFromJson(json);
@@ -189,10 +196,13 @@ class _$EmployeeListImpl implements _EmployeeList {
   @override
   @JsonKey(name: 'reports_to')
   final String? reportsTo;
+  @override
+  @JsonKey(name: 'reports_to_name')
+  final String? reportsToName;
 
   @override
   String toString() {
-    return 'EmployeeList(name: $name, employeeName: $employeeName, department: $department, company: $company, reportsTo: $reportsTo)';
+    return 'EmployeeList(name: $name, employeeName: $employeeName, department: $department, company: $company, reportsTo: $reportsTo, reportsToName: $reportsToName)';
   }
 
   @override
@@ -207,17 +217,17 @@ class _$EmployeeListImpl implements _EmployeeList {
                 other.department == department) &&
             (identical(other.company, company) || other.company == company) &&
             (identical(other.reportsTo, reportsTo) ||
-                other.reportsTo == reportsTo));
+                other.reportsTo == reportsTo) &&
+            (identical(other.reportsToName, reportsToName) ||
+                other.reportsToName == reportsToName));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, name, employeeName, department, company, reportsTo);
+  int get hashCode => Object.hash(runtimeType, name, employeeName, department,
+      company, reportsTo, reportsToName);
 
-  /// Create a copy of EmployeeList
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmployeeListImplCopyWith<_$EmployeeListImpl> get copyWith =>
@@ -237,7 +247,8 @@ abstract class _EmployeeList implements EmployeeList {
           @JsonKey(name: 'employee_name') final String? employeeName,
           @JsonKey(name: 'department') final String? department,
           @JsonKey(name: 'company') final String? company,
-          @JsonKey(name: 'reports_to') final String? reportsTo}) =
+          @JsonKey(name: 'reports_to') final String? reportsTo,
+          @JsonKey(name: 'reports_to_name') final String? reportsToName}) =
       _$EmployeeListImpl;
 
   factory _EmployeeList.fromJson(Map<String, dynamic> json) =
@@ -258,11 +269,11 @@ abstract class _EmployeeList implements EmployeeList {
   @override
   @JsonKey(name: 'reports_to')
   String? get reportsTo;
-
-  /// Create a copy of EmployeeList
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(name: 'reports_to_name')
+  String? get reportsToName;
+  @override
+  @JsonKey(ignore: true)
   _$$EmployeeListImplCopyWith<_$EmployeeListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

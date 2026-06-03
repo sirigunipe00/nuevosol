@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/employee_tracker/data/employee_tracker_repo.dart';
+import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/qr_code.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/styles/app_color.dart';
-import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class EmployeeGatePassQRSection extends StatefulWidget {
@@ -61,23 +61,33 @@ class _EmployeeGatePassQRSectionState extends State<EmployeeGatePassQRSection> {
 
         final userRoles = context.user.role ?? [];
         final isHod = userRoles.any(
-          (r) => r.toString().toLowerCase().contains('hod'),
+          (r) => r.toString().toLowerCase().contains('hod (hr)'),
         );
-        final isSecurity = userRoles.any(
-          (r) => r.toString().toLowerCase().contains('security'),
-        );
+        final isSecurity = userRoles.any((r) {
+          final role = r.toString().toLowerCase();
+          return role.contains('nepl-unit-1-gate') ||
+              role.contains('nepl-unit-2-gate') ||
+              role.contains('nmpl-unit-1-gate') ||
+              role.contains('nmpl-unit-2-gate') ||
+              role.contains('head office gate');
+        });
 
-        if (!isHod && !isSecurity) return const SizedBox.shrink();
+        // if (!isHod && !isSecurity) return const SizedBox.shrink();
 
         final gatePassId = form.name ?? '';
 
         _fetchTrackingIfNeeded(context, gatePassId, workflowState);
 
         return Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.only(
+            top: 16,
+            left: 16,
+            right: 16,
+            bottom: 5,
+          ),
           margin: const EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFFFFF3E0),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: AppColors.registration.withOpacity(0.2)),
           ),
@@ -92,7 +102,7 @@ class _EmployeeGatePassQRSectionState extends State<EmployeeGatePassQRSection> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Gate Pass',
+                    'Movement Tracking',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -104,17 +114,17 @@ class _EmployeeGatePassQRSectionState extends State<EmployeeGatePassQRSection> {
               const SizedBox(height: 4),
               Text(
                 gatePassId,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey.shade500,
+                  color: Colors.black,
                   fontFamily: 'monospace',
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
-              if (isOngoing || isClosed) const _EventTrackingSection(),
+              if (isOngoing || isClosed) _EventTrackingSection(form: form),
 
-              if (isHod && (isApproved || isOngoing))
+              if ((isApproved || isOngoing) && !isSecurity)
                 _SingleQRCard(gatePassId: gatePassId),
 
               if (isSecurity && !isClosed)
@@ -204,7 +214,8 @@ class _WorkflowBadge extends StatelessWidget {
 }
 
 class _EventTrackingSection extends StatelessWidget {
-  const _EventTrackingSection();
+  final EmployeeTracker form;
+  const _EventTrackingSection({required this.form});
 
   @override
   Widget build(BuildContext context) {
@@ -241,14 +252,24 @@ class _EventTrackingSection extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
 
                 ...items.asMap().entries.map((entry) {
                   final index = entry.key;
                   final item = entry.value;
+                  final trackingStatus = switch (index) {
+                    0 => form.status1,
+                    1 => form.status1,
+                    2 => form.status2,
+                    3 => form.status2,
+                    _ => null,
+                  };
                   final hasActual =
                       item.actualDateTime != null &&
                       item.actualDateTime!.trim().isNotEmpty;
+                  final hasExpected =
+                      item.expectedDateTime != null &&
+                      item.expectedDateTime!.trim().isNotEmpty;
 
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8),
@@ -344,10 +365,44 @@ class _EventTrackingSection extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                  const SizedBox(width: 6),
+
+                                  if (trackingStatus != null &&
+                                      trackingStatus.trim().isNotEmpty) ...[
+                                    const SizedBox(width: 6),
+                                    _StatusBadge(status: trackingStatus),
+                                  ],
                                 ],
                               ),
 
                               const SizedBox(height: 6),
+                              Text(
+                                hasExpected ? 'Expected  Date & Time' : '',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color:
+                                      hasExpected
+                                          ? Colors.black
+                                          : Colors.grey.shade400,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                hasExpected
+                                    ? DFU.ddMMyyyyHHmmssFromStr(
+                                      item.expectedDateTime!,
+                                    )
+                                    : '--',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color:
+                                      hasExpected
+                                          ? Colors.black
+                                          : Colors.grey.shade400,
+                                ),
+                              ),
 
                               Text(
                                 hasActual
@@ -399,12 +454,65 @@ class _EventTrackingSection extends StatelessWidget {
                   );
                 }),
 
-                const SizedBox(height: 12),
+                // const SizedBox(height: 5),
               ],
             );
           },
         );
       },
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    final value = status.toLowerCase().trim();
+
+    Color bgColor;
+    Color textColor;
+    IconData icon;
+
+    if (value.contains('late')) {
+      bgColor = Colors.red.shade50;
+      textColor = Colors.red.shade700;
+      icon = Icons.warning_amber_rounded;
+    } else if (value.contains('before')) {
+      bgColor = Colors.orange.shade50;
+      textColor = Colors.orange.shade700;
+      icon = Icons.check_circle_outline_rounded;
+    } else {
+      // on time
+      bgColor = Colors.green.shade50;
+      textColor = Colors.green.shade700;
+      icon = Icons.access_time_rounded;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: textColor),
+          const SizedBox(width: 4),
+          Text(
+            status,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -851,53 +959,54 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
   //   _initCamera();
   // }
   Future<void> _onQRDetect(BarcodeCapture capture) async {
-  if (_step != _ScanStep.scanQR) return;
+    if (_step != _ScanStep.scanQR) return;
 
-  final barcode = capture.barcodes.firstOrNull;
-  if (barcode?.rawValue == null) return;
+    final barcode = capture.barcodes.firstOrNull;
+    if (barcode?.rawValue == null) return;
 
-  _qrController.stop();
+    _qrController.stop();
 
-  final gatePassId = barcode!.rawValue!;
+    final gatePassId = barcode!.rawValue!;
 
-  await showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) => AlertDialog(
-      title: const Text('QR Scanned Successfully'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Scanned Gate Pass'),
-          const SizedBox(height: 10),
-          Text(
-            gatePassId,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: const Text('QR Scanned Successfully'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Scanned Gate Pass'),
+                const SizedBox(height: 10),
+                Text(
+                  gatePassId,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(dialogContext),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
+    );
 
-  if (!mounted) return;
+    if (!mounted) return;
 
-  setState(() {
-    _scannedGatePassId = gatePassId;
-    _step = _ScanStep.capturePhoto;
-  });
+    setState(() {
+      _scannedGatePassId = gatePassId;
+      _step = _ScanStep.capturePhoto;
+    });
 
-  await _initCamera();
-}
+    await _initCamera();
+  }
 
   Future<void> _initCamera() async {
     final cameras = await availableCameras();
@@ -989,43 +1098,42 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     }
   }
 
-void _handleSuccess(QrCodeModel result) async {
-  setState(() {
-    _apiResult = result;
-    _isSubmitting = false;
-  });
+  void _handleSuccess(QrCodeModel result) async {
+    setState(() {
+      _apiResult = result;
+      _isSubmitting = false;
+    });
 
-  widget.onScanComplete(result);
+    widget.onScanComplete(result);
 
-  await showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) => AlertDialog(
-      title: const Text('Gate Pass Verified'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(result.message ?? 'Verification Successful'),
-          const SizedBox(height: 12),
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: const Text('Gate Pass Verified'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(result.message ?? 'Verification Successful'),
+                const SizedBox(height: 12),
 
-          Text(
-            'Gate Pass ID: ${result.gatePassId ?? ''}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+                Text(
+                  'Gate Pass ID: ${result.gatePassId ?? ''}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1120,6 +1228,13 @@ void _handleSuccess(QrCodeModel result) async {
   }
 
   Widget _buildBottomActions() {
+    if (_step != _ScanStep.result) {
+      return const SizedBox.shrink();
+    }
+
+    if (_isSubmitting) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
       child: Column(
@@ -1557,7 +1672,6 @@ class _CameraPreviewBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             Align(
               alignment: Alignment.center,
               child: GestureDetector(
@@ -1591,7 +1705,6 @@ class _CameraPreviewBody extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
         const SizedBox(height: 8),

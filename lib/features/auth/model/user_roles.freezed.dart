@@ -33,12 +33,8 @@ mixin _$UserRoles {
   @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
   int get entry => throw _privateConstructorUsedError;
 
-  /// Serializes this UserRoles to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of UserRoles
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $UserRolesCopyWith<UserRoles> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -72,8 +68,6 @@ class _$UserRolesCopyWithImpl<$Res, $Val extends UserRoles>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UserRoles
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -143,8 +137,6 @@ class __$$UserRolesImplCopyWithImpl<$Res>
       _$UserRolesImpl _value, $Res Function(_$UserRolesImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of UserRoles
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -245,14 +237,12 @@ class _$UserRolesImpl extends _UserRoles {
             (identical(other.entry, entry) || other.entry == entry));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, dashbaords, approval, gaylord, registration, exit, entry);
 
-  /// Create a copy of UserRoles
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserRolesImplCopyWith<_$UserRolesImpl> get copyWith =>
@@ -303,11 +293,8 @@ abstract class _UserRoles extends UserRoles {
   @override
   @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
   int get entry;
-
-  /// Create a copy of UserRoles
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$UserRolesImplCopyWith<_$UserRolesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

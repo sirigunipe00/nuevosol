@@ -46,12 +46,8 @@ mixin _$PoApprovalForm {
   @JsonKey(name: 'workflow_state')
   String get state => throw _privateConstructorUsedError;
 
-  /// Serializes this PoApprovalForm to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of PoApprovalForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $PoApprovalFormCopyWith<PoApprovalForm> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -88,8 +84,6 @@ class _$PoApprovalFormCopyWithImpl<$Res, $Val extends PoApprovalForm>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PoApprovalForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -196,8 +190,6 @@ class __$$PoApprovalFormImplCopyWithImpl<$Res>
       _$PoApprovalFormImpl _value, $Res Function(_$PoApprovalFormImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PoApprovalForm
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -366,7 +358,7 @@ class _$PoApprovalFormImpl implements _PoApprovalForm {
             (identical(other.state, state) || other.state == state));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -384,9 +376,7 @@ class _$PoApprovalFormImpl implements _PoApprovalForm {
       vendorsContact,
       state);
 
-  /// Create a copy of PoApprovalForm
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PoApprovalFormImplCopyWith<_$PoApprovalFormImpl> get copyWith =>
@@ -462,11 +452,8 @@ abstract class _PoApprovalForm implements PoApprovalForm {
   @override
   @JsonKey(name: 'workflow_state')
   String get state;
-
-  /// Create a copy of PoApprovalForm
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$PoApprovalFormImplCopyWith<_$PoApprovalFormImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

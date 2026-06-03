@@ -16,9 +16,9 @@ enum PageMode2 {
   dipatchGaylord('Dispatch Gaylord'),
   poapprovallist('PO Approval List'),
   dashbaords('Dashbaords');
-   const PageMode2(this.name);
+
+  const PageMode2(this.name);
   final String name;
- 
 }
 
 class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
@@ -31,9 +31,9 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
     required this.child,
     this.status = const [],
     this.onUpdateQuery,
-    this.onUpdateStatus, 
+    this.onUpdateStatus,
     this.hideFAB = false,
-    this.onNew, 
+    this.onNew,
   });
 
   final String? title;
@@ -50,13 +50,20 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userRoles = context.user.role ?? [];
+    final isSecurity = userRoles.any((r) {
+      final role = r.toString().toLowerCase();
+      return role.contains('nepl-unit-1-gate') ||
+          role.contains('nepl-unit-2-gate') ||
+          role.contains('nmpl-unit-1-gate') ||
+          role.contains('nmpl-unit-2-gate') ||
+          role.contains('head office gate');
+    });
     T? cubit;
     try {
       cubit = context.read<T>();
-    } catch (_) {
-      
-    }
-   
+    } catch (_) {}
+
     final hintText = switch (mode) {
       PageMode2.gateentry => 'Search Gate Entry - ID',
       PageMode2.gateexit => 'Search Gate Exit - ID',
@@ -71,31 +78,61 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned(
-            left: 52,
-            top: -24,
-            child: Image.asset(scaffoldBg),
-          ),
+          Positioned(left: 52, top: -24, child: Image.asset(scaffoldBg)),
           Positioned(
             left: 18,
+            right: 18,
             top: kToolbarHeight,
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const GoBackWidget(),
-                  AppSpacer.p8(),
-                  Text(
-                    title ?? mode.name,
-                    style: AppTextStyles.titleLarge(context).copyWith(
-                      color: AppColors.black,
-                      fontSize: 18,
-                    ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const GoBackWidget(),
+                      AppSpacer.p8(),
+                      Text(
+                        title ?? mode.name,
+                        style: AppTextStyles.titleLarge(
+                          context,
+                        ).copyWith(color: AppColors.black, fontSize: 18),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.person,
+                        size: 18,
+                        color: AppColors.registration,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        context.user.firstName.toString(),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+
           if (mode != PageMode2.dashbaords) ...[
             Positioned(
               top: kToolbarHeight + 32,
@@ -105,7 +142,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    if(onUpdateQuery != null)...[
+                    if (onUpdateQuery != null) ...[
                       Expanded(
                         child: SimpleSearchBar(
                           inputType: TextInputType.number,
@@ -117,7 +154,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                       ),
                     ],
                     AppSpacer.p8(),
-                    if (status.isNotEmpty && onUpdateStatus != null)...[
+                    if (status.isNotEmpty && onUpdateStatus != null) ...[
                       Expanded(
                         flex: 1,
                         child: StatusMenuWidget(
@@ -150,7 +187,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                     color: AppColors.black.withValues(alpha: 0.5),
                     blurRadius: 10,
                     offset: const Offset(0, -1),
-                  )
+                  ),
                 ],
               ),
               child: child,
@@ -158,24 +195,24 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: hideFAB.isTrue
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: onNew,
-              backgroundColor: mode == PageMode2.employeeTracker
-                  ? AppColors.registration
-                  : backgroundColor,
-              extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
+
+      floatingActionButton:
+          (hideFAB.isTrue || isSecurity)
+              ? null
+              : FloatingActionButton.extended(
+                onPressed: onNew,
+                backgroundColor:
+                    mode == PageMode2.employeeTracker
+                        ? AppColors.registration
+                        : backgroundColor,
+                extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                elevation: 1,
+                icon: const Icon(Icons.add, color: AppColors.white),
+                label: Text('New', style: AppTextStyles.titleLarge(context)),
               ),
-              elevation: 1,
-              icon: const Icon(Icons.add, color: AppColors.white),
-              label: Text(
-                'New',
-                style: AppTextStyles.titleLarge(context),
-              ),
-            ),
     );
   }
 }

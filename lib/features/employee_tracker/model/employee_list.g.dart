@@ -13,6 +13,7 @@ _$EmployeeListImpl _$$EmployeeListImplFromJson(Map<String, dynamic> json) =>
       department: json['department'] as String?,
       company: json['company'] as String?,
       reportsTo: json['reports_to'] as String?,
+      reportsToName: json['reports_to_name'] as String?,
     );
 
 Map<String, dynamic> _$$EmployeeListImplToJson(_$EmployeeListImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$EmployeeListImplToJson(_$EmployeeListImpl instance) =>
       'department': instance.department,
       'company': instance.company,
       'reports_to': instance.reportsTo,
+      'reports_to_name': instance.reportsToName,
     };

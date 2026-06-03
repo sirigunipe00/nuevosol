@@ -20,15 +20,82 @@ class EmployeeListScrn extends StatefulWidget {
 class _EmployeeListScrnState extends State<EmployeeListScrn> {
   String? status;
    @override
-    void initState() {
-      status = 'Draft';
-      context.read<EmployeeFilters>().onChangeStatus('Draft');
-      context.read<EmployeeFilters>().onSearch(null);
-      super.initState();
-    }
+    @override
+@override
+void initState() {
+  final userRoles = context.user.role ?? [];
+
+  final issecurity = userRoles.any((r) {
+    final role = r.toString().toLowerCase();
+
+    return role.contains('nepl-unit-1-gate') ||
+        role.contains('nepl-unit-2-gate') ||
+        role.contains('nmpl-unit-1-gate') ||
+        role.contains('nmpl-unit-2-gate') ||
+        role.contains('head office gate');
+  });
+
+  final isHod = userRoles.any(
+    (r) => r.toString().toLowerCase().contains('hod (hr)'),
+  );
+
+  if (isHod) {
+    status = 'Pending For Approval';
+  } else if (issecurity) {
+    status = 'Approved';
+  } else {
+    status = 'Draft';
+  }
+
+  context.read<EmployeeFilters>().onChangeStatus(status!);
+  context.read<EmployeeFilters>().onSearch(null);
+
+  super.initState();
+}
 
   @override
   Widget build(BuildContext context) {
+     final userRoles = context.user.role ?? [];
+
+final issecurity = userRoles.any((r) {
+  final role = r.toString().toLowerCase();
+
+  return role.contains('nepl-unit-1-gate') ||
+      role.contains('nepl-unit-2-gate') ||
+      role.contains('nmpl-unit-1-gate') ||
+      role.contains('nmpl-unit-2-gate') ||
+      role.contains('head office gate');
+});
+
+final isHod = userRoles.any(
+  (r) => r.toString().toLowerCase().contains('hod (hr)'),
+);
+
+  final statusList = issecurity
+    ? const [
+        'Approved',
+        'Movement Ongoing',
+        'Closed',
+      ]
+    : isHod
+        ? const [
+          'All',
+            'Draft',
+            'Pending For Approval',
+            'Approved',
+            'Rejected',
+            'Movement Ongoing',
+            'Closed',
+          ]
+        : const [
+            'All',
+            'Draft',
+            'Pending For Approval',
+            'Approved',
+            'Rejected',
+            'Movement Ongoing',
+            'Closed',
+          ];
     return AppPageView2<EmployeeFilters>(
       mode: PageMode2.employeeTracker,
       scaffoldBg: AppIcons.bgFrame1.path,
@@ -47,7 +114,7 @@ class _EmployeeListScrnState extends State<EmployeeListScrn> {
         context.cubit<EmployeeFilters>().onChangeStatus(value);
         fetchInital(context);
       },
-      status: const ['All', 'Draft','Pending For Approval', 'Approved', 'Rejected','Movement Ongoing','Closed'],
+      status: statusList,
       child: RefreshIndicator(
         onRefresh: (){
           final filters = context.read<EmployeeFilters>().state;

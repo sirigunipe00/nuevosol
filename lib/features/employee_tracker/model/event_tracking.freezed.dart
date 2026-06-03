@@ -30,13 +30,11 @@ mixin _$EventTracking {
   String? get activity => throw _privateConstructorUsedError;
   @JsonKey(name: 'location')
   String? get location => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expected_date_time')
+  String? get expectedDateTime => throw _privateConstructorUsedError;
 
-  /// Serializes this EventTracking to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EventTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EventTrackingCopyWith<EventTracking> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,7 +50,8 @@ abstract class $EventTrackingCopyWith<$Res> {
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'actual_date_time') String? actualDateTime,
       @JsonKey(name: 'activity') String? activity,
-      @JsonKey(name: 'location') String? location});
+      @JsonKey(name: 'location') String? location,
+      @JsonKey(name: 'expected_date_time') String? expectedDateTime});
 }
 
 /// @nodoc
@@ -65,8 +64,6 @@ class _$EventTrackingCopyWithImpl<$Res, $Val extends EventTracking>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EventTracking
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +72,7 @@ class _$EventTrackingCopyWithImpl<$Res, $Val extends EventTracking>
     Object? actualDateTime = freezed,
     Object? activity = freezed,
     Object? location = freezed,
+    Object? expectedDateTime = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -97,6 +95,10 @@ class _$EventTrackingCopyWithImpl<$Res, $Val extends EventTracking>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      expectedDateTime: freezed == expectedDateTime
+          ? _value.expectedDateTime
+          : expectedDateTime // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -114,7 +116,8 @@ abstract class _$$EventTrackingImplCopyWith<$Res>
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'actual_date_time') String? actualDateTime,
       @JsonKey(name: 'activity') String? activity,
-      @JsonKey(name: 'location') String? location});
+      @JsonKey(name: 'location') String? location,
+      @JsonKey(name: 'expected_date_time') String? expectedDateTime});
 }
 
 /// @nodoc
@@ -125,8 +128,6 @@ class __$$EventTrackingImplCopyWithImpl<$Res>
       _$EventTrackingImpl _value, $Res Function(_$EventTrackingImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EventTracking
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +136,7 @@ class __$$EventTrackingImplCopyWithImpl<$Res>
     Object? actualDateTime = freezed,
     Object? activity = freezed,
     Object? location = freezed,
+    Object? expectedDateTime = freezed,
   }) {
     return _then(_$EventTrackingImpl(
       name: freezed == name
@@ -157,6 +159,10 @@ class __$$EventTrackingImplCopyWithImpl<$Res>
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String?,
+      expectedDateTime: freezed == expectedDateTime
+          ? _value.expectedDateTime
+          : expectedDateTime // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -169,7 +175,8 @@ class _$EventTrackingImpl implements _EventTracking {
       @JsonKey(name: 'idx') this.idx,
       @JsonKey(name: 'actual_date_time') this.actualDateTime,
       @JsonKey(name: 'activity') this.activity,
-      @JsonKey(name: 'location') this.location});
+      @JsonKey(name: 'location') this.location,
+      @JsonKey(name: 'expected_date_time') this.expectedDateTime});
 
   factory _$EventTrackingImpl.fromJson(Map<String, dynamic> json) =>
       _$$EventTrackingImplFromJson(json);
@@ -189,10 +196,13 @@ class _$EventTrackingImpl implements _EventTracking {
   @override
   @JsonKey(name: 'location')
   final String? location;
+  @override
+  @JsonKey(name: 'expected_date_time')
+  final String? expectedDateTime;
 
   @override
   String toString() {
-    return 'EventTracking(name: $name, idx: $idx, actualDateTime: $actualDateTime, activity: $activity, location: $location)';
+    return 'EventTracking(name: $name, idx: $idx, actualDateTime: $actualDateTime, activity: $activity, location: $location, expectedDateTime: $expectedDateTime)';
   }
 
   @override
@@ -207,17 +217,17 @@ class _$EventTrackingImpl implements _EventTracking {
             (identical(other.activity, activity) ||
                 other.activity == activity) &&
             (identical(other.location, location) ||
-                other.location == location));
+                other.location == location) &&
+            (identical(other.expectedDateTime, expectedDateTime) ||
+                other.expectedDateTime == expectedDateTime));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, idx, actualDateTime, activity, location);
+  int get hashCode => Object.hash(runtimeType, name, idx, actualDateTime,
+      activity, location, expectedDateTime);
 
-  /// Create a copy of EventTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EventTrackingImplCopyWith<_$EventTrackingImpl> get copyWith =>
@@ -237,7 +247,9 @@ abstract class _EventTracking implements EventTracking {
       @JsonKey(name: 'idx') final int? idx,
       @JsonKey(name: 'actual_date_time') final String? actualDateTime,
       @JsonKey(name: 'activity') final String? activity,
-      @JsonKey(name: 'location') final String? location}) = _$EventTrackingImpl;
+      @JsonKey(name: 'location') final String? location,
+      @JsonKey(name: 'expected_date_time')
+      final String? expectedDateTime}) = _$EventTrackingImpl;
 
   factory _EventTracking.fromJson(Map<String, dynamic> json) =
       _$EventTrackingImpl.fromJson;
@@ -257,11 +269,11 @@ abstract class _EventTracking implements EventTracking {
   @override
   @JsonKey(name: 'location')
   String? get location;
-
-  /// Create a copy of EventTracking
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(name: 'expected_date_time')
+  String? get expectedDateTime;
+  @override
+  @JsonKey(ignore: true)
   _$$EventTrackingImplCopyWith<_$EventTrackingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
