@@ -57,9 +57,10 @@ class AppRouterConfig {
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider(
-                        create: (_) =>
-                            AppUpdateBlocprovider.get().appversionCubit()
-                              ..request(),
+                        create:
+                            (_) =>
+                                AppUpdateBlocprovider.get().appversionCubit()
+                                  ..request(),
                       ),
                     ],
                     child: const AppHomePage(),
@@ -67,12 +68,17 @@ class AppRouterConfig {
                 },
                 routes: [
                   GoRoute(
-                  path: _getPath(AppRoute.gateEntry),
+                    path: _getPath(AppRoute.gateEntry),
                     builder: (ctxt, state) {
-                      final filters = Pair(  StringUtils.docStatusInt('Draft'), null,);
+                      final filters = Pair(
+                        StringUtils.docStatusInt('Draft'),
+                        null,
+                      );
                       return BlocProvider(
                         create:
-                            (context) => GateEntryBlocProvider.get().fetchGateEntries()..fetchInitial(filters),
+                            (context) =>
+                                GateEntryBlocProvider.get().fetchGateEntries()
+                                  ..fetchInitial(filters),
                         child: const GateEntryListScrn(),
                       );
                     },
@@ -83,21 +89,29 @@ class AppRouterConfig {
                           final provider = GateEntryBlocProvider.get();
                           // final name = state.extra as String?;
                           final form = state.extra as GateEntry?;
-                          
+
                           return MultiBlocProvider(
                             providers: [
                               // if (name.isNull) ...[
                               //   BlocProvider(
                               //       create: (_) => provider.getDetails()),
                               // ] else ...[]
-                                BlocProvider(
-                                    create: (_) =>
-                                        provider.supplietList()..request('')),
-                               BlocProvider(
-                                  create: (_) =>
-                                      provider.fetchPONumbers()..request(form?.name ?? '')),
                               BlocProvider(
-                                  create: (_) => $sl.get<CreateGateEntryCubit>()..initDetails(form)),
+                                create:
+                                    (_) => provider.supplietList()..request(''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchPONumbers()
+                                          ..request(form?.name ?? ''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        $sl.get<CreateGateEntryCubit>()
+                                          ..initDetails(form),
+                              ),
                             ],
                             child: const NewGateEntry(),
                           );
@@ -116,10 +130,16 @@ class AppRouterConfig {
                   ),
                   GoRoute(
                     path: _getPath(AppRoute.gateExit),
-                   builder: (ctxt, state) {
-                      final filters = Pair( StringUtils.docStatusInt('Draft'),null,);
-                      return BlocProvider(create:
-                            (context) => GateExitBlocProvider.get().fetchGateExit()..fetchInitial(filters),
+                    builder: (ctxt, state) {
+                      final filters = Pair(
+                        StringUtils.docStatusInt('Draft'),
+                        null,
+                      );
+                      return BlocProvider(
+                        create:
+                            (context) =>
+                                GateExitBlocProvider.get().fetchGateExit()
+                                  ..fetchInitial(filters),
                         child: const GateExitListScrn(),
                       );
                     },
@@ -140,10 +160,17 @@ class AppRouterConfig {
                               //           provider.getDetails()..request(name!)),
                               // ],
                               BlocProvider(
-                                  create: (_) => provider.salesInvoiceList()..request(form?.name ?? '')),
+                                create:
+                                    (_) =>
+                                        provider.salesInvoiceList()
+                                          ..request(form?.name ?? ''),
+                              ),
                               BlocProvider(
-                                  create: (_) =>
-                                      $sl.get<CreateGateExitCubit>()..initDetails(form)),
+                                create:
+                                    (_) =>
+                                        $sl.get<CreateGateExitCubit>()
+                                          ..initDetails(form),
+                              ),
                             ],
                             child: const NewGateExit(),
                           );
@@ -160,68 +187,88 @@ class AppRouterConfig {
                       ),
                     ],
                   ),
-                 GoRoute(
-  path: _getPath(AppRoute.employeeTracker),
-  builder: (ctxt, state) {
-    final userRoles = ctxt.user.role ?? [];
+                  GoRoute(
+                    path: _getPath(AppRoute.employeeTracker),
+                    builder: (ctxt, state) {
+                      final userRoles = ctxt.user.role ?? [];
 
-    final issecurity = userRoles.any((r) {
-      final role = r.toString().toLowerCase();
+                      final issecurity = userRoles.any((r) {
+                        final role = r.toString().toLowerCase();
 
-      return role.contains('nepl-unit-1-gate') ||
-          role.contains('nepl-unit-2-gate') ||
-          role.contains('nmpl-unit-1-gate') ||
-          role.contains('nmpl-unit-2-gate') ||
-          role.contains('head office gate');
-    });
+                        return role.contains('nepl-unit-1-gate') ||
+                            role.contains('nepl-unit-2-gate') ||
+                            role.contains('nmpl-unit-1-gate') ||
+                            role.contains('nmpl-unit-2-gate') ||
+                            role.contains('head office gate');
+                      });
 
-    final isHod = userRoles.any(
-  (r) => r.toString().toLowerCase().contains('hod (hr)'),
-);
+                      final isHod = userRoles.any(
+                        (r) => r.toString().toLowerCase().contains('hod (hr)'),
+                      );
 
-final defaultStatus = isHod
-    ? 'Pending For Approval'
-    : issecurity
-        ? 'Approved'
-        : 'Draft';
+                      final defaultStatus =
+                          isHod
+                              ? 'Pending For Approval'
+                              : issecurity
+                              ? 'Approved'
+                              : 'Draft';
 
-    final filters = Pair(
-      StringUtils.docStatusEmployee(defaultStatus),
-      null,
-    );
+                      final filters = Pair(
+                        StringUtils.docStatusEmployee(defaultStatus),
+                        null,
+                      );
 
-    return BlocProvider(
-      create: (context) =>
-          EmployeeBlocProvider.get()
-            .fetchEmployeeEntries()
-            ..fetchInitial(filters),
-      child: const EmployeeListScrn(),
-    );
-  },
+                      return BlocProvider(
+                        create:
+                            (context) =>
+                                EmployeeBlocProvider.get()
+                                    .fetchEmployeeEntries()
+                                  ..fetchInitial(filters),
+                        child: const EmployeeListScrn(),
+                      );
+                    },
                     routes: [
                       GoRoute(
                         path: _getPath(AppRoute.newEmployeeTracker),
                         builder: (_, state) {
                           final form = state.extra as EmployeeTracker?;
-                          final blocprovider =
-                              EmployeeBlocProvider.get();
+                          final blocprovider = EmployeeBlocProvider.get();
                           return MultiBlocProvider(
                             providers: [
                               BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.fetchEmployeeList()..request()),
+                                create:
+                                    (_) =>
+                                        blocprovider.fetchEmployeeList()
+                                          ..request(),
+                              ),
                               BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.fetchReasonExit()..request()),
+                                create:
+                                    (_) =>
+                                        blocprovider.getAttachments()
+                                          ..request(form?.employeeNo ?? ''),
+                              ),
                               BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.getLocation()..request()),
-                                       BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.getEventTracking()..request(form?.name ?? '')),
+                                create:
+                                    (_) =>
+                                        blocprovider.fetchReasonExit()
+                                          ..request(),
+                              ),
                               BlocProvider(
-                                create: (_) => $sl.get<CreateEmployeeCubit>()
-                                  ..initDetails(state.extra),
+                                create:
+                                    (_) =>
+                                        blocprovider.getLocation()..request(),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        blocprovider.getEventTracking()
+                                          ..request(form?.name ?? ''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        $sl.get<CreateEmployeeCubit>()
+                                          ..initDetails(state.extra),
                               ),
                             ],
                             child: const NewEmployee(),
@@ -277,19 +324,29 @@ final defaultStatus = isHod
                           return MultiBlocProvider(
                             providers: [
                               BlocProvider(
-                                create: (_) => blocprovider.fetchPoOrderItems()
-                                  ..request(form.name),
+                                create:
+                                    (_) =>
+                                        blocprovider.fetchPoOrderItems()
+                                          ..request(form.name),
                               ),
                               BlocProvider(
-                                  create: (_) => blocprovider.rejectPO()),
+                                create: (_) => blocprovider.rejectPO(),
+                              ),
                               BlocProvider(
-                                  create: (_) => blocprovider.approvePO()),
+                                create: (_) => blocprovider.approvePO(),
+                              ),
                               BlocProvider(
-                                  create: (_) => blocprovider.poAttchmentsCubit()..request(form.name)),
+                                create:
+                                    (_) =>
+                                        blocprovider.poAttchmentsCubit()
+                                          ..request(form.name),
+                              ),
                               BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.poPermissionCubit()
-                                        ..request(form.name)),
+                                create:
+                                    (_) =>
+                                        blocprovider.poPermissionCubit()
+                                          ..request(form.name),
+                              ),
                             ],
                             child: PoApprovalFormWidegt(form: form),
                           );

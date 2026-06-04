@@ -1,5 +1,6 @@
 import 'package:nuevosol/core/model/pair.dart';
 import 'package:nuevosol/core/utils/typedefs.dart';
+import 'package:nuevosol/features/employee_tracker/model/attachement.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
@@ -24,4 +25,5 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
    AsyncValueOf<Pair<String,String>> rejectEmployee(EmployeeTracker form);
    AsyncValueOf<List<EventTracking>> fetchTracking(String name);
    AsyncValueOf<QrCodeModel>   qrData(String qrCode,String actualDateTime,String employeePhoto);
+   AsyncValueOf<List<AttachementInvoices>> fetchAttachments(String name);
 }

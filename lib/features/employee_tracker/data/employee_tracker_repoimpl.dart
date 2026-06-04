@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/auth/model/logged_in_user.dart';
 import 'package:nuevosol/features/employee_tracker/data/employee_tracker_repo.dart';
+import 'package:nuevosol/features/employee_tracker/model/attachement.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
@@ -136,7 +137,40 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
 
   return response.process((r) => right(r.data!));
 }
+  @override
+  AsyncValueOf<List<AttachementInvoices>> fetchAttachments(
+    String gateEntryId,
+  ) async {
+    return await executeSafely(() async {
+      final filters = [
+        ['attached_to_doctype', '=', 'Employee'],
+        ['attached_to_name', '=', gateEntryId],
+        ['attached_to_field', '=', 'image'],
+      ];
 
+      final config = RequestConfig(
+        url: Urls.getList,
+        parser: (json) {
+          final data = json['message'] as List<dynamic>;
+          return data.map((e) => AttachementInvoices.fromJson(e)).toList();
+        },
+        reqParams: {
+          'doctype': 'File',
+          'filters': jsonEncode(filters),
+          'fields': jsonEncode([
+            'file_url',
+            'attached_to_doctype',
+            'attached_to_name',
+            'attached_to_field',
+          ]),
+        },
+      );
+
+      final response = await get(config);
+      $logger.devLog('fetchAttachments response.....$response');
+      return response.process((r) => right(r.data!));
+    });
+  }
   @override
   AsyncValueOf<Pair<String, String>> createEmployee(
     EmployeeTracker form,
@@ -184,6 +218,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     String employeePhoto,
   ) async {
     return executeSafely(() async {
+      final userRole = $sl.get<LoggedInUser>();
       final config = RequestConfig(
         url: Urls.qrData,
         parser: (json) {
@@ -192,6 +227,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
           return QrCodeModel.fromJson({...data, 'message': json['message']});
         },
         body: jsonEncode({
+          'current_user_roles': userRole.role,
           'gate_pass_id': qrCode,
           'actual_date_time': actualDateTime,
           'employee_photo': employeePhoto,

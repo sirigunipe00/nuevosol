@@ -60,9 +60,9 @@ class _EmployeeGatePassQRSectionState extends State<EmployeeGatePassQRSection> {
         }
 
         final userRoles = context.user.role ?? [];
-        final isHod = userRoles.any(
-          (r) => r.toString().toLowerCase().contains('hod (hr)'),
-        );
+        // final isHod = userRoles.any(
+        //   (r) => r.toString().toLowerCase().contains('hod (hr)'),
+        // );
         final isSecurity = userRoles.any((r) {
           final role = r.toString().toLowerCase();
           return role.contains('nepl-unit-1-gate') ||

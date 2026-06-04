@@ -1,6 +1,7 @@
 import 'package:nuevosol/core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:nuevosol/features/employee_tracker/data/employee_tracker_repo.dart';
+import 'package:nuevosol/features/employee_tracker/model/attachement.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
@@ -21,6 +22,9 @@ typedef LocationState = NetworkRequestState<List<LocationList>>;
 
 typedef EventTrackingCubit = NetworkRequestCubit<List<EventTracking>, String>;
 typedef EventTrackingState = NetworkRequestState<List<EventTracking>>;
+
+typedef AttachementCubit = NetworkRequestCubit<List<AttachementInvoices>, String>;
+typedef AttachementState = NetworkRequestState<List<AttachementInvoices>>;
 
 @lazySingleton
 class EmployeeBlocProvider {
@@ -49,5 +53,8 @@ class EmployeeBlocProvider {
   );
   EventTrackingCubit getEventTracking() => EventTrackingCubit(
     onRequest: (params, state) => repo.fetchTracking(params ?? ''),
+  );
+  AttachementCubit getAttachments() => AttachementCubit(
+    onRequest: (params, state) => repo.fetchAttachments(params ?? ''),
   );
 }

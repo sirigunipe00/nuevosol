@@ -10,6 +10,7 @@ import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provid
 import 'package:nuevosol/features/employee_tracker/presentation/bloc/create_employee_cubit/create_employee_cubit.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/ui/approve_reject_btn.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/widget/employee_qr_pass_widget.dart';
+import 'package:nuevosol/features/employee_tracker/presentation/widget/image_preview.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
@@ -54,6 +55,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
 
     final isReadOnly = isCompleted || isRejected;
     final userRoles = context.user.role ?? [];
+    final String base = Urls.baseUrl.replaceAll('/api', '');
 
     final isHod = userRoles.any(
       (r) => r.toString().toLowerCase().contains('hod (hr)'),
@@ -69,11 +71,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     final isPendingApproval =
         form.workflowState?.toLowerCase().trim() == 'pending for approval';
     final canApprove = isHod && isPendingApproval;
-final isApproved =
-    form.workflowState?.toLowerCase().trim() == 'approved';
+    final isApproved = form.workflowState?.toLowerCase().trim() == 'approved';
 
-final showSafetyInstruction =
-    isApproved && !isHod && !issecurity;
+    final showSafetyInstruction = isApproved && !isHod && !issecurity;
     //     final isSecurity = (context.user.role ?? []).any(
     //   (r) => r.toString().toLowerCase().contains('security'),
     // );
@@ -86,38 +86,87 @@ final showSafetyInstruction =
       defaultHeight: 8,
       children: [
         if (showSafetyInstruction) ...[
-  Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.orange.shade50,
-      borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: Colors.orange.shade200),
-    ),
-    child: const Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          Icons.warning_amber_rounded,
-          color: Colors.orange,
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            'Please follow Safety rules & regulations.',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.orange.shade50,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.orange.shade200),
+            ),
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.warning_amber_rounded, color: Colors.orange),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Please follow Safety rules & regulations.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
-    ),
-  ),
 
-  const SizedBox(height: 12),
-],
+          const SizedBox(height: 5),
+        ],
+        // if (isApproved || isRejected) ...[
+          BlocBuilder<AttachementCubit, AttachementState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                success: (files) {
+                  if (files.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final imageUrl = '$base${files.first.fileUrl}';
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                      const SizedBox(width: 12),
+
+                        const Expanded(
+                          child: Text(
+                            'Employee Photo',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) => EmployeeImagePreviewScreen(
+                                      imageUrl: imageUrl,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: const Text('View'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                orElse: () => const SizedBox.shrink(),
+              );
+            },
+          ),
+        // ],
+
         if (isRejected &&
             form.rejectReason != null &&
             form.rejectReason!.trim().isNotEmpty) ...[
@@ -164,7 +213,7 @@ final showSafetyInstruction =
           const SizedBox(height: 12),
         ],
         Container(
-          padding: const EdgeInsets.only(top:16,left: 16, right: 16,),
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
           decoration: BoxDecoration(
             color: Colors.grey.shade300,
             borderRadius: BorderRadius.circular(20),
@@ -426,15 +475,9 @@ final showSafetyInstruction =
 
                   List<String> movementTypes;
                   if (selectedReason.toLowerCase() == 'inter plant movement') {
-                    movementTypes = [
-                      'Exit - In',
-                      'Exit - In & Exit - In',
-                    ];
+                    movementTypes = ['Exit - In', 'Exit - In & Exit - In'];
                   } else if (selectedReason.toLowerCase() == 'personal work') {
-                    movementTypes = [
-                      'Exit',
-                      'Exit - In',
-                    ];
+                    movementTypes = ['Exit', 'Exit - In'];
                   } else {
                     movementTypes = [
                       'Exit - In',
@@ -487,9 +530,9 @@ final showSafetyInstruction =
                     orElse: () => <LocationList>[],
                     success: (data) => data,
                   );
-              
+
                   final names = allData.toList();
-              
+
                   return AppDropDownWidget<LocationList>(
                     title: 'From Location',
                     hint: 'Select Location',
@@ -505,9 +548,9 @@ final showSafetyInstruction =
                                 .state
                                 .form
                                 .fromLocation;
-              
+
                         if (selectedReason == null) return null;
-              
+
                         return data.firstWhere(
                           (e) => e.name == selectedReason,
                           orElse: () => const LocationList(),
@@ -517,12 +560,12 @@ final showSafetyInstruction =
                     ),
                     futureRequest: (query) async {
                       if (query.isEmpty) return names;
-              
+
                       return names.where((item) {
                         final orderNo = item.name?.toLowerCase() ?? '';
                         final reason = item.location?.toLowerCase() ?? '';
                         final search = query.toLowerCase();
-              
+
                         return orderNo.contains(search) ||
                             reason.contains(search);
                       }).toList();
@@ -539,9 +582,9 @@ final showSafetyInstruction =
                   );
                 },
               ),
-              
+
               const SizedBox(width: 14),
-              
+
               BlocBuilder<LocationCubit, LocationState>(
                 buildWhen: (previous, current) => previous != current,
                 builder: (_, state) {
@@ -549,9 +592,9 @@ final showSafetyInstruction =
                     orElse: () => <LocationList>[],
                     success: (data) => data,
                   );
-              
+
                   final names = allData.toList();
-              
+
                   return AppDropDownWidget<LocationList>(
                     title: 'To Location',
                     hint: 'Select Location',
@@ -567,9 +610,9 @@ final showSafetyInstruction =
                                 .state
                                 .form
                                 .toLocation;
-              
+
                         if (selectedReason == null) return null;
-              
+
                         return data.firstWhere(
                           (e) => e.name == selectedReason,
                           orElse: () => const LocationList(),
@@ -579,12 +622,12 @@ final showSafetyInstruction =
                     ),
                     futureRequest: (query) async {
                       if (query.isEmpty) return names;
-              
+
                       return names.where((item) {
                         final orderNo = item.name?.toLowerCase() ?? '';
                         final reason = item.location?.toLowerCase() ?? '';
                         final search = query.toLowerCase();
-              
+
                         return orderNo.contains(search) ||
                             reason.contains(search);
                       }).toList();
@@ -622,9 +665,7 @@ final showSafetyInstruction =
             final exitDateTime = form.expectedExitDateTime ?? '';
             final returnDateTime = form.expectedReturnDateTime ?? '';
 
-            final showReturnField =
-                movementType == 'Exit - In & Exit - In' ;
-               
+            final showReturnField = movementType == 'Exit - In & Exit - In';
 
             // final showSummary = fromLocation.isNotEmpty || toLocation.isNotEmpty;
             // final showSummary = movementType.isNotEmpty;
@@ -712,7 +753,12 @@ final showSafetyInstruction =
                   const Divider(height: 1),
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 16, left: 16, right: 16,bottom: 5),
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                      bottom: 5,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -850,7 +896,12 @@ final showSafetyInstruction =
                   if (showReturnField) ...[
                     const Divider(height: 1),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 5),
+                      padding: const EdgeInsets.only(
+                        top: 16,
+                        left: 16,
+                        right: 16,
+                        bottom: 5,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -980,7 +1031,6 @@ final showSafetyInstruction =
           },
         ),
 
-
         BlocProvider(
           create: (_) => context.read<EventTrackingCubit>(),
           child: const EmployeeGatePassQRSection(),
@@ -998,7 +1048,12 @@ final showSafetyInstruction =
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 5),
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  bottom: 5,
+                ),
                 child: Column(
                   children: [
                     const Row(
@@ -1082,20 +1137,23 @@ final showSafetyInstruction =
               ),
             ),
 
-
-
           /// RETURN TRIP
           if ((form.gateExitDateAndTimeReturn ?? '').isNotEmpty ||
               (form.gateEntryDateAndTimeReturn ?? '').isNotEmpty ||
               (form.status2 ?? '').isNotEmpty)
             Card(
               elevation: 0,
-              color:  Colors.green.withOpacity(0.4),
+              color: Colors.green.withOpacity(0.4),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 5),
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  bottom: 5,
+                ),
                 child: Column(
                   children: [
                     const Row(
