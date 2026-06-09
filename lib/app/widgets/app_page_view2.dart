@@ -21,7 +21,7 @@ enum PageMode2 {
   final String name;
 }
 
-class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
+class AppPageView2<T extends FiltersCubit> extends StatefulWidget {
   const AppPageView2({
     super.key,
     required this.mode,
@@ -34,6 +34,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
     this.onUpdateStatus,
     this.hideFAB = false,
     this.onNew,
+    this.trailingAction
   });
 
   final String? title;
@@ -45,12 +46,22 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
   final List<String> status;
   final ValueChanged<String>? onUpdateStatus;
   final ValueChanged<String?>? onUpdateQuery;
+  final Widget? trailingAction;
 
   final bool hideFAB;
 
+   @override
+  State<AppPageView2<T>> createState() => _AppPageView2State<T>();
+}
+
+class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> {
   @override
   Widget build(BuildContext context) {
+    
     final userRoles = context.user.role ?? [];
+    final isHod = userRoles.any(
+  (r) => r.toString().toLowerCase().contains('hod (hr)'),
+);
     final isSecurity = userRoles.any((r) {
       final role = r.toString().toLowerCase();
       return role.contains('nepl-unit-1-gate') ||
@@ -64,7 +75,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
       cubit = context.read<T>();
     } catch (_) {}
 
-    final hintText = switch (mode) {
+    final hintText = switch (widget.mode) {
       PageMode2.gateentry => 'Search Gate Entry - ID',
       PageMode2.gateexit => 'Search Gate Exit - ID',
       PageMode2.employeeTracker => 'Search Gate Pass - ID',
@@ -74,11 +85,11 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
     };
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
+      backgroundColor: widget.backgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned(left: 52, top: -24, child: Image.asset(scaffoldBg)),
+          Positioned(left: 52, top: -24, child: Image.asset(widget.scaffoldBg)),
           Positioned(
             left: 18,
             right: 18,
@@ -93,7 +104,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                       const GoBackWidget(),
                       AppSpacer.p8(),
                       Text(
-                        title ?? mode.name,
+                        widget.title ?? widget.mode.name,
                         style: AppTextStyles.titleLarge(
                           context,
                         ).copyWith(color: AppColors.black, fontSize: 18),
@@ -108,7 +119,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -133,7 +144,7 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
             ),
           ),
 
-          if (mode != PageMode2.dashbaords) ...[
+          if (widget.mode != PageMode2.dashbaords) ...[
             Positioned(
               top: kToolbarHeight + 32,
               left: 0,
@@ -142,28 +153,36 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    if (onUpdateQuery != null) ...[
+                    if (widget.onUpdateQuery != null) ...[
                       Expanded(
                         child: SimpleSearchBar(
                           inputType: TextInputType.number,
                           initial: cubit?.state.query,
                           hintText: hintText,
-                          onCancel: () => onUpdateQuery!(null),
-                          onSearch: onUpdateQuery!,
+                          onCancel: () => widget.onUpdateQuery!(null),
+                          onSearch: widget.onUpdateQuery!,
                         ),
                       ),
                     ],
                     AppSpacer.p8(),
-                    if (status.isNotEmpty && onUpdateStatus != null) ...[
+                    if (widget.status.isNotEmpty && widget.onUpdateStatus != null) ...[
                       Expanded(
                         flex: 1,
                         child: StatusMenuWidget(
                           defaultStatus: cubit?.state.status,
-                          items: status,
-                          onChange: onUpdateStatus!,
+                          items: widget.status,
+                          onChange: widget.onUpdateStatus!,
                         ),
                       ),
                     ],
+                    if (widget.mode == PageMode2.employeeTracker && isHod
+             ) ...[
+            const SizedBox(width: 8),
+            Expanded(
+          flex: 1, // other 50%
+          child: widget.trailingAction ?? const SizedBox.shrink(),
+        ),
+          ],
                   ],
                 ),
               ),
@@ -190,21 +209,21 @@ class AppPageView2<T extends FiltersCubit> extends StatelessWidget {
                   ),
                 ],
               ),
-              child: child,
+              child: widget.child,
             ),
           ),
         ],
       ),
 
       floatingActionButton:
-          (hideFAB.isTrue || isSecurity)
+          (widget.hideFAB.isTrue || isSecurity)
               ? null
               : FloatingActionButton.extended(
-                onPressed: onNew,
+                onPressed: widget.onNew,
                 backgroundColor:
-                    mode == PageMode2.employeeTracker
+                    widget.mode == PageMode2.employeeTracker
                         ? AppColors.registration
-                        : backgroundColor,
+                        : widget.backgroundColor,
                 extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),

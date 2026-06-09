@@ -8,6 +8,7 @@ class EmployeeFilters extends FiltersCubit {
       : super(
           PageViewFilters(
             status: _defaultStatus(),
+            //  department: _defaultDepartment(),
           ),
         );
 
@@ -44,16 +45,40 @@ class EmployeeFilters extends FiltersCubit {
     final newState = state.copyWith(status: status);
     emitSafeState(newState);
   }
+//   static String? _defaultDepartment() {
+//   final user = $sl.get<LoggedInUser>();
+
+//   final isHod = user.role!.any(
+//     (e) => e.toString().toLowerCase().contains('hod (hr)'),
+//   );
+
+//   if (isHod) {
+//     return user.department; 
+//   }
+
+//   return null;
+// }
+  void onChangeDepartment(String? department) {
+  emitSafeState(
+    state.copyWith(
+      department: department,
+    ),
+  );
+}
 
   @override
-  void onSearch([String? query]) {
-    if (query.doesNotHaveValue) {
-      emitSafeState(
-        PageViewFilters(status: state.status),
-      );
-    } else {
-      final newState = state.copyWith(query: query);
-      emitSafeState(newState);
-    }
+void onSearch([String? query]) {
+  if (query.doesNotHaveValue) {
+    emitSafeState(
+      PageViewFilters(
+        status: state.status,
+        department: state.department,
+      ),
+    );
+  } else {
+    emitSafeState(
+      state.copyWith(query: query),
+    );
   }
+}
 }

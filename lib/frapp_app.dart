@@ -68,9 +68,9 @@ class FrappeApp extends StatelessWidget {
   final employeeStatus =
       issecurity ? 'Approved' : 'Draft';
 
-  final filterEmployee = Pair(
+  final filterEmployee = Triple(
     StringUtils.docStatusEmployee(employeeStatus),
-    null,
+    null,null
   );
 
   routerCtxt

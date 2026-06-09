@@ -85,7 +85,7 @@ class PoApprovalRepoImpl extends BaseApiRepository implements PoApprovalRepo {
 
   @override
   AsyncValueOf<None> approvePOButton(String orderiD, String action) async {
-    print('action====:$action');
+
     final config = RequestConfig(
         url: Urls.approvePO,
         parser: (json) => json,
@@ -123,9 +123,9 @@ class PoApprovalRepoImpl extends BaseApiRepository implements PoApprovalRepo {
           return data.map((e) => PoApprovalAttachments.fromJson(e)).toList();
         },
         reqParams: {'po_name': poApprovalAttachment});
-    print('config---------- $config');
+
     final response = await get(config);
-    print('response---------- $response');
+
     return response.process((r) {
       return right(r.data ?? []);
     });

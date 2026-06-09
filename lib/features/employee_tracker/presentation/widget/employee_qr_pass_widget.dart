@@ -89,7 +89,7 @@ class _EmployeeGatePassQRSectionState extends State<EmployeeGatePassQRSection> {
           decoration: BoxDecoration(
             color: const Color(0xFFFFF3E0),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.registration.withOpacity(0.2)),
+            border: Border.all(color: AppColors.registration.withValues(alpha: 0.2)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,8 +214,8 @@ class _WorkflowBadge extends StatelessWidget {
 }
 
 class _EventTrackingSection extends StatelessWidget {
-  final EmployeeTracker form;
   const _EventTrackingSection({required this.form});
+  final EmployeeTracker form;
 
   @override
   Widget build(BuildContext context) {
@@ -1624,7 +1624,7 @@ class _CameraPreviewBody extends StatelessWidget {
                               height: 220,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: AppColors.registration.withOpacity(
+                                  color: AppColors.registration.withValues(alpha:
                                     0.8,
                                   ),
                                   width: 2.5,
@@ -1686,7 +1686,7 @@ class _CameraPreviewBody extends StatelessWidget {
                     border: Border.all(color: AppColors.registration, width: 3),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.registration.withOpacity(0.25),
+                        color: AppColors.registration.withValues(alpha:0.25),
                         blurRadius: 12,
                       ),
                     ],

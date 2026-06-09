@@ -54,9 +54,9 @@ class _NewEmployeeState extends State<NewEmployee> {
                 final filter = context.read<EmployeeFilters>().state;
 
                 context.cubit<EmployeeEntriesCubit>().fetchInitial(
-                  Pair(
+                  Triple(
                     StringUtils.docStatusEmployee(filter.status),
-                    filter.query,
+                    filter.query,filter.department
                   ),
                 );
 
@@ -76,9 +76,9 @@ class _NewEmployeeState extends State<NewEmployee> {
                 final filter = context.read<EmployeeFilters>().state;
 
                 context.cubit<EmployeeEntriesCubit>().fetchInitial(
-                  Pair(
+                  Triple(
                     StringUtils.docStatusEmployee(filter.status),
-                    filter.query,
+                    filter.query,filter.department
                   ),
                 );
 

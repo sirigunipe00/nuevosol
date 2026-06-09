@@ -1,0 +1,2 @@
+/Users/sayyad/Desktop/Easycloud/nuevosol/android/app/.cxx/RelWithDebInfo/2e715533/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/sayyad/Desktop/Easycloud/nuevosol/android/app/.cxx/RelWithDebInfo/2e715533/arm64-v8a/CMakeFiles/rebuild_cache.dir

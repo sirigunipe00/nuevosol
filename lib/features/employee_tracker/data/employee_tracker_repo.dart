@@ -1,6 +1,7 @@
 import 'package:nuevosol/core/model/pair.dart';
 import 'package:nuevosol/core/utils/typedefs.dart';
 import 'package:nuevosol/features/employee_tracker/model/attachement.dart';
+import 'package:nuevosol/features/employee_tracker/model/department.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
@@ -14,16 +15,17 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     int start,
     String? docStatus,
     String? search,
+    String? department,
   );  
-    AsyncValueOf<List<EmployeeList>> fetchEmployeeList(String name);
-    AsyncValueOf<List<ReasonExitType>> reasonExit(String name);
-    AsyncValueOf<List<LocationList>> locationList(String name);
-
-  AsyncValueOf<Pair<String, String>> createEmployee(EmployeeTracker form);
+   AsyncValueOf<List<EmployeeList>> fetchEmployeeList(String name);
+   AsyncValueOf<List<ReasonExitType>> reasonExit(String name);
+   AsyncValueOf<List<LocationList>> locationList(String name);
+   AsyncValueOf<Pair<String, String>> createEmployee(EmployeeTracker form);
    AsyncValueOf<Pair<String, String>> updateEmployee(EmployeeTracker form);
    AsyncValueOf<Pair<String,String>> approveEmployee(EmployeeTracker form);
    AsyncValueOf<Pair<String,String>> rejectEmployee(EmployeeTracker form);
    AsyncValueOf<List<EventTracking>> fetchTracking(String name);
    AsyncValueOf<QrCodeModel>   qrData(String qrCode,String actualDateTime,String employeePhoto);
    AsyncValueOf<List<AttachementInvoices>> fetchAttachments(String name);
+   AsyncValueOf<List<Department>> fetchDepartment(String name);
 }

@@ -3,7 +3,7 @@ import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_text_styles.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
-import 'package:nuevosol/doc_status_widget.dart';
+
 
 
 enum DocNoAlignment { vertical, horizontal }

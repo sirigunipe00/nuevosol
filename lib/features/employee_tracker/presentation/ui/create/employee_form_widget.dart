@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
@@ -70,17 +70,14 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     });
     final isPendingApproval =
         form.workflowState?.toLowerCase().trim() == 'pending for approval';
-    final canApprove = isHod && isPendingApproval;
+    final isOwner =
+        form.owner?.toLowerCase() == context.user.email?.toLowerCase();
+
+    final canApprove = isHod && isPendingApproval && !isOwner;
+    // final canApprove = isHod && isPendingApproval;
     final isApproved = form.workflowState?.toLowerCase().trim() == 'approved';
 
     final showSafetyInstruction = isApproved && !isHod && !issecurity;
-    //     final isSecurity = (context.user.role ?? []).any(
-    //   (r) => r.toString().toLowerCase().contains('security'),
-    // );
-    // final actualExitDateTime = form.expectedReturnDateTime ?? '';
-
-    log('Form State: ${form}');
-
     return SpacedColumn(
       margin: const EdgeInsets.all(12.0),
       defaultHeight: 8,
@@ -116,57 +113,97 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
           const SizedBox(height: 5),
         ],
         // if (isApproved || isRejected) ...[
-          BlocBuilder<AttachementCubit, AttachementState>(
-            builder: (context, state) {
-              return state.maybeWhen(
-                success: (files) {
-                  if (files.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
+        BlocBuilder<AttachementCubit, AttachementState>(
+          builder: (context, state) {
+            return state.maybeWhen(
+              success: (files) {
+                if (files.isEmpty) {
+                  return const SizedBox.shrink();
+                }
 
-                  final imageUrl = '$base${files.first.fileUrl}';
-                  return Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                      const SizedBox(width: 12),
+                final imageUrl = '$base${files.first.fileUrl}';
 
-                        const Expanded(
-                          child: Text(
-                            'Employee Photo',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
+                Widget imageWidget;
 
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (_) => EmployeeImagePreviewScreen(
-                                      imageUrl: imageUrl,
-                                    ),
-                              ),
-                            );
-                          },
-                          child: const Text('View'),
-                        ),
-                      ],
-                    ),
+                if (imageUrl.toLowerCase().endsWith('.svg')) {
+                  imageWidget = SvgPicture.network(
+                    imageUrl,
+                    width: 70,
+                    height: 70,
+                    placeholderBuilder:
+                        (_) => const CircularProgressIndicator(),
                   );
-                },
-                orElse: () => const SizedBox.shrink(),
-              );
-            },
-          ),
-        // ],
+                } else {
+                  imageWidget = Image.network(
+                    imageUrl,
+                    width: 70,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const Icon(Icons.person),
+                  );
+                }
 
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Employee Photo',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => EmployeeImagePreviewScreen(
+                                    imageUrl: imageUrl,
+                                  ),
+                            ),
+                          );
+                        },
+
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: imageWidget,
+                        ),
+                      ),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => EmployeeImagePreviewScreen(
+                                    imageUrl: imageUrl,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: const Text('View'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              orElse: () => const SizedBox.shrink(),
+            );
+          },
+        ),
+
+        // ],
         if (isRejected &&
             form.rejectReason != null &&
             form.rejectReason!.trim().isNotEmpty) ...[
@@ -217,7 +254,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
           decoration: BoxDecoration(
             color: Colors.grey.shade300,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.registration.withOpacity(0.2)),
+            border: Border.all(
+              color: AppColors.registration.withValues(alpha: 0.2),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +412,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
           decoration: BoxDecoration(
             color: Colors.cyan.shade50,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.registration.withOpacity(0.2)),
+            border: Border.all(
+              color: AppColors.registration.withValues(alpha: 0.2),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -817,8 +858,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                       firstDate: DateTime(2000),
                                       lastDate: DateTime(2100),
                                     );
-                                    if (date == null || !context.mounted)
+                                    if (date == null || !context.mounted) {
                                       return;
+                                    }
 
                                     final time = await showTimePicker(
                                       context: context,
@@ -949,8 +991,9 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                         firstDate: DateTime(2000),
                                         lastDate: DateTime(2100),
                                       );
-                                      if (date == null || !context.mounted)
+                                      if (date == null || !context.mounted) {
                                         return;
+                                      }
 
                                       final time = await showTimePicker(
                                         context: context,
@@ -1043,7 +1086,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
               (form.status1 ?? '').isNotEmpty)
             Card(
               elevation: 0,
-              color: Colors.grey.shade300.withOpacity(0.4),
+              color: Colors.grey.shade300.withValues(alpha: 0.4),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -1143,7 +1186,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
               (form.status2 ?? '').isNotEmpty)
             Card(
               elevation: 0,
-              color: Colors.green.withOpacity(0.4),
+              color: Colors.green.withValues(alpha: 0.4),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -1234,6 +1277,18 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
               ),
             ),
         ],
+        if (isHod && isPendingApproval && isOwner)
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.orange.shade50,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'You cannot approve your own Gate Pass.',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
         if (canApprove) ...[
           const ApproveRejectButtons(),
         ] else if (!isReadOnly) ...[

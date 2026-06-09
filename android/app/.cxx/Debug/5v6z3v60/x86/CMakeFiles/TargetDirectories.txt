@@ -1,0 +1,2 @@
+/Users/sayyad/Desktop/Easycloud/nuevosol/android/app/.cxx/Debug/5v6z3v60/x86/CMakeFiles/edit_cache.dir
+/Users/sayyad/Desktop/Easycloud/nuevosol/android/app/.cxx/Debug/5v6z3v60/x86/CMakeFiles/rebuild_cache.dir

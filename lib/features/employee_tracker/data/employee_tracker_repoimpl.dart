@@ -6,6 +6,7 @@ import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/auth/model/logged_in_user.dart';
 import 'package:nuevosol/features/employee_tracker/data/employee_tracker_repo.dart';
 import 'package:nuevosol/features/employee_tracker/model/attachement.dart';
+import 'package:nuevosol/features/employee_tracker/model/department.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_model.dart';
 import 'package:nuevosol/features/employee_tracker/model/event_tracking.dart';
@@ -22,6 +23,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
   int start,
   String? docStatus,
   String? search,
+  String? deparment
 ) async {
   final filters = <List<dynamic>>[];
   final orFilters = <List<dynamic>>[];
@@ -35,6 +37,13 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
   if (search != null && search.isNotEmpty) {
     filters.add(['name', 'like', '%$search%']);
   }
+  if (deparment != null && deparment.isNotEmpty) {
+  filters.add([
+    'department',
+    '=',
+    deparment,
+  ]);
+}
 
   final userRole = $sl.get<LoggedInUser>();
 
@@ -235,6 +244,8 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
       );
 
       final response = await post(config);
+      $logger.devLog('qrData response.....$config');
+
       return response.process((r) => right(r.data!));
     });
   }
@@ -244,15 +255,11 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     return await executeSafely(() async {
       final config = RequestConfig(
         url: Urls.getList,
-
         parser: (json) {
           final data = json['message'];
           final listdata = data as List<dynamic>;
-
-          final items = listdata.map((e) => EventTracking.fromJson(e)).toList();
-
-          items.sort((a, b) => (a.idx ?? 0).compareTo(b.idx ?? 0));
-
+          final items = listdata.map((e) => EventTracking.fromJson(e)).toList()
+          ..sort((a, b) => (a.idx ?? 0).compareTo(b.idx ?? 0));
           return items;
         },
         reqParams: {
@@ -266,10 +273,8 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
           'parent': 'Employee Gate Pass',
           'fields': ['*'],
         },
-
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
-
       final response = await get(config);
       $logger.devLog('response.....$response');
       return response.processAsync((r) async {
@@ -479,6 +484,45 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
           'doctype': 'Employee',
           'fields': ['*'],
         },
+        headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      );
+
+      final response = await get(config);
+      $logger.devLog('response.....$response');
+      return response.processAsync((r) async {
+        return right((r.data!));
+      });
+    });
+  }
+  @override
+  AsyncValueOf<List<Department>> fetchDepartment(String name) async {
+    return await executeSafely(() async {
+      final filters = <List<dynamic>>[];
+
+    if (name.isNotEmpty) {
+      filters.add([
+        'name',
+        'like',
+        '%$name%',
+      ]);
+    }
+    
+      final config = RequestConfig(
+        url: Urls.getList,
+
+        parser: (json) {
+          final data = json['message'];
+          final listdata = data as List<dynamic>;
+          return listdata.map((e) => Department.fromJson(e)).toList();
+        },
+        reqParams: {
+        'limit_page_length': 'None',
+        'order_by': 'creation desc',
+        'doctype': 'Department',
+        'fields': ['*'],
+        if (filters.isNotEmpty)
+          'filters': jsonEncode(filters),
+      },
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
 

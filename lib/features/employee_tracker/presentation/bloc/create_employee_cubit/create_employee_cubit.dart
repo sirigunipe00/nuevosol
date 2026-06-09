@@ -312,6 +312,9 @@ void reject(String reason) async {
     if (form.reasonOfGateExit == null && form.reasonOfGateExit?.trim().isEmpty == true) {
       return optionOf(const Pair('Missing Reason for Gate Exit', 0));
     } 
+    else if (form.hod == null && form.hod?.trim().isEmpty == true) {
+      return optionOf(const Pair('HOD Name is required', 0));
+    }
     else if (form.movementType == null && form.movementType?.trim().isEmpty == true) {
       return optionOf(const Pair('Missing Movement Type', 0));
     } 

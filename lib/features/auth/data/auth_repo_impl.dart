@@ -88,10 +88,6 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
         return left(const Failure(error: 'No user details found'));
       }
       final userData = jsonDecode(userSource!) as Map<String, dynamic>;
-
-    
-
-    print('Stored user roles: ${userData['roles']}');
       final user = LoggedInUser.fromJson(userData);
       return right(user);
     } on Exception catch (e, st) {

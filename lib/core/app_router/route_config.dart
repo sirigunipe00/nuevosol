@@ -213,9 +213,9 @@ class AppRouterConfig {
                               ? 'Approved'
                               : 'Draft';
 
-                      final filters = Pair(
+                      final filters = Triple(
                         StringUtils.docStatusEmployee(defaultStatus),
-                        null,
+                        null,null
                       );
 
                       return BlocProvider(
@@ -233,6 +233,7 @@ class AppRouterConfig {
                         builder: (_, state) {
                           final form = state.extra as EmployeeTracker?;
                           final blocprovider = EmployeeBlocProvider.get();
+                          print('form?.employeeNo: ${form?.employeeNo}');
                           return MultiBlocProvider(
                             providers: [
                               BlocProvider(
@@ -257,6 +258,11 @@ class AppRouterConfig {
                                 create:
                                     (_) =>
                                         blocprovider.getLocation()..request(),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        blocprovider.getDepartments()..request(),
                               ),
                               BlocProvider(
                                 create:

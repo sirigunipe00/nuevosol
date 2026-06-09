@@ -209,7 +209,7 @@ String? getFullUrl(String? path) {
           ),
           (r) {
             if (r.first.isEmpty) {
-              print('Error: ${r.first}');
+
         emitSafeState(
           state.copyWith(
             isLoading: false,
