@@ -95,8 +95,10 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
     final config = RequestConfig(
       url: Urls.createGateExit,
       parser: (json) {
-        final data = json['message']['data']['name'] as String;
-        return Pair(data, '');
+        // final data = json['message']['data']['name'] as String;
+        final data = json['message']['message'] as String;
+        final name = json['message']['data']['name'] as String;
+        return Pair(data, name);
       },
 
       body: jsonEncode({
@@ -123,7 +125,9 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
     );
 
     final response = await post(config);
+    $logger.devLog('reponse-......$response');
     $logger.devLog('response.....$config');
+
     return response.processAsync((r) async {
       return right(Pair(r.data!.first, r.data!.second));
     });

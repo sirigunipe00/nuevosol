@@ -30,7 +30,7 @@ mixin _$EmployeeList {
   String? get company => throw _privateConstructorUsedError;
   @JsonKey(name: 'reports_to')
   String? get reportsTo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'reports_to_name')
+  @JsonKey(name: 'custom_reports_to_name')
   String? get reportsToName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,7 +51,7 @@ abstract class $EmployeeListCopyWith<$Res> {
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'reports_to') String? reportsTo,
-      @JsonKey(name: 'reports_to_name') String? reportsToName});
+      @JsonKey(name: 'custom_reports_to_name') String? reportsToName});
 }
 
 /// @nodoc
@@ -117,7 +117,7 @@ abstract class _$$EmployeeListImplCopyWith<$Res>
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'reports_to') String? reportsTo,
-      @JsonKey(name: 'reports_to_name') String? reportsToName});
+      @JsonKey(name: 'custom_reports_to_name') String? reportsToName});
 }
 
 /// @nodoc
@@ -176,7 +176,7 @@ class _$EmployeeListImpl implements _EmployeeList {
       @JsonKey(name: 'department') this.department,
       @JsonKey(name: 'company') this.company,
       @JsonKey(name: 'reports_to') this.reportsTo,
-      @JsonKey(name: 'reports_to_name') this.reportsToName});
+      @JsonKey(name: 'custom_reports_to_name') this.reportsToName});
 
   factory _$EmployeeListImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmployeeListImplFromJson(json);
@@ -197,7 +197,7 @@ class _$EmployeeListImpl implements _EmployeeList {
   @JsonKey(name: 'reports_to')
   final String? reportsTo;
   @override
-  @JsonKey(name: 'reports_to_name')
+  @JsonKey(name: 'custom_reports_to_name')
   final String? reportsToName;
 
   @override
@@ -243,13 +243,13 @@ class _$EmployeeListImpl implements _EmployeeList {
 
 abstract class _EmployeeList implements EmployeeList {
   const factory _EmployeeList(
-          {@JsonKey(name: 'name') final String? name,
-          @JsonKey(name: 'employee_name') final String? employeeName,
-          @JsonKey(name: 'department') final String? department,
-          @JsonKey(name: 'company') final String? company,
-          @JsonKey(name: 'reports_to') final String? reportsTo,
-          @JsonKey(name: 'reports_to_name') final String? reportsToName}) =
-      _$EmployeeListImpl;
+      {@JsonKey(name: 'name') final String? name,
+      @JsonKey(name: 'employee_name') final String? employeeName,
+      @JsonKey(name: 'department') final String? department,
+      @JsonKey(name: 'company') final String? company,
+      @JsonKey(name: 'reports_to') final String? reportsTo,
+      @JsonKey(name: 'custom_reports_to_name')
+      final String? reportsToName}) = _$EmployeeListImpl;
 
   factory _EmployeeList.fromJson(Map<String, dynamic> json) =
       _$EmployeeListImpl.fromJson;
@@ -270,7 +270,7 @@ abstract class _EmployeeList implements EmployeeList {
   @JsonKey(name: 'reports_to')
   String? get reportsTo;
   @override
-  @JsonKey(name: 'reports_to_name')
+  @JsonKey(name: 'custom_reports_to_name')
   String? get reportsToName;
   @override
   @JsonKey(ignore: true)

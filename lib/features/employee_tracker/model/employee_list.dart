@@ -11,7 +11,7 @@ class EmployeeList with _$EmployeeList {
     @JsonKey(name: 'department') String? department,
     @JsonKey(name: 'company') String? company,
     @JsonKey(name: 'reports_to') String? reportsTo,
-    @JsonKey(name: 'reports_to_name') String? reportsToName
+    @JsonKey(name: 'custom_reports_to_name') String? reportsToName
   }) = _EmployeeList;
 factory EmployeeList.fromJson(Map<String, dynamic> json) => _$EmployeeListFromJson(json);
 }

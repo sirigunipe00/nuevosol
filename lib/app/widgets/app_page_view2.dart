@@ -62,6 +62,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
     final isHod = userRoles.any(
   (r) => r.toString().toLowerCase().contains('hod (hr)'),
 );
+
     final isSecurity = userRoles.any((r) {
       final role = r.toString().toLowerCase();
       return role.contains('nepl-unit-1-gate') ||
@@ -70,6 +71,8 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
           role.contains('nmpl-unit-2-gate') ||
           role.contains('head office gate');
     });
+    final hideFabForSecurity =
+    widget.mode == PageMode2.employeeTracker && isSecurity;
     T? cubit;
     try {
       cubit = context.read<T>();
@@ -216,7 +219,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
       ),
 
       floatingActionButton:
-          (widget.hideFAB.isTrue || isSecurity)
+          (widget.hideFAB.isTrue || hideFabForSecurity)
               ? null
               : FloatingActionButton.extended(
                 onPressed: widget.onNew,

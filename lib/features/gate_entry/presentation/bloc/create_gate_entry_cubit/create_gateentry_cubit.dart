@@ -230,7 +230,7 @@ String? getFullUrl(String? path) {
                 isLoading: false,
                 isSuccess: true,
                 form: state.form.copyWith(status: status, name: docstatus),
-                successMsg: r.first,
+                successMsg: '${r.first}\n${r.second}',
                 view: nextMode,
               ),
             );

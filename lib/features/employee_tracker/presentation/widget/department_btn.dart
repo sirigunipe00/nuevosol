@@ -30,15 +30,15 @@ class DepartmentFilterButton extends StatelessWidget {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
-        height: 44,
+        height: 38,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: isActive ? AppColors.registration : Colors.white,
-          border: Border.all(
-            color: isActive ? AppColors.registration : Colors.grey.shade300,
-            width: 1.4,
-          ),
-          borderRadius: BorderRadius.circular(12),
+          // border: Border.all(
+          //   color: isActive ? AppColors.registration : Colors.grey.shade300,
+          //   width: 1.4,
+          // ),
+          borderRadius: BorderRadius.circular(5),
           boxShadow: [
             if (isActive)
               BoxShadow(

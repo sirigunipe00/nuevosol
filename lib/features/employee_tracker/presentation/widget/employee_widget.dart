@@ -73,7 +73,15 @@ class EmployeeWidget extends StatelessWidget {
                       color: Colors.grey.shade900,
                     ),
                   ),
-                  Divider(color: Colors.grey.shade300,thickness: 0.1),
+                  Text(
+                    'Department : ${employee.department ?? ''}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade900,
+                    ),
+                  ),
+                  Divider(color: Colors.grey.shade300, thickness: 0.1),
                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -168,9 +176,7 @@ class EmployeeWidget extends StatelessWidget {
                     fontSize: 15,
                   ),
                 ),
-
-
-                      // DocStatusWidget(
+                // DocStatusWidget(
                       //   status: StringUtils.docStatus(
                       //       employee.docstatus ?? 0),
                       // ),
