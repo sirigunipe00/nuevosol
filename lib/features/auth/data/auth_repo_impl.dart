@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:nuevosol/core/core.dart';
 
@@ -107,5 +108,42 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
       return left(const Failure(error: 'Could not sign out'));
     }
   }
+ @override
+AsyncValueOf<Pair<String, String>> forgotPassword(String email) async {
+
+  final config = RequestConfig(
+    url: Urls.forgotPassword,
+    body: jsonEncode({
+      'user': email,
+    }),
+    
+  parser: (json) {
+  print('FORGOT PASSWORD JSON => $json');
+
+  final serverMessages = json['_server_messages'] as String;
+
+  final decodedMessages = jsonDecode(serverMessages) as List;
+
+  final messageData =
+      jsonDecode(decodedMessages.first as String)
+          as Map<String, dynamic>;
+
+  return Pair(
+    messageData['title'] as String,
+    messageData['message'] as String,
+  );
+},
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+  );
+  
+
+  final response = await post(config,includeAuthHeader: false,);
+
+  return response.process(
+    (r) => right(r.data!),
+  );
+}
 
 }

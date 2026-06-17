@@ -4,12 +4,14 @@ import 'package:nuevosol/core/logger/app_logger.dart';
 import 'package:nuevosol/core/network/api_response.dart';
 import 'package:nuevosol/core/network/exception.dart';
 
-
 typedef ApiObjectParser<T> = T Function(Map<String, dynamic>);
 
 abstract class ApiResponseParser<T> {
   ApiResponse<T> parse(
-      String response, ApiObjectParser<T> parser, String defErrorMessage);
+    String response,
+    ApiObjectParser<T> parser,
+    String defErrorMessage,
+  );
 }
 
 class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
@@ -22,8 +24,8 @@ class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
     try {
       final Map<String, dynamic> response =
           json.decode(apiResponse) as Map<String, dynamic>;
-      
-      if(response['status'] == 400) {
+
+      if (response['status'] == 400) {
         return ApiResponse.failure(response['message'].toString());
       }
       if (response.containsKey('message')) {
@@ -35,7 +37,7 @@ class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
           final result = parser(response);
           return ApiResponse.success(result);
         }
-        if(message is String) {
+        if (message is String) {
           final ress = parser(response);
           return ApiResponse.success(ress);
         }
@@ -52,10 +54,14 @@ class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
         final result = parser(response);
         return ApiResponse.success(result);
       }
+      if (response.containsKey('_server_messages')) {
+        final result = parser(response);
+        return ApiResponse.success(result);
+      }
 
       throw UnExpectedResponseException(Errors.unrecognizedResponse);
     } on Exception catch (e, st) {
-      $logger.error(e, st);
+      $logger.error(e.toString(),e, st);
       throw Exception(e);
     }
   }

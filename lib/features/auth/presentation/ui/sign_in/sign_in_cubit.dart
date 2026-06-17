@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:nuevosol/features/auth/data/auth_repo.dart';
 
 
+
 part 'sign_in_cubit.freezed.dart';
 
 @injectable
@@ -28,6 +29,38 @@ class SignInCubit extends AppBaseCubit<SignInState> {
       );
     }
   }
+  Future<void> forgotPassword(String email) async {
+  if (email.isEmpty) {
+    _emitFailureState('Email');
+    return;
+  }
+
+  if (!email.contains('@')) {
+    emitSafeState(
+      const _Failure(
+        Failure(
+          title: 'Validation Error',
+          error: 'Please enter a valid email address',
+        ),
+      ),
+    );
+    return;
+  }
+
+  emitSafeState(const _Loading());
+
+  final response = await repo.forgotPassword(email);
+
+  response.fold(
+    (l) => emitSafeState(_Failure(l)),
+    (r) => emitSafeState(
+      SignInState.forgotPasswordSuccess(
+        r.first,
+        r.second,
+      ),
+    ),
+  );
+}
 
   void _emitFailureState(String errmsg) {
     final failure = Failure(error: errmsg, title: 'Missing Fields');
@@ -35,12 +68,17 @@ class SignInCubit extends AppBaseCubit<SignInState> {
   }
 }
 
+
 @freezed
 class SignInState with _$SignInState {
   const factory SignInState.initial() = _Initial;
   const factory SignInState.loading() = _Loading;
   const factory SignInState.success() = _Success;
   const factory SignInState.failure(Failure failure) = _Failure;
+  const factory SignInState.forgotPasswordSuccess(
+    String title,
+    String message,
+  ) = _ForgotPasswordSuccess;
 }
 
 

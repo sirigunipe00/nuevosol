@@ -24,9 +24,9 @@ Future<void> bootstrap(void Function() runApp) async {
       await configureDependencies(env: Environment.prod);
 
       if (kDebugMode) {
-        await register<Urls>(Urls.nuevosolUat(), instanceName: 'baseUrl');
+        await register<Urls>(Urls.live(), instanceName: 'baseUrl');
       } else {
-        await register<Urls>(Urls.nuevosolUat(), instanceName: 'baseUrl');
+        await register<Urls>(Urls.live(), instanceName: 'baseUrl');
       }
       await Firebase.initializeApp(
         name: 'nuevosol',

@@ -52,7 +52,8 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
                     ),
                   ),
                 ),
-                Text('Login',
+                Text(
+                  'Login',
                   style: context.textTheme.labelLarge?.copyWith(
                     color: AppColors.black,
                     fontWeight: FontWeight.bold,
@@ -79,13 +80,19 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
                   suffixIcon: InkWell(
                     onTap: togglePswd,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 8,
+                      ),
                       child: Text(
                         showPswd ? ' show ' : ' hide ',
                         style: context.textTheme.titleMedium?.copyWith(
                           color: Colors.transparent,
                           shadows: [
-                            const Shadow(color: AppColors.haintBlue, offset: Offset(0, -5)),
+                            const Shadow(
+                              color: AppColors.haintBlue,
+                              offset: Offset(0, -5),
+                            ),
                           ],
                           decorationColor: AppColors.haintBlue,
                           decoration: TextDecoration.underline,
@@ -97,18 +104,46 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
                     ),
                   ),
                 ),
-                
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      context.read<SignInCubit>().forgotPassword(
+                        username.text.trim(),
+                      );
+                    },
+                    child: Text(
+                      'Forgot Password?',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.haintBlue,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.haintBlue,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
                 BlocConsumer<SignInCubit, SignInState>(
                   listener: (_, state) {
                     state.maybeWhen(
                       orElse: () {},
+                      forgotPasswordSuccess: (title, message) {
+                        AppDialog.showSuccessDialog(
+                          context,
+                          title: title,
+                          content: message,
+                          onTapDismiss: context.close,
+                        );
+                      },
                       success: context.cubit<AuthCubit>().authCheckRequested,
-                      failure: (failure) => AppDialog.showErrorDialog(
-                        context, 
-                        title: failure.title,
-                        content: failure.error,
-                        onTapDismiss: context.close,
-                      ),
+                      failure:
+                          (failure) => AppDialog.showErrorDialog(
+                            context,
+                            title: failure.title,
+                            content: failure.error,
+                            onTapDismiss: context.close,
+                          ),
                     );
                   },
                   builder: (_, state) {
@@ -116,9 +151,11 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
                       label: 'Sign In',
                       isLoading: state.isLoading,
                       margin: const EdgeInsets.all(12),
-                      onPressed: () => context
-                          .cubit<SignInCubit>()
-                          .login(username.text, pswd.text),
+                      onPressed:
+                          () => context.cubit<SignInCubit>().login(
+                            username.text,
+                            pswd.text,
+                          ),
                     );
                   },
                 ),
@@ -131,6 +168,6 @@ class _AuthenticationScrnState extends State<AuthenticationScrn> {
   }
 
   void togglePswd() => setState(() {
-        showPswd = !showPswd;
-      });
+    showPswd = !showPswd;
+  });
 }

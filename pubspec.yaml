@@ -2,7 +2,7 @@ name: nuevosol
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.0.5+8
+version: 1.0.6+9
 
 environment:
   sdk: ^3.7.2
@@ -75,6 +75,7 @@ flutter:
 
   assets:
     - assets/
+    - shorebird.yaml
 flutter_launcher_icons: 
   android: 'ic_launcher'
   image_path: 'assets/app_logo.png'

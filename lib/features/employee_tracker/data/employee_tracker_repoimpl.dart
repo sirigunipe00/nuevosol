@@ -101,8 +101,8 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
 
     if (headOffice) {
       orFilters
-        ..add(['from_location', '=', 'Head Office Gate'])
-        ..add(['to_location', '=', 'Head Office Gate']);
+        ..add(['from_location', '=', 'HEAD OFFICE'])
+        ..add(['to_location', '=', 'HEAD OFFICE']);
     }
     final isSecurity =
     isUnit1GateNEPL ||

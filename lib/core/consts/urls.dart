@@ -51,4 +51,6 @@ static String filepath(String path) {
   static final userPermission ='$cusWs/nuevosol.api.check_user_permission'; 
   static final poApprovalAttachments = '$cusWs/nuevosol.api.get_po_with_attachments';
 
+  static final forgotPassword = '$cusWs/frappe.core.doctype.user.user.reset_password';
+
 }
