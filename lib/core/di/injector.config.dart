@@ -48,6 +48,13 @@ import '../../features/po_approval_list/data/po_approval_repo_impl.dart'
     as _i299;
 import '../../features/po_approval_list/presentation/bloc/bloc_provider.dart'
     as _i313;
+import '../../features/trainingEvent/data/training_event_repo.dart' as _i330;
+import '../../features/trainingEvent/data/training_event_repo_impl.dart'
+    as _i816;
+import '../../features/trainingEvent/presentation/bloc/bloc_provider.dart'
+    as _i926;
+import '../../features/trainingEvent/presentation/bloc/create_training_cubit/create_training_cubit.dart'
+    as _i307;
 import '../core.dart' as _i351;
 import '../local_storage/key_vale_storage.dart' as _i1012;
 import '../network/api_client.dart' as _i557;
@@ -91,10 +98,16 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i519.Client>(),
           gh<_i351.InternetConnectionChecker>(),
         ));
+    gh.lazySingleton<_i330.TrainingEventRepo>(
+        () => _i816.TrainingEventRepoImpl(gh<_i351.ApiClient>()));
     gh.lazySingleton<_i585.AuthRepo>(() => _i328.AuthRepoImpl(
           gh<_i351.ApiClient>(),
           gh<_i351.KeyValueStorage>(),
         ));
+    gh.lazySingleton<_i926.TrainingEventBlocProvider>(
+        () => _i926.TrainingEventBlocProvider(gh<_i330.TrainingEventRepo>()));
+    gh.factory<_i307.CreateTrainingCubit>(
+        () => _i307.CreateTrainingCubit(gh<_i330.TrainingEventRepo>()));
     gh.lazySingleton<_i691.AppRepository>(() => _i691.AppRepository(
           gh<_i351.ApiClient>(),
           gh<_i346.AppVersion>(),

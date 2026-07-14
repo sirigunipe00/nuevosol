@@ -12,6 +12,8 @@ import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart
 import 'package:nuevosol/features/gate_exit/presentation/bloc/gate_exit_filter.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/po_approval_filters_cubit.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/bloc/traning_event_filter_cubit.dart';
 import 'package:nuevosol/styles/material_theme.dart';
 
 
@@ -29,6 +31,7 @@ class FrappeApp extends StatelessWidget {
         BlocProvider(create: (_) => GateExitFilterCubit()),
         BlocProvider(create: (_) => EmployeeFilters()),
         BlocProvider(create: (_) => PoApprovalFiltersCubit()),
+        BlocProvider(create: (_) => TraningEventFilterCubit()),
       
         BlocProvider(
           create: (_) => GateEntryBlocProvider.get().fetchGateEntries()),
@@ -40,6 +43,7 @@ class FrappeApp extends StatelessWidget {
           create: (_) => GateEntryBlocProvider.get().fetchPONumbers()),
         BlocProvider(create: (_) => GateExitBlocProvider.get().salesInvoiceList()),
         BlocProvider(create: (_) => PoApprovalBlocProvider.get().fetchPurchaseOrders()),
+         BlocProvider(create: (_) => TrainingEventBlocProvider.get().fetchTraningEvent()),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listener: (_, state) {
@@ -79,6 +83,7 @@ class FrappeApp extends StatelessWidget {
     ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
     ..cubit<PurchaseOrders>().request('')
     ..cubit<SalesInvoiceList>().request('')
+    ..cubit<TrainingEventCubit>().fetchInitial(filters)
     ..cubit<PoApprovalCubit>().fetchInitial(
       PageViewFilters.initial(),
     );

@@ -22,6 +22,8 @@ abstract class _AppRoutePaths {
   static const poApprovalListPreview ='/home/poapprovallist/poApprovalListPreview';
   static const dashboards = '/home/dashboards';
   static const dashboardView = '/home/dashboards/view';
+  static const trainingEvent = '/home/traningEvent';
+  static const newTrainingEvent = '/home/traningEvent/newtrainingEvent';
   static const account = '/account';
 }
 
@@ -46,6 +48,8 @@ enum AppRoute {
   poApprovalListPreview(_AppRoutePaths.poApprovalListPreview),
   dashboards(_AppRoutePaths.dashboards),
   dashboardView(_AppRoutePaths.dashboardView),
+  trainingEvent(_AppRoutePaths.trainingEvent),
+  newTrainingEvent(_AppRoutePaths.newTrainingEvent),
 
   account(_AppRoutePaths.account);
 

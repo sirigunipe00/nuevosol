@@ -13,6 +13,7 @@ enum PageMode2 {
   gateentry('Gate Entry'),
   gateexit('Gate Exit'),
   employeeTracker('Gate Pass'),
+  trainingEvent('Traning Event'),
   dipatchGaylord('Dispatch Gaylord'),
   poapprovallist('PO Approval List'),
   dashbaords('Dashbaords');
@@ -73,6 +74,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
     });
     final hideFabForSecurity =
     widget.mode == PageMode2.employeeTracker && isSecurity;
+    final hideFabForTraining = widget.mode == PageMode2.trainingEvent;
     T? cubit;
     try {
       cubit = context.read<T>();
@@ -85,6 +87,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
       PageMode2.dipatchGaylord => 'Serach Delivery Note - ID',
       PageMode2.poapprovallist => 'Search PO - ID',
       PageMode2.dashbaords => '',
+      PageMode2.trainingEvent => 'Search Event'
     };
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -219,7 +222,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
       ),
 
       floatingActionButton:
-          (widget.hideFAB.isTrue || hideFabForSecurity)
+          (widget.hideFAB.isTrue || hideFabForSecurity || hideFabForTraining)
               ? null
               : FloatingActionButton.extended(
                 onPressed: widget.onNew,

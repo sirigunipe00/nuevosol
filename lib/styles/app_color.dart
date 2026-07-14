@@ -27,6 +27,7 @@ abstract class AppColors {
   static const green = Color(0xFF1C8C4C);
   static const lavender = Color(0xFFC8BDFF);
   static const shyMoment = Color(0xFFAA9AFF);
+  static const event = Color(0xFF66CFCF); 
   static const pageViewColor = Color(0xFFF5FBFF);
   static const chimneySweep = Color(0xFF263238);
   static const himlayaPeeks = Color(0xFFE2EAF0);

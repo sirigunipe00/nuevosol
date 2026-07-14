@@ -13,12 +13,13 @@ class AppIcons {
   static const bgFrame1 = AppIcon('$basePath/bg_frame_1.png');
   static const bgFrame2 = AppIcon('$basePath/bg_frame_2.png');
   static const bgFrame3 = AppIcon('$basePath/bg_frame3.png');
-  static const bgFrame4 = AppIcon('$basePath/bg_frame4.png');
+  static const bgFrame4 = AppIcon('$basePath/invite_visitor.png');
   static const bgFrame5 = AppIcon('$basePath/bg_frame5.png');
   static const bgFrame6 = AppIcon('$basePath/bg_frame6.png');
   static const gatePass = AppIcon('$basePath/signing_contract.png');
   static const helloCuate = AppIcon('$basePath/hello_cuate.svg');
   static const settingsCuate = AppIcon('$basePath/settings_cuate.svg');
+  static const event = AppIcon('$basePath/event.png');
 
   static const vechileEntry = AppIcon('$basePath/vehicle_entry.png');
   static const gateEntryCurves = AppIcon('$basePath/gate_entry_1.png');

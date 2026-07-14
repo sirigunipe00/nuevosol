@@ -28,6 +28,11 @@ import 'package:nuevosol/features/po_approval_list/model/po_approval.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/ui/details/po_approval_form_widget.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/ui/po_approval_list/po_approval_list.dart';
+import 'package:nuevosol/features/trainingEvent/model/training_event.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/bloc/create_training_cubit/create_training_cubit.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/ui/new_training.dart';
+import 'package:nuevosol/features/trainingEvent/presentation/widget/training_event_list.dart';
 
 class AppRouterConfig {
   static final parentNavigatorKey = GlobalKey<NavigatorState>();
@@ -285,41 +290,40 @@ class AppRouterConfig {
                       ),
                     ],
                   ),
-                  // GoRoute(
-                  //     path: _getPath(AppRoute.dipatchGaylord),
-                  //     builder: (ctxt, state) {
-                  //       return const DispatchGaylordList();
-                  //     },
-                  //     routes: [
-                  //       GoRoute(
-                  //         path: _getPath(AppRoute.dispatchGaylordPreview),
-                  //         builder: (_, state) {
-                  //           final form = state.extra as GaylordForm;
-                  //           final blocprovider = DispatchBlocProvider.get();
-                  //           return MultiBlocProvider(
-                  //             providers: [
-                  //               BlocProvider(
-                  //                 create: (_) =>
-                  //                     blocprovider.fetchGaylordItems()
-                  //                       ..request(form.name),
-                  //               ),
-                  //               BlocProvider(
-                  //                   create: (_) =>
-                  //                       blocprovider.updateGaylord()),
-                  //               BlocProvider(
-                  //                 create: (_) => blocprovider.removeGaylord(),
-                  //               ),
-                  //               BlocProvider(
-                  //                   create: (_) =>
-                  //                       blocprovider.submitGaylord()),
-                  //             ],
-                  //             child: DispatchGaylordFormWidget(
-                  //               form: form,
-                  //             ),
-                  //           );
-                  //         },
-                  //       )
-                  //     ]),
+                  GoRoute(
+                      path: _getPath(AppRoute.trainingEvent),
+                      builder: (ctxt, state) {
+                        return const TrainingEventList();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: _getPath(AppRoute.newTrainingEvent),
+                          builder: (_, state) {
+                            final form = state.extra as TrainingEvent;
+                            final blocprovider = TrainingEventBlocProvider.get();
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                  create: (_) =>
+                                      blocprovider.fetchTraningEvent()
+                                ),
+                                BlocProvider(
+                                create:
+                                    (_) =>
+                                        $sl.get<CreateTrainingCubit>()
+                                          ..initDetails(state.extra),
+                              ),
+
+                                BlocProvider(
+                                    create: (_) =>
+                                        blocprovider.fetchEmployess()..request(form.name)),
+                              ],
+                              child: const NewTraining()
+                            );
+                          },
+                        )
+                      ]
+                  ),
                   GoRoute(
                     path: _getPath(AppRoute.poApprovalList),
                     builder: (ctxt, state) => const PoApprovalListScrn(),

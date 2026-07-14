@@ -8,7 +8,6 @@ import 'package:injectable/injectable.dart';
 import 'package:nuevosol/features/gate_entry/data/gate_entry_repo.dart';
 import 'package:nuevosol/features/gate_entry/model/gate_entry.dart';
 
-
 part 'create_gateentry_cubit.freezed.dart';
 
 enum GateEntryView { create, edit, completed }
@@ -55,7 +54,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
   }) async {
     shouldAskForConfirmation.value = true;
     final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    
+
     final form = state.form;
 
     final vehiclePhotos = vehiclePhoto ?? form.vehiclePhotoImg;
@@ -66,7 +65,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
     final newForm = form.copyWith(
       customSupplier: customSupplier ?? form.customSupplier,
       name: name ?? form.name,
-      createTime: createTime ?? form.createTime ,
+      createTime: createTime ?? form.createTime,
       creationDate: today,
       owner: owner ?? form.owner,
       customeUnit1: customUnit1 ?? form.customeUnit1,
@@ -83,7 +82,7 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
       invoiceAmount: invoiceAmount ?? form.invoiceAmount,
       receipt: receipt ?? form.receipt,
       remarks: remarks ?? form.remarks,
-      
+
       vehiclePhotoImg: vehiclePhotos,
       invoicePhotoImg: vendorInvoicePhotoBase64,
       weighmentPhotoImg: weightmentPhotos,
@@ -91,23 +90,19 @@ class CreateGateEntryCubit extends AppBaseCubit<CreateGateEntryState> {
 
     emitSafeState(state.copyWith(form: newForm));
   }
-//   String? getFullUrl(String? path) {
-//   if (path == null || path.isEmpty) return null;
-//   if (path.startsWith('http')) return path;
-//   return 'http://65.21.176.38:8000$path';
-// }
-String? getFullUrl(String? path) {
-  if (path == null || path.isEmpty) return null;
 
+  //   String? getFullUrl(String? path) {
+  //   if (path == null || path.isEmpty) return null;
+  //   if (path.startsWith('http')) return path;
+  //   return 'http://65.21.176.38:8000$path';
+  // }
+  String? getFullUrl(String? path) {
+    if (path == null || path.isEmpty) return null;
 
-  if (path.startsWith('http')) return path;
+    if (path.startsWith('http')) return path;
 
-
-  return Urls.filepath(path);
-}
-
-
-
+    return Urls.filepath(path);
+  }
 
   void initDetails(Object? entry) {
     shouldAskForConfirmation.value = false;
@@ -130,17 +125,16 @@ String? getFullUrl(String? path) {
         vendorInvoiceNo: entry.vendorInvoiceNo,
         vendorInvoiceDate: entry.vendorInvoiceDate,
         vehicleNo: entry.vehicleNo,
-       vehiclePhoto: getFullUrl(entry.vehiclePhoto),
-       weighmentPhoto: getFullUrl(entry.weighmentPhoto),
-       invoicePhoto: getFullUrl(entry.invoicePhoto),
+        vehiclePhoto: getFullUrl(entry.vehiclePhoto),
+        weighmentPhoto: getFullUrl(entry.weighmentPhoto),
+        invoicePhoto: getFullUrl(entry.invoicePhoto),
         invoiceAmount: entry.invoiceAmount,
         invoiceQuantity: entry.invoiceQuantity,
         customSupplier: entry.customSupplier,
         createTime: entry.createTime,
         customeUnit1: entry.customeUnit1,
         customeUnit2: entry.customeUnit2,
-        
-        
+
         creationDate: formattedStr,
       );
 
@@ -209,20 +203,18 @@ String? getFullUrl(String? path) {
           ),
           (r) {
             if (r.first.isEmpty) {
-
-        emitSafeState(
-          state.copyWith(
-            isLoading: false,
-            isSuccess: false,
-            error:  const Failure(
-              title: 'Validation Error',
-              error: 'Failed to create gate entry',
-              
-            ),
-          ),
-        );
-        return;
-      }
+              emitSafeState(
+                state.copyWith(
+                  isLoading: false,
+                  isSuccess: false,
+                  error: const Failure(
+                    title: 'Validation Error',
+                    error: 'Failed to create gate entry',
+                  ),
+                ),
+              );
+              return;
+            }
             shouldAskForConfirmation.value = false;
             final docstatus = r.second;
             emitSafeState(
@@ -282,71 +274,48 @@ String? getFullUrl(String? path) {
   Option<Pair<String, int?>> _validate() {
     final form = state.form;
 
-
     // if (form.purchaseOrder == null) {
     //   return optionOf(const Pair('Select Purchase Order', 0));
-    // } else 
-    if (form.vehiclePhotoImg.isNull &&
-        form.vehiclePhoto.doesNotHaveValue) {
+    // } else
+    if (form.vehiclePhotoImg.isNull && form.vehiclePhoto.doesNotHaveValue) {
       return optionOf(const Pair('Missing Vehicle Photo', 0));
-    } 
+    }
     // else if (form.vehicleBackPhotoImg.isNull &&
     //     form.vehicleBackPhoto.doesNotHaveValue) {
     //   return optionOf(const Pair('Missing VehicleBack Photo', 0));
-    // } 
+    // }
     else if (form.invoicePhotoImg.isNull &&
         form.invoicePhoto.doesNotHaveValue) {
       return optionOf(const Pair('Missing VendorInvoice Photo', 0));
-    }  else if (form.customeUnit1.isNull ||
+    } else if (form.customeUnit1.isNull ||
         (form.customeUnit1?.trim().isEmpty ?? true)) {
       return optionOf(const Pair('Missing Company Name', 0));
     } else if (form.vendorInvoiceDate.isNull ||
         (form.vendorInvoiceDate?.trim().isEmpty ?? true)) {
       return optionOf(const Pair('Missing VendorInvoice Date', 0));
     } else if ((form.vendorInvoiceNo?.length ?? 0) > 25) {
-  return optionOf(
-    const Pair(
-      'Invoice Number should not exceed 25 characters',
-      0,
-    ),
-  );
-} else if (form.vehicleNo.isNull ||
-    (form.vehicleNo?.trim().isEmpty ?? true)) {
-
-  return optionOf(
-    const Pair('Missing Vehicle Number', 0),
-  );
-
-} else if ((form.vehicleNo?.length ?? 0) < 8 ||
-           (form.vehicleNo?.length ?? 0) > 10) {
-
-  return optionOf(
-    const Pair(
-      'Vehicle Number must be between 8 and 10 characters',
-      0,
-    ),
-  );
-
-} else {
-
-  final lastFour =
-      form.vehicleNo!.substring(
-        form.vehicleNo!.length - 4,
+      return optionOf(
+        const Pair('Invoice Number should not exceed 25 characters', 0),
       );
+    } else if (form.vehicleNo.isNull ||
+        (form.vehicleNo?.trim().isEmpty ?? true)) {
+      return optionOf(const Pair('Missing Vehicle Number', 0));
+    } else if ((form.vehicleNo?.length ?? 0) < 8 ||
+        (form.vehicleNo?.length ?? 0) > 10) {
+      return optionOf(
+        const Pair('Vehicle Number must be between 8 and 10 characters', 0),
+      );
+    } else {
+      final lastFour = form.vehicleNo!.substring(form.vehicleNo!.length - 4);
 
-  final isLastFourDigits = RegExp(
-    r'^[0-9]{4}$',
-  ).hasMatch(lastFour);
+      final isLastFourDigits = RegExp(r'^[0-9]{4}$').hasMatch(lastFour);
 
-  if (!isLastFourDigits) {
-    return optionOf(
-      const Pair(
-        'In Vehicle No Last 4 characters must be numbers',
-        0,
-      ),
-    );
-  }
-}
+      if (!isLastFourDigits) {
+        return optionOf(
+          const Pair('In Vehicle No Last 4 characters must be numbers', 0),
+        );
+      }
+    }
 
     return const None();
   }
@@ -370,7 +339,11 @@ class CreateGateEntryState with _$CreateGateEntryState {
     final entryDate = DFU.ddMMyyyy(DFU.now());
 
     return CreateGateEntryState(
-      form: GateEntry(creationDate: creationDate, gateEntryDate: entryDate, createTime: now.toString(), ),
+      form: GateEntry(
+        creationDate: creationDate,
+        gateEntryDate: entryDate,
+        createTime: now.toString(),
+      ),
       view: GateEntryView.create,
       isLoading: false,
       isSuccess: false,

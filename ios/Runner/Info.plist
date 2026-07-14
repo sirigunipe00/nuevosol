@@ -42,8 +42,19 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+<true/>
+
+<key>UIApplicationSupportsIndirectInputEvents</key>
+<true/>
+
+<key>NSLocalNetworkUsageDescription</key>
+<string>Allow local network access for debugging and device discovery.</string>
+
+<key>NSBonjourServices</key>
+<array>
+    <string>_dartobservatory._tcp</string>
+</array>
+
+
 </dict>
 </plist>

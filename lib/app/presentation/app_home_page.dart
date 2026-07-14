@@ -90,19 +90,19 @@ class AppHomePage extends StatelessWidget {
                           onTap: () => AppRoute.employeeTracker.push(context),
                         ),
                      
-                        // AppFeatureWidget(
-                        //   icon: AppIcons.gayLord.toWidget(
-                        //       height: 100, width: 120, fit: BoxFit.fill),
-                        //   title: FittedBox(
-                        //     child: Text('Dispatch Gaylord',
-                        //         style:
-                        //             AppTextStyles.featureLabelStyle(context)),
-                        //   ),
-                        //   featureColor: AppColors.dispatch,
-                        //   onTap: () {
-                        //     // AppRoute.dipatchGaylord.push(context);
-                        //   },
-                        // ),
+                        AppFeatureWidget(
+                          icon: AppIcons.event.toWidget(
+                              height: 100, width: 120, fit: BoxFit.fill),
+                          title: FittedBox(
+                            child: Text('Training Event',
+                                style:
+                                    AppTextStyles.featureLabelStyle(context)),
+                          ),
+                          featureColor: AppColors.event,
+                          onTap: () =>
+                            AppRoute.trainingEvent.push(context),
+                          
+                        ),
 
                 
                    
