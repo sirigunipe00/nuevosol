@@ -8,14 +8,12 @@ import 'package:injectable/injectable.dart';
 import 'package:nuevosol/features/auth/data/auth_repo.dart';
 import 'package:nuevosol/features/auth/model/logged_in_user.dart';
 
-
-
 @LazySingleton(as: AuthRepo)
 class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
   const AuthRepoImpl(super.client, this.storage);
 
   final KeyValueStorage storage;
-  
+
   @override
   Future<bool> isLoggedIn() async {
     try {
@@ -30,28 +28,26 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
   @override
   AsyncValueOf<LoggedInUser> logIn(String username, String pswd) async {
     return await executeSafely(() async {
-
-      
       final requestConfig = RequestConfig(
         url: Urls.getUsers,
         parser: (res) {
-  final message = res['message'] as Map<String, dynamic>;
-  final data = message['data'] as List<dynamic>;
-  
-  final userData = Map<String, dynamic>.from(
-    data.first as Map<String, dynamic>,
-  );
-  
-  // Merge top-level roles into the user object
-  userData['roles'] = message['roles'];
-  
-  return LoggedInUser.fromJson(userData);
-},
+          final message = res['message'] as Map<String, dynamic>;
+          final data = message['data'] as List<dynamic>;
+
+          final userData = Map<String, dynamic>.from(
+            data.first as Map<String, dynamic>,
+          );
+
+          // Merge top-level roles into the user object
+          userData['roles'] = message['roles'];
+
+          return LoggedInUser.fromJson(userData);
+        },
         // parser: (res) {
         //   final data = res['message']['data'] as List<dynamic>;
         //   return LoggedInUser.fromJson(data.first);
         // },
-        body: jsonEncode({'usr' : username, 'pwd' : pswd}),
+        body: jsonEncode({'usr': username, 'pwd': pswd}),
       );
 
       final response = await post(requestConfig, includeAuthHeader: false);
@@ -108,42 +104,31 @@ class AuthRepoImpl extends BaseApiRepository implements AuthRepo {
       return left(const Failure(error: 'Could not sign out'));
     }
   }
- @override
-AsyncValueOf<Pair<String, String>> forgotPassword(String email) async {
 
-  final config = RequestConfig(
-    url: Urls.forgotPassword,
-    body: jsonEncode({
-      'user': email,
-    }),
-    
-  parser: (json) {
-  print('FORGOT PASSWORD JSON => $json');
+  @override
+  AsyncValueOf<Pair<String, String>> forgotPassword(String email) async {
+    final config = RequestConfig(
+      url: Urls.forgotPassword,
+      body: jsonEncode({'user': email}),
 
-  final serverMessages = json['_server_messages'] as String;
+      parser: (json) {
+        final serverMessages = json['_server_messages'] as String;
 
-  final decodedMessages = jsonDecode(serverMessages) as List;
+        final decodedMessages = jsonDecode(serverMessages) as List;
 
-  final messageData =
-      jsonDecode(decodedMessages.first as String)
-          as Map<String, dynamic>;
+        final messageData =
+            jsonDecode(decodedMessages.first as String) as Map<String, dynamic>;
 
-  return Pair(
-    messageData['title'] as String,
-    messageData['message'] as String,
-  );
-},
-    headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-    },
-  );
-  
+        return Pair(
+          messageData['title'] as String,
+          messageData['message'] as String,
+        );
+      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    );
 
-  final response = await post(config,includeAuthHeader: false,);
+    final response = await post(config, includeAuthHeader: false);
 
-  return response.process(
-    (r) => right(r.data!),
-  );
-}
-
+    return response.process((r) => right(r.data!));
+  }
 }

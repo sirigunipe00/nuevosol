@@ -10,40 +10,56 @@ import 'package:nuevosol/features/gate_entry/presentation/bloc/bloc_provider.dar
 import 'package:nuevosol/features/gate_entry/presentation/bloc/gate_entry_filter.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/gate_exit/presentation/bloc/gate_exit_filter.dart';
+import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/packing/presentation/bloc/packing_filter_cubit.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/po_approval_filters_cubit.dart';
 import 'package:nuevosol/features/trainingEvent/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/trainingEvent/presentation/bloc/traning_event_filter_cubit.dart';
 import 'package:nuevosol/styles/material_theme.dart';
 
-
 class FrappeApp extends StatelessWidget {
   const FrappeApp({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
-          create: (_) => $sl.get<AuthCubit>()..authCheckRequested()),
+          create: (_) => $sl.get<AuthCubit>()..authCheckRequested(),
+        ),
         BlocProvider<SignInCubit>(create: (_) => $sl.get<SignInCubit>()),
         BlocProvider(create: (_) => GateEntryFilterCubit()),
         BlocProvider(create: (_) => GateExitFilterCubit()),
         BlocProvider(create: (_) => EmployeeFilters()),
+        BlocProvider(create: (_) => PackingFilterCubit()),
         BlocProvider(create: (_) => PoApprovalFiltersCubit()),
         BlocProvider(create: (_) => TraningEventFilterCubit()),
-      
+
         BlocProvider(
-          create: (_) => GateEntryBlocProvider.get().fetchGateEntries()),
+          create: (_) => GateEntryBlocProvider.get().fetchGateEntries(),
+        ),
+        BlocProvider(create: (_) => GateExitBlocProvider.get().fetchGateExit()),
         BlocProvider(
-          create: (_) => GateExitBlocProvider.get().fetchGateExit()),
-          BlocProvider(
-          create: (_) => EmployeeBlocProvider.get().fetchEmployeeEntries()),
+          create: (_) => EmployeeBlocProvider.get().fetchEmployeeEntries(),
+        ),
         BlocProvider(
-          create: (_) => GateEntryBlocProvider.get().fetchPONumbers()),
-        BlocProvider(create: (_) => GateExitBlocProvider.get().salesInvoiceList()),
-        BlocProvider(create: (_) => PoApprovalBlocProvider.get().fetchPurchaseOrders()),
-         BlocProvider(create: (_) => TrainingEventBlocProvider.get().fetchTraningEvent()),
+          create: (_) => GateEntryBlocProvider.get().fetchPONumbers(),
+        ),
+        BlocProvider(
+          create: (_) => GateExitBlocProvider.get().salesInvoiceList(),
+        ),
+        BlocProvider(
+          create: (_) => PoApprovalBlocProvider.get().fetchPurchaseOrders(),
+        ),
+        BlocProvider(
+          create: (_) => TrainingEventBlocProvider.get().fetchTraningEvent(),
+        ),
+        BlocProvider(
+          create: (_) => PackingBlocProvider.get().fetchPacking(),
+        ),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listener: (_, state) {
@@ -51,55 +67,54 @@ class FrappeApp extends StatelessWidget {
           state.maybeWhen(
             orElse: () => AppRoute.initial.go(routerCtxt),
             // loading: () => AppRoute.initial.go(routerCtxt),
-           authenticated: () {
-  final userRoles = routerCtxt.user.role ?? [];
+            authenticated: () {
+              final userRoles = routerCtxt.user.role ?? [];
 
-  final issecurity = userRoles.any((r) {
-    final role = r.toString().toLowerCase();
+              final issecurity = userRoles.any((r) {
+                final role = r.toString().toLowerCase();
 
-    return role.contains('nepl-unit-1-gate') ||
-        role.contains('nepl-unit-2-gate') ||
-        role.contains('nmpl-unit-1-gate') ||
-        role.contains('nmpl-unit-2-gate') ||
-        role.contains('head office gate');
-  });
+                return role.contains('nepl-unit-1-gate') ||
+                    role.contains('nepl-unit-2-gate') ||
+                    role.contains('nmpl-unit-1-gate') ||
+                    role.contains('nmpl-unit-2-gate') ||
+                    role.contains('head office gate');
+              });
 
-  final filters = Pair(
-    StringUtils.docStatusInt('Draft'),
-    null,
-  );
+              final filters = Pair(StringUtils.docStatusInt('Draft'), null);
 
-  final employeeStatus =
-      issecurity ? 'Approved' : 'Draft';
+              final employeeStatus = issecurity ? 'Approved' : 'Draft';
 
-  final filterEmployee = Triple(
-    StringUtils.docStatusEmployee(employeeStatus),
-    null,null
-  );
+              final filterEmployee = Triple(
+                StringUtils.docStatusEmployee(employeeStatus),
+                null,
+                null,
+              );
 
-  routerCtxt
-    ..cubit<GateEntriesCubit>().fetchInitial(filters)
-    ..cubit<GateExitCubit>().fetchInitial(filters)
-    ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
-    ..cubit<PurchaseOrders>().request('')
-    ..cubit<SalesInvoiceList>().request('')
-    ..cubit<TrainingEventCubit>().fetchInitial(filters)
-    ..cubit<PoApprovalCubit>().fetchInitial(
-      PageViewFilters.initial(),
-    );
+              routerCtxt
+                ..cubit<GateEntriesCubit>().fetchInitial(filters)
+                ..cubit<GateExitCubit>().fetchInitial(filters)
+                ..cubit<EmployeeEntriesCubit>().fetchInitial(filterEmployee)
+                ..cubit<PurchaseOrders>().request('')
+                ..cubit<SalesInvoiceList>().request('')
+                ..cubit<TrainingEventCubit>().fetchInitial(filters)
+                 ..cubit<PackingCubit>().fetchInitial(filters)
+                ..cubit<PoApprovalCubit>().fetchInitial(
+                  PageViewFilters.initial(),
+                );
 
-  AppRoute.home.go(routerCtxt);
-},
+              AppRoute.home.go(routerCtxt);
+            },
             unAuthenticated: () => AppRoute.login.go(routerCtxt),
           );
         },
         child: MaterialApp.router(
-            title: 'Nuevosol',
-            theme: AppMaterialTheme.lightTheme,
-            darkTheme: AppMaterialTheme.lightTheme,
-            routerConfig: AppRouterConfig.router,
-            debugShowCheckedModeBanner: false,
-            ),
+          // scaffoldMessengerKey: appMessengerKey,
+          title: 'Nuevosol',
+          theme: AppMaterialTheme.lightTheme,
+          darkTheme: AppMaterialTheme.lightTheme,
+          routerConfig: AppRouterConfig.router,
+          debugShowCheckedModeBanner: false,
+        ),
       ),
     );
   }

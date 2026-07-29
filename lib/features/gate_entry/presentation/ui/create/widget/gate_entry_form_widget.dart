@@ -80,7 +80,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
     final form = formState.form;
     final bool isPoSelected = form.purchaseOrder.containsValidValue;
 
-
     // final indianFormat = NumberFormat.decimalPattern('en_IN');
     $logger.devLog('form.........$form');
 
@@ -170,18 +169,15 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           hintText: 'Enter Your Vehicle Number',
           isRequired: true,
           inputFormatters: [
-  UpperCaseTextFormatter(),
+            UpperCaseTextFormatter(),
 
-  FilteringTextInputFormatter.allow(
-    RegExp(r'[A-Z0-9]'),
-  ),
+            FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
 
-  LengthLimitingTextInputFormatter(10),
-],
+            LengthLimitingTextInputFormatter(10),
+          ],
           controller: vehicleNo,
           initialValue: form.vehicleNo,
-          
-        
+
           borderColor: AppColors.marigoldDDust,
           onChanged: (vehicleNum) {
             context.cubit<CreateGateEntryCubit>().onValueChanged(
@@ -347,7 +343,7 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           inputFormatters: [
             UpperCaseTextFormatter(),
             LengthLimitingTextInputFormatter(25),
-           ],
+          ],
           initialValue: form.vendorInvoiceNo,
           borderColor: AppColors.marigoldDDust,
           onChanged: (invNumber) {

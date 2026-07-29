@@ -28,6 +28,7 @@ class GateEntryListScrn extends StatelessWidget {
       backgroundColor: AppColors.marigoldDDust,
       onNew: () async {
         final refresh = await AppRoute.newGateEntry.push<bool?>(context);
+        if(!context.mounted) return;
         if (refresh == true) {
           fetchInital(context);
         }
@@ -55,6 +56,7 @@ class GateEntryListScrn extends StatelessWidget {
                     onTap: () async {
                       final refresh = await AppRoute.newGateEntry
                           .push<bool?>(context, extra: entry);
+                          if(!context.mounted) return;
                       if (refresh == true) {
                         fetchInital(context);
                       }

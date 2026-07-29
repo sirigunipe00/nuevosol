@@ -84,17 +84,15 @@ class _GateExitFormWidgetState extends State<GateExitFormWidget> {
         BlocBuilder<SalesInvoiceList, SalesInvoiceState>(
           buildWhen: (previous, current) => previous != current,
           builder: (_, state) {
-            
             return state.maybeWhen(
               loading: () => const Center(child: CircularProgressIndicator()),
               success: (items) {
                 return AppDropDownWidget<SalesInvoiceForm>(
                   title: 'Sales Invoice Number',
                   items: items,
-                  
-                  // color: Colors.black,
 
-            borderColor: AppColors.lavender,
+                  // color: Colors.black,
+                  borderColor: AppColors.lavender,
                   readOnly: isCompleted,
                   hint: 'Select Invoice Number',
                   isMandatory: true,
@@ -167,61 +165,60 @@ class _GateExitFormWidgetState extends State<GateExitFormWidget> {
                     );
 
                     if (scanResult != null) {
-  final scannedValue =
-      extractIrnFromQr(scanResult).trim().toUpperCase();
-  final allPOs =
-      context
-          .read<SalesInvoiceList>()
-          .state
-          .maybeWhen(
-            orElse: () => <SalesInvoiceForm>[],
-            success: (data) => data,
-          )
-          .toList();
+                      final scannedValue =
+                          extractIrnFromQr(scanResult).trim().toUpperCase();
+                      if (!context.mounted) return;
+                      final allPOs =
+                          context
+                              .read<SalesInvoiceList>()
+                              .state
+                              .maybeWhen(
+                                orElse: () => <SalesInvoiceForm>[],
+                                success: (data) => data,
+                              )
+                              .toList();
 
-  try {
-    SalesInvoiceForm matchedInvoice = allPOs.firstWhere(
-      (po) =>
-          (po.name ?? '').trim().toUpperCase() ==
-          scannedValue,
-    );
-
-    // Update the dropdown's selected value
-    setState(() {
-      invoiceForm = matchedInvoice; // <-- this updates the selected item
-    });
-
-    // Update the cubit with customerName & invoice number
-    context.cubit<CreateGateExitCubit>().onValueChanged(
-      salesInvoice: matchedInvoice.name,
-      customerName: matchedInvoice.customer,
-    );
-  } catch (e) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Error',
-          style: TextStyle(
-            color: Colors.red,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: const Text(
-          'Scanned Invoice Order Number is Not Matched With Existing Invoice Order.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
+                      try {
+                        SalesInvoiceForm matchedInvoice = allPOs.firstWhere(
+                          (po) =>
+                              (po.name ?? '').trim().toUpperCase() ==
+                              scannedValue,
+                        );
+                        setState(() {
+                          invoiceForm =
+                              matchedInvoice;
+                        });
+                        context.cubit<CreateGateExitCubit>().onValueChanged(
+                          salesInvoice: matchedInvoice.name,
+                          customerName: matchedInvoice.customer,
+                        );
+                      } catch (e) {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                title: const Text(
+                                  'Error',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: const Text(
+                                  'Scanned Invoice Order Number is Not Matched With Existing Invoice Order.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(context).pop(),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                        );
+                      }
+                    }
                   },
                   showScanner: true,
                 );
@@ -229,7 +226,6 @@ class _GateExitFormWidgetState extends State<GateExitFormWidget> {
               orElse: () => const SizedBox.shrink(),
             );
           },
-          
         ),
 
         InputField(
@@ -387,11 +383,11 @@ class _GateExitFormWidgetState extends State<GateExitFormWidget> {
             color: AppColors.black,
           ),
         ),
-      TimeSelectionField(
+        TimeSelectionField(
           title: 'Gate Exit Time',
-          initialValue: formatTime(form.gateExitTime), 
+          initialValue: formatTime(form.gateExitTime),
           readOnly: true,
-          onTimeSelect: (_) {}, 
+          onTimeSelect: (_) {},
           borderColor: AppColors.lavender,
           suffixIcon: const Icon(
             Icons.access_time_filled,

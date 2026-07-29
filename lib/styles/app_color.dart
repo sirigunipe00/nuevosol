@@ -31,4 +31,5 @@ abstract class AppColors {
   static const pageViewColor = Color(0xFFF5FBFF);
   static const chimneySweep = Color(0xFF263238);
   static const himlayaPeeks = Color(0xFFE2EAF0);
+  static const packing = Color.fromARGB(255, 247, 152, 176);
 }

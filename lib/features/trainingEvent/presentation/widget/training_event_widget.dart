@@ -46,7 +46,7 @@ class TrainingWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(gateEntry.name ?? '', style: AppTextStyles.titleLarge(context).copyWith(color: AppColors.black)),
+                    Text(gateEntry.name ?? '', style: AppTextStyles.titleMedium(context,AppColors.black).copyWith(color: AppColors.black)),
                     Text(DFU.ddMMyyyyFromStr(gateEntry.creationDate ?? ''),style: AppTextStyles.titleLarge(context).copyWith(color: AppColors.black)),
 
                   ],

@@ -24,6 +24,9 @@ abstract class _AppRoutePaths {
   static const dashboardView = '/home/dashboards/view';
   static const trainingEvent = '/home/traningEvent';
   static const newTrainingEvent = '/home/traningEvent/newtrainingEvent';
+  static const packing = '/home/packing';
+  static const newPacking = '/home/packing/newPacking';
+  static const packingItemScan = '/home/packing/newPacking/itemScan';
   static const account = '/account';
 }
 
@@ -50,6 +53,9 @@ enum AppRoute {
   dashboardView(_AppRoutePaths.dashboardView),
   trainingEvent(_AppRoutePaths.trainingEvent),
   newTrainingEvent(_AppRoutePaths.newTrainingEvent),
+  packing(_AppRoutePaths.packing),
+  newPacking(_AppRoutePaths.newPacking),
+  packingItemScan(_AppRoutePaths.packingItemScan),
 
   account(_AppRoutePaths.account);
 

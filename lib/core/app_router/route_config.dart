@@ -24,6 +24,12 @@ import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart
 import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/create/new_gate_exit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/gate_exit_list/gate_exit_list.dart';
+import 'package:nuevosol/features/packing/model/packing_model.dart';
+import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
+import 'package:nuevosol/features/packing/presentation/bloc/create_packing_cubit/create_packing_cubit.dart';
+import 'package:nuevosol/features/packing/presentation/ui/new_packing.dart';
+import 'package:nuevosol/features/packing/presentation/ui/packing_item_scan.dart';
+import 'package:nuevosol/features/packing/presentation/widget/packing_list.dart';
 import 'package:nuevosol/features/po_approval_list/model/po_approval.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/ui/details/po_approval_form_widget.dart';
@@ -133,6 +139,7 @@ class AppRouterConfig {
                       ),
                     ],
                   ),
+                  
                   GoRoute(
                     path: _getPath(AppRoute.gateExit),
                     builder: (ctxt, state) {
@@ -291,38 +298,164 @@ class AppRouterConfig {
                     ],
                   ),
                   GoRoute(
-                      path: _getPath(AppRoute.trainingEvent),
-                      builder: (ctxt, state) {
-                        return const TrainingEventList();
-                      },
-                      routes: [
-                        GoRoute(
-                          path: _getPath(AppRoute.newTrainingEvent),
-                          builder: (_, state) {
-                            final form = state.extra as TrainingEvent;
-                            final blocprovider = TrainingEventBlocProvider.get();
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (_) =>
-                                      blocprovider.fetchTraningEvent()
-                                ),
-                                BlocProvider(
+                    path: _getPath(AppRoute.trainingEvent),
+                    builder: (ctxt, state) {
+                      final filters = Pair(
+                        StringUtils.docStatusInt('Draft'),
+                        null,
+                      );
+                      return MultiBlocProvider(
+                        providers: [ 
+                          BlocProvider(
+                            create: (context) => $sl.get<CreateTrainingCubit>(),
+                          ),
+                          BlocProvider(
+                            create:
+                                (_) =>
+                                    TrainingEventBlocProvider.get()
+                                        .fetchTraningEvent()
+                                      ..fetchInitial(filters),
+                          ),
+                        ],
+                        child: const TrainingEventList(),
+                      );
+                    },
+                    routes: [
+                      GoRoute(
+                        path: _getPath(AppRoute.newTrainingEvent),
+                        builder: (_, state) {
+                          final form = state.extra as TrainingEvent;
+                          final blocprovider = TrainingEventBlocProvider.get();
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (_) => blocprovider.fetchTraningEvent(),
+                              ),
+                              BlocProvider(
                                 create:
                                     (_) =>
                                         $sl.get<CreateTrainingCubit>()
                                           ..initDetails(state.extra),
                               ),
 
-                                BlocProvider(
-                                    create: (_) =>
-                                        blocprovider.fetchEmployess()..request(form.name)),
-                              ],
-                              child: const NewTraining()
-                            );
-                          },
-                        )
-                      ]
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        blocprovider.fetchEmployess()
+                                          ..request(form.name),
+                              ),
+                            ],
+                            child: const NewTraining(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: _getPath(AppRoute.packing),
+                    builder: (ctxt, state) {
+                      final filters = Pair(
+                        StringUtils.docStatusInt('Draft'),
+                        null,
+                      );
+                      return BlocProvider(
+                        create:
+                            (context) =>
+                                PackingBlocProvider.get().fetchPacking()
+                                  ..fetchInitial(filters),
+                        child: const PackingList(),
+                      );
+                    },
+                    routes: [
+                      GoRoute(
+                        path: _getPath(AppRoute.newPacking),
+                        builder: (ctxt, state) {
+                          final provider = PackingBlocProvider.get();
+                          final form = state.extra as PackingModel?;
+
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        EmployeeBlocProvider.get()
+                                            .fetchEmployeeList()
+                                          ..request(),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchBom()..request(
+                                          form?.rawMaterialName ?? '',
+                                        ),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchMachine()..request(''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchProcess()..request(''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchFinished()..request(''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        provider.fetchOperator()
+                                          ..request(form?.name ?? ''),
+                              ),
+                              BlocProvider(
+                                create:
+                                    (_) =>
+                                        $sl.get<CreatePackingCubit>()
+                                          ..initDetails(form),
+                              ),
+                            ],
+                            child: const NewPacking(),
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: _getPath(AppRoute.packingItemScan),
+                            builder: (_, state) {
+                              final provider = PackingBlocProvider.get();
+                              final form =
+                                  state.extra as PackingModel? ??
+                                  const PackingModel();
+                              return MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create:
+                                        (_) =>
+                                            provider.fetchBomItems()
+                                              ..request(form.bomItem ?? ''),
+                                  ),
+                                  BlocProvider(
+                                    create:
+                                        (_) =>
+                                            provider.fetchOperator()
+                                              ..request(form.name ?? ''),
+                                  ),
+                                  BlocProvider(
+                                    create:
+                                        (_) =>
+                                            provider.fetchComponentScanning()
+                                              ..request(form.name ?? ''),
+                                  ),
+                                ],
+                                child: PackingItemScanScrn(packing: form),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: _getPath(AppRoute.poApprovalList),

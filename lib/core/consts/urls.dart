@@ -35,17 +35,9 @@ static String filepath(String path) {
   static final approveGatePass = '$cusWs/nuevosol.gatepass_api.approve_employee_gate_pass';
   static final qrData = '$cusWs/nuevosol.gatepass_api.scan_gate_pass_qr';
   static final createGateEntry = '$cusWs/nuevosol.gate_api.createGateEntry';
-  // static final submitGateEntry = '$cusWs/shaktihormann.api.submit_gate_entry';
   static final createGateExit = '$cusWs/nuevosol.gate_api.createGateExit';
    static final addEmployeeToTrainingEvent =
       '$cusWs/nuevosol.api.add_employee_to_training_event';
-  // static final submitGateExit = '$cusWs/shaktihormann.api.submit_gate_exit';
-  // static final createLogisticPlanning =
-  //     '$cusWs/shaktihormann.api.create_logistic_planning';
-  // static final updateLogisticPlanning =
-  //     '$cusWs/shaktihormann.api.update_logistic_planning';
-  // static final updateTransport='$cusWs/shaktihormann.api.update_logistic_transporter';
-  // static final createVehicleReporting='$cusWs/shaktihormann.api.create_vehicle_reporting';
 
   static final getPurchaseOrders = '$cusWs/nuevosol.api.get_purchase_orders';
   static final getPoOrderItems = '$cusWs/nuevosol.api.get_purchase_order_items';
@@ -55,4 +47,6 @@ static String filepath(String path) {
 
   static final forgotPassword = '$cusWs/frappe.core.doctype.user.user.reset_password';
 
+  static final createPacking = '$cusWs/nuevosol.packing.create_production_posting_fc_and_packing';
+  static final packingqrScanning = '$cusWs/nuevosol.packing.validate_and_save_component_scan';
 }

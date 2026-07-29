@@ -43,6 +43,11 @@ import '../../features/gate_exit/data/gate_exit_repo_impl.dart' as _i100;
 import '../../features/gate_exit/presentation/bloc/bloc_provider.dart' as _i565;
 import '../../features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart'
     as _i161;
+import '../../features/packing/data/packing_repo.dart' as _i292;
+import '../../features/packing/data/packing_repo_impl.dart' as _i38;
+import '../../features/packing/presentation/bloc/bloc_provider.dart' as _i680;
+import '../../features/packing/presentation/bloc/create_packing_cubit/create_packing_cubit.dart'
+    as _i1031;
 import '../../features/po_approval_list/data/po_approval_repo.dart' as _i285;
 import '../../features/po_approval_list/data/po_approval_repo_impl.dart'
     as _i299;
@@ -104,6 +109,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i351.ApiClient>(),
           gh<_i351.KeyValueStorage>(),
         ));
+    gh.lazySingleton<_i292.PackingRepo>(
+        () => _i38.PackingRepoImpl(gh<_i351.ApiClient>()));
     gh.lazySingleton<_i926.TrainingEventBlocProvider>(
         () => _i926.TrainingEventBlocProvider(gh<_i330.TrainingEventRepo>()));
     gh.factory<_i307.CreateTrainingCubit>(
@@ -120,6 +127,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i299.PoApprovalRepoImpl(gh<_i351.ApiClient>()));
     gh.lazySingleton<_i660.EmployeeRepo>(
         () => _i549.EmployeeRepoImpl(gh<_i351.ApiClient>()));
+    gh.factory<_i1031.CreatePackingCubit>(
+        () => _i1031.CreatePackingCubit(gh<_i292.PackingRepo>()));
+    gh.lazySingleton<_i680.PackingBlocProvider>(
+        () => _i680.PackingBlocProvider(gh<_i292.PackingRepo>()));
     gh.factory<_i947.SignInCubit>(
         () => _i947.SignInCubit(gh<_i585.AuthRepo>()));
     gh.factory<_i190.AuthCubit>(() => _i190.AuthCubit(gh<_i585.AuthRepo>()));

@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/trainingEvent/data/training_event_repo.dart';
+import 'package:nuevosol/features/trainingEvent/model/join_training_result.dart';
 import 'package:nuevosol/features/trainingEvent/model/training_employee.dart';
 import 'package:nuevosol/features/trainingEvent/model/training_event.dart';
 
@@ -84,33 +85,61 @@ class TrainingEventRepoImpl extends BaseApiRepository
       });
     });
   }
-
   @override
-  AsyncValueOf<Pair<String, String>> createEmployee(
-    String trainingEvent,
-  ) async {
-    return await executeSafely(() async {
-      final config = RequestConfig(
-        url: Urls.addEmployeeToTrainingEvent,
-       parser: (json) {
-  final data = json['message'] as Map<String, dynamic>;
+Future<Either<Failure, JoinTrainingResult>> createEmployee(
+  String trainingEvent,
+) async {
+  return await executeSafely(() async {
+    final config = RequestConfig(
+      url: Urls.addEmployeeToTrainingEvent,
+      parser: (json) {
+        return JoinTrainingResult.fromJson(
+          json['message'] as Map<String, dynamic>,
+        );
+      },
+      reqParams: {
+        'user_email': user().email,
+        'training_event': trainingEvent,
+      },
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
 
-  return Pair(
-    data['employee_name']?.toString() ?? '',
-    data['message']?.toString() ?? '',
-  );
-},
-        reqParams: {
-          'user_email': user().email,
-          'training_event': trainingEvent,
-        },
-        headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-      );
+    final response = await post(config);
 
-      final response = await post(config);
-      $logger.devLog('requet.....>$config');
-      $logger.devLog('addEmployeeToTrainingEvent response....$response');
-      return response.processAsync((r) async => right(r.data!));
-    });
-  }
+    return response.processAsync(
+      (r) async => right(r.data!),
+    );
+  });
+}
+
+//   @override
+//   AsyncValueOf<Pair<String, String>> createEmployee(
+//     String trainingEvent,
+//   ) async {
+//     return await executeSafely(() async {
+//       final config = RequestConfig(
+//         url: Urls.addEmployeeToTrainingEvent,
+//        parser: (json) {
+//   final data = json['message'] as Map<String, dynamic>;
+
+//   return Pair(
+//     data['employee_name']?.toString() ?? '',
+//     data['message']?.toString() ?? '',
+//   );
+// },
+//         reqParams: {
+//           'user_email': user().email,
+//           'training_event': trainingEvent,
+//         },
+//         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+//       );
+
+//       final response = await post(config);
+//       $logger.devLog('requet.....>$config');
+//       $logger.devLog('addEmployeeToTrainingEvent response....$response');
+//       return response.processAsync((r) async => right(r.data!));
+//     });
+//   }
 }

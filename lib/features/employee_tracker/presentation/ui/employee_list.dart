@@ -130,6 +130,7 @@ debugPrint(
       ),
       onNew: () async {
         final refresh = await AppRoute.newEmployeeTracker.push<bool?>(context);
+        if(!context.mounted) return;
         if (refresh == true) {
           fetchInital(context);
         }
@@ -163,6 +164,7 @@ debugPrint(
                     context,
                     extra: entry,
                   );
+                  if(!context.mounted) return;
                   if (refresh == true) {
                     fetchInital(context);
                   }

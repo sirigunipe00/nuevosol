@@ -52,6 +52,7 @@ class _PoDetailsWidgetState extends State<PoDetailsWidget>
     _controller..stop()
     ..reset();
     setState(() => _isAnimating = false);
+   
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('AI Compare Completed!')),

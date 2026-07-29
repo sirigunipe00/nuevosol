@@ -125,7 +125,6 @@ class GateExitRepoImpl extends BaseApiRepository implements GateExitRepo {
     );
 
     final response = await post(config);
-    $logger.devLog('reponse-......$response');
     $logger.devLog('response.....$config');
 
     return response.processAsync((r) async {

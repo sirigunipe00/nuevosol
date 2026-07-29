@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/styles/app_text_styles.dart';
 import 'package:nuevosol/widgets/caption_text.dart';
@@ -21,6 +22,8 @@ class DateSelectionField extends StatefulWidget {
     required this.onDateSelect, 
     this.borderColor,
     this.isRequired = false,
+    this.includeTime = false, 
+    this.initialTime, 
     this.filled = false,
   });
 
@@ -34,6 +37,8 @@ class DateSelectionField extends StatefulWidget {
   final String? hintText;
   final Widget? suffixIcon;
   final Color? borderColor;
+  final bool includeTime;
+  final TimeOfDay? initialTime;
   final Function(DateTime date) onDateSelect;
 
   @override
@@ -107,19 +112,57 @@ class _DateSelectionFieldState extends State<DateSelectionField> {
       ],
     );
   }
-
-  void showDatePickerDialog() async {
+    void showDatePickerDialog() async {
     final selectedDate = await showDatePicker(
       context: context,
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,
     );
-    if(selectedDate.isNotNull) {
-      final formattedDate = DFU.friendlyFormat(selectedDate!);
+
+    if (selectedDate.isNotNull) {
+      DateTime finalDateTime = selectedDate!;
+
+      if (widget.includeTime) {
+        if (!mounted) return;
+        final selectedTime = await showTimePicker(
+          context: context,
+          initialTime: widget.initialTime ?? TimeOfDay.now(),
+        );
+
+        if (selectedTime != null) {
+          finalDateTime = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
+        }
+      }
+
+     final formattedDate = widget.includeTime
+    ? DateFormat('dd-MM-yyyy hh:mm a').format(finalDateTime)   
+    : DFU.friendlyFormat(finalDateTime); 
+
       setState(() {
         controller.text = formattedDate;
       });
-      widget.onDateSelect(selectedDate);
+      widget.onDateSelect(finalDateTime);
     }
   }
+
+  // void showDatePickerDialog() async {
+  //   final selectedDate = await showDatePicker(
+  //     context: context,
+  //     firstDate: widget.firstDate,
+  //     lastDate: widget.lastDate,
+  //   );
+  //   if(selectedDate.isNotNull) {
+  //     final formattedDate = DFU.friendlyFormat(selectedDate!);
+  //     setState(() {
+  //       controller.text = formattedDate;
+  //     });
+  //     widget.onDateSelect(selectedDate);
+  //   }
+  // }
 }

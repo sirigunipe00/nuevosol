@@ -48,7 +48,7 @@ class FrappeApiResponseParser<T> implements ApiResponseParser<T> {
           return ApiResponse.success(result);
         } else if (msgObj.containsKey('message')) {
           final String message = msgObj['message'];
-          return ApiResponse.failure(message);
+          return ApiResponse.failure(message, status: status);
         }
       } else if (response.containsKey('data')) {
         final result = parser(response);

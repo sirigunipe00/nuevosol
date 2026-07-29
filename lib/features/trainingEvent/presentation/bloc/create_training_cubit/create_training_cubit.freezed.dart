@@ -22,6 +22,9 @@ mixin _$CreateTrainingState {
   TraininView get view => throw _privateConstructorUsedError;
   String? get successMsg => throw _privateConstructorUsedError;
   Failure? get error => throw _privateConstructorUsedError;
+  List<TrainingEvent> get scannedEvents => throw _privateConstructorUsedError;
+  String? get employeeName => throw _privateConstructorUsedError;
+  String? get employeeCode => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CreateTrainingStateCopyWith<CreateTrainingState> get copyWith =>
@@ -40,7 +43,10 @@ abstract class $CreateTrainingStateCopyWith<$Res> {
       bool isSuccess,
       TraininView view,
       String? successMsg,
-      Failure? error});
+      Failure? error,
+      List<TrainingEvent> scannedEvents,
+      String? employeeName,
+      String? employeeCode});
 
   $TrainingEventCopyWith<$Res> get form;
   $FailureCopyWith<$Res>? get error;
@@ -65,6 +71,9 @@ class _$CreateTrainingStateCopyWithImpl<$Res, $Val extends CreateTrainingState>
     Object? view = null,
     Object? successMsg = freezed,
     Object? error = freezed,
+    Object? scannedEvents = null,
+    Object? employeeName = freezed,
+    Object? employeeCode = freezed,
   }) {
     return _then(_value.copyWith(
       form: null == form
@@ -91,6 +100,18 @@ class _$CreateTrainingStateCopyWithImpl<$Res, $Val extends CreateTrainingState>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as Failure?,
+      scannedEvents: null == scannedEvents
+          ? _value.scannedEvents
+          : scannedEvents // ignore: cast_nullable_to_non_nullable
+              as List<TrainingEvent>,
+      employeeName: freezed == employeeName
+          ? _value.employeeName
+          : employeeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      employeeCode: freezed == employeeCode
+          ? _value.employeeCode
+          : employeeCode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -129,7 +150,10 @@ abstract class _$$CreateTrainingStateImplCopyWith<$Res>
       bool isSuccess,
       TraininView view,
       String? successMsg,
-      Failure? error});
+      Failure? error,
+      List<TrainingEvent> scannedEvents,
+      String? employeeName,
+      String? employeeCode});
 
   @override
   $TrainingEventCopyWith<$Res> get form;
@@ -154,6 +178,9 @@ class __$$CreateTrainingStateImplCopyWithImpl<$Res>
     Object? view = null,
     Object? successMsg = freezed,
     Object? error = freezed,
+    Object? scannedEvents = null,
+    Object? employeeName = freezed,
+    Object? employeeCode = freezed,
   }) {
     return _then(_$CreateTrainingStateImpl(
       form: null == form
@@ -180,6 +207,18 @@ class __$$CreateTrainingStateImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as Failure?,
+      scannedEvents: null == scannedEvents
+          ? _value._scannedEvents
+          : scannedEvents // ignore: cast_nullable_to_non_nullable
+              as List<TrainingEvent>,
+      employeeName: freezed == employeeName
+          ? _value.employeeName
+          : employeeName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      employeeCode: freezed == employeeCode
+          ? _value.employeeCode
+          : employeeCode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -193,7 +232,11 @@ class _$CreateTrainingStateImpl implements _CreateTrainingState {
       required this.isSuccess,
       required this.view,
       this.successMsg,
-      this.error});
+      this.error,
+      final List<TrainingEvent> scannedEvents = const <TrainingEvent>[],
+      this.employeeName,
+      this.employeeCode})
+      : _scannedEvents = scannedEvents;
 
   @override
   final TrainingEvent form;
@@ -207,10 +250,23 @@ class _$CreateTrainingStateImpl implements _CreateTrainingState {
   final String? successMsg;
   @override
   final Failure? error;
+  final List<TrainingEvent> _scannedEvents;
+  @override
+  @JsonKey()
+  List<TrainingEvent> get scannedEvents {
+    if (_scannedEvents is EqualUnmodifiableListView) return _scannedEvents;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_scannedEvents);
+  }
+
+  @override
+  final String? employeeName;
+  @override
+  final String? employeeCode;
 
   @override
   String toString() {
-    return 'CreateTrainingState(form: $form, isLoading: $isLoading, isSuccess: $isSuccess, view: $view, successMsg: $successMsg, error: $error)';
+    return 'CreateTrainingState(form: $form, isLoading: $isLoading, isSuccess: $isSuccess, view: $view, successMsg: $successMsg, error: $error, scannedEvents: $scannedEvents, employeeName: $employeeName, employeeCode: $employeeCode)';
   }
 
   @override
@@ -226,12 +282,27 @@ class _$CreateTrainingStateImpl implements _CreateTrainingState {
             (identical(other.view, view) || other.view == view) &&
             (identical(other.successMsg, successMsg) ||
                 other.successMsg == successMsg) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            const DeepCollectionEquality()
+                .equals(other._scannedEvents, _scannedEvents) &&
+            (identical(other.employeeName, employeeName) ||
+                other.employeeName == employeeName) &&
+            (identical(other.employeeCode, employeeCode) ||
+                other.employeeCode == employeeCode));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, form, isLoading, isSuccess, view, successMsg, error);
+      runtimeType,
+      form,
+      isLoading,
+      isSuccess,
+      view,
+      successMsg,
+      error,
+      const DeepCollectionEquality().hash(_scannedEvents),
+      employeeName,
+      employeeCode);
 
   @JsonKey(ignore: true)
   @override
@@ -248,7 +319,10 @@ abstract class _CreateTrainingState implements CreateTrainingState {
       required final bool isSuccess,
       required final TraininView view,
       final String? successMsg,
-      final Failure? error}) = _$CreateTrainingStateImpl;
+      final Failure? error,
+      final List<TrainingEvent> scannedEvents,
+      final String? employeeName,
+      final String? employeeCode}) = _$CreateTrainingStateImpl;
 
   @override
   TrainingEvent get form;
@@ -262,6 +336,12 @@ abstract class _CreateTrainingState implements CreateTrainingState {
   String? get successMsg;
   @override
   Failure? get error;
+  @override
+  List<TrainingEvent> get scannedEvents;
+  @override
+  String? get employeeName;
+  @override
+  String? get employeeCode;
   @override
   @JsonKey(ignore: true)
   _$$CreateTrainingStateImplCopyWith<_$CreateTrainingStateImpl> get copyWith =>

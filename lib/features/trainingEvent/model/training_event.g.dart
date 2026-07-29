@@ -34,6 +34,10 @@ _$TrainingEventImpl _$$TrainingEventImplFromJson(Map<String, dynamic> json) =>
       introduction: json['introduction'] as String?,
       amendedFrom: json['amended_from'] as String?,
       employeeEmails: json['employee_emails'] as String?,
+      employeeDetails: json['employee_details'] == null
+          ? null
+          : EmployeeDetails.fromJson(
+              json['employee_details'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$TrainingEventImplToJson(_$TrainingEventImpl instance) =>
@@ -64,4 +68,5 @@ Map<String, dynamic> _$$TrainingEventImplToJson(_$TrainingEventImpl instance) =>
       'introduction': instance.introduction,
       'amended_from': instance.amendedFrom,
       'employee_emails': instance.employeeEmails,
+      'employee_details': instance.employeeDetails,
     };

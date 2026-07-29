@@ -26,8 +26,6 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateTrainingCubit, CreateTrainingState>(
       builder: (context, formState) {
-        // final isCreating = formState.view == GateEntryView.create;
-        // final isCompleted = formState.view == GateEntryView.completed;
         final form = formState.form;
         $logger.devLog('form.........$form');
 
@@ -35,14 +33,11 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
         final isHod = userRoles.any(
           (r) => r.toString().toLowerCase().contains('hr user'),
         );
-        final isTrainee = userRoles.any(
-          (r) => r.toString().toLowerCase().contains('trainee'),
-        );
         final isTrainer = userRoles.any(
           (r) => r.toString().toLowerCase().contains('trainer'),
         );
         $logger.devLog('trainer....$isTrainer');
-        final showQr = ( isHod || isTrainer) &&  (form.name?.isNotEmpty ?? false);
+        final showQr = (isHod || isTrainer) && (form.name?.isNotEmpty ?? false);
 
         return SpacedColumn(
           margin: const EdgeInsets.all(12.0),
@@ -60,7 +55,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.marigoldDDust),
+                        border: Border.all(color: AppColors.event),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: QrImageView(
@@ -70,65 +65,20 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(form.name!, style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      form.name!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
             ],
-            if (isTrainee) ...[
-              SizedBox(
-                width: double.infinity,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.event.withValues(alpha: 0.35),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.event,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  icon: const Icon(Icons.qr_code_scanner),
-                  label: const Text('Scan Training QR'),
-                  onPressed: () async {
-                    final result = await Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(builder: (_) => const QrScannerPage()),
-                    );
-
-                    if (result != null && result.isNotEmpty) {
-                      context.read<CreateTrainingCubit>().joinTraining(result);
-                      if (!context.mounted) return;
-
-                      context.read<Employess>().request(result);
-                    }
-                  },
-                  ),
-                ),
-              ),
-            ],
-
             InputField(
               title: 'Training Program',
               readOnly: true,
               isRequired: true,
               initialValue: form.trainingProgram,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               onChanged: (no) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
                   trainingProgram: no,
@@ -141,7 +91,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               hintText: 'Enter Invoice Number',
               isRequired: true,
               initialValue: form.eventStatus,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               onChanged: (invNumber) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
                   eventStatus: invNumber,
@@ -152,7 +102,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Type',
               readOnly: true,
               initialValue: form.type,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (type) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(type: type);
@@ -162,7 +112,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Company',
               readOnly: true,
               initialValue: form.company,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (company) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -174,7 +124,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Trainer',
               readOnly: true,
               initialValue: form.trainerName,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (trainerName) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -186,7 +136,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Supplier',
               readOnly: true,
               initialValue: form.supplier,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (supplier) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -198,7 +148,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Traininer Email',
               readOnly: true,
               initialValue: form.trainerEmail,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (trainerEmail) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -210,7 +160,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Contact',
               readOnly: true,
               initialValue: form.contactNumber,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (contactNumber) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -222,17 +172,19 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Course',
               readOnly: true,
               initialValue: form.course,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (course) {
-                context.cubit<CreateTrainingCubit>().onValueChanged(course: course);
+                context.cubit<CreateTrainingCubit>().onValueChanged(
+                  course: course,
+                );
               },
             ),
             InputField(
               title: 'Location',
               readOnly: true,
               initialValue: form.location,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (location) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -244,7 +196,7 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'Start Time',
               readOnly: true,
               initialValue: form.startTime,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (startTime) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
@@ -256,23 +208,11 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
               title: 'End Time',
               readOnly: true,
               initialValue: form.endTime,
-              borderColor: AppColors.marigoldDDust,
+              borderColor: AppColors.event,
               minLines: 1,
               onChanged: (endTime) {
                 context.cubit<CreateTrainingCubit>().onValueChanged(
                   endTime: endTime,
-                );
-              },
-            ),
-            InputField(
-              title: 'Introduction',
-              readOnly: true,
-              initialValue: form.introduction,
-              borderColor: AppColors.marigoldDDust,
-              minLines: 1,
-              onChanged: (introduction) {
-                context.cubit<CreateTrainingCubit>().onValueChanged(
-                  introduction: introduction,
                 );
               },
             ),
@@ -328,15 +268,8 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
   }
 
   Widget _employeeTable(List<TrainingEmployee> employees) {
-    // Only force a horizontal scroll on screens too narrow to fit the
-    // columns naturally — on wide screens the table just fills the space.
     final screenWidth = MediaQuery.of(context).size.width;
     final tableMinWidth = screenWidth < 700 ? 700.0 : screenWidth - 24;
-
-    final allSelected =
-        employees.isNotEmpty && _selectedRows.length == employees.length;
-    final someSelected = _selectedRows.isNotEmpty && !allSelected;
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -345,126 +278,99 @@ class _TrainingFormWidgetState extends State<TrainingFormWidget> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Scrollbar(
-          thumbVisibility: true,
-          child: DataTable2(
-            columnSpacing: 16,
-            horizontalMargin: 12,
-            minWidth: tableMinWidth,
-            headingRowHeight: 44,
-            dataRowHeight: 46,
-            border: TableBorder(
-              top: BorderSide(color: Colors.grey.shade300),
-              bottom: BorderSide(color: Colors.grey.shade300),
-              left: BorderSide(color: Colors.grey.shade300),
-              right: BorderSide(color: Colors.grey.shade300),
-              horizontalInside: BorderSide(color: Colors.grey.shade300),
-              verticalInside: BorderSide(color: Colors.grey.shade300),
-            ),
-            headingRowColor: WidgetStateProperty.all(Colors.grey.shade100),
-            columns: [
-              DataColumn2(
-                fixedWidth: 40,
-                label: Checkbox(
-                  value: allSelected,
-                  tristate: someSelected,
-                  onChanged: (checked) {
-                    setState(() {
-                      if (checked == true) {
-                        _selectedRows
-                          ..clear()
-                          ..addAll(List.generate(employees.length, (i) => i));
-                      } else {
-                        _selectedRows.clear();
-                      }
-                    });
-                  },
-                ),
-              ),
-              const DataColumn2(fixedWidth: 45, label: Text('No.')),
-              const DataColumn2(size: ColumnSize.L, label: Text('Employee')),
-              const DataColumn2(size: ColumnSize.L, label: Text('Status')),
-              const DataColumn2(size: ColumnSize.M, label: Text('Attendance')),
-              const DataColumn2(
-                size: ColumnSize.M,
-                label: Text('Is Mandatory'),
-              ),
-              const DataColumn2(
-                fixedWidth: 45,
-                label: Icon(Icons.settings, size: 18),
-              ),
-            ],
-            rows: List.generate(employees.length, (index) {
-              final e = employees[index];
-              final selected = _selectedRows.contains(index);
-
-              return DataRow(
-                selected: selected,
-                cells: [
-                  DataCell(
-                    Checkbox(
-                      value: selected,
-                      onChanged: (checked) {
-                        setState(() {
-                          if (checked == true) {
-                            _selectedRows.add(index);
-                          } else {
-                            _selectedRows.remove(index);
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  DataCell(Text('${index + 1}')),
-                  DataCell(Text(e.employeeName ?? '')),
-                  DataCell(Text(e.status ?? 'Completed')),
-                  DataCell(Text(e.attendance ?? 'Present')),
-                  DataCell(
-                    Checkbox(
-                      value: e.isMandatory == 1,
-                      onChanged: (_) {
-                        // TODO: wire to cubit once a "toggle mandatory"
-                        // action exists on CreateTrainingCubit/Employess.
-                      },
-                    ),
-                  ),
-                  DataCell(
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined, size: 18),
-                      onPressed: () {
-                        // TODO: hook up row edit action.
-                      },
-                    ),
-                  ),
-                ],
-              );
-            }),
+        child: DataTable2(
+          columnSpacing: 16,
+          horizontalMargin: 12,
+          minWidth: tableMinWidth,
+          headingRowHeight: 44,
+          dataRowHeight: 46,
+          border: TableBorder(
+            top: BorderSide(color: Colors.grey.shade300),
+            bottom: BorderSide(color: Colors.grey.shade300),
+            left: BorderSide(color: Colors.grey.shade300),
+            right: BorderSide(color: Colors.grey.shade300),
+            horizontalInside: BorderSide(color: Colors.grey.shade300),
+            verticalInside: BorderSide(color: Colors.grey.shade300),
           ),
+          headingRowColor: WidgetStateProperty.all(Colors.grey.shade100),
+          columns: const [
+            DataColumn2(fixedWidth: 45, label: Text('No.')),
+            DataColumn2(size: ColumnSize.L, label: Text('Employee')),
+            DataColumn2(size: ColumnSize.S, label: Text('Status')),
+            DataColumn2(size: ColumnSize.S, label: Text('Attendance')),
+            DataColumn2(size: ColumnSize.S, label: Text('Is Mandatory')),
+          ],
+          rows: List.generate(employees.length, (index) {
+            final e = employees[index];
+            final selected = _selectedRows.contains(index);
+
+            return DataRow(
+              selected: selected,
+              cells: [
+                DataCell(Text('${index + 1}')),
+                DataCell(Text(e.employeeName ?? '')),
+                DataCell(Text(e.status ?? 'Completed')),
+                DataCell(Text(e.attendance ?? 'Present')),
+                DataCell(
+                  Checkbox(value: e.isMandatory == 1, onChanged: (_) {}),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
   }
 }
-
-class QrScannerPage extends StatelessWidget {
+class QrScannerPage extends StatefulWidget {
   const QrScannerPage({super.key});
+
+  @override
+  State<QrScannerPage> createState() => _QrScannerPageState();
+}
+
+class _QrScannerPageState extends State<QrScannerPage> {
+  bool _handled = false;
+
+  void _onDetect(BarcodeCapture capture) {
+    if (_handled) return; // ignore any further frames
+
+    final barcode = capture.barcodes.first;
+    final value = barcode.rawValue;
+    if (value != null && value.isNotEmpty) {
+      _handled = true;
+      Navigator.pop(context, value);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Scan Training QR')),
-      body: MobileScanner(
-        onDetect: (capture) {
-          final barcode = capture.barcodes.first;
-          final value = barcode.rawValue;
-          if (value != null) {
-            Navigator.pop(context, value);
-          }
-        },
-      ),
+      body: MobileScanner(onDetect: _onDetect),
     );
   }
 }
+
+// class QrScannerPage extends StatelessWidget {
+//   const QrScannerPage({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Scan Training QR')),
+//       body: MobileScanner(
+//         onDetect: (capture) {
+//           final barcode = capture.barcodes.first;
+//           final value = barcode.rawValue;
+//           if (value != null) {
+//             Navigator.pop(context, value);
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
 
 String? formatTime(String? backendTime) {
   if (backendTime == null || backendTime.isEmpty) return null;

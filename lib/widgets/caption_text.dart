@@ -5,10 +5,11 @@ import 'package:nuevosol/styles/app_text_styles.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 
 class CaptionText extends StatelessWidget {
-  const CaptionText({super.key, required this.title, this.isRequired = true});
+  const CaptionText({super.key, required this.title, this.isRequired = true, this.color = AppColors.black,});
 
   final String title;
   final bool isRequired;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     if (title.doesNotHaveValue) return const SizedBox.shrink();

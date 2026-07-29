@@ -71,6 +71,8 @@ mixin _$TrainingEvent {
   String? get amendedFrom => throw _privateConstructorUsedError;
   @JsonKey(name: 'employee_emails')
   String? get employeeEmails => throw _privateConstructorUsedError;
+  @JsonKey(name: 'employee_details')
+  EmployeeDetails? get employeeDetails => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -110,7 +112,10 @@ abstract class $TrainingEventCopyWith<$Res> {
       @JsonKey(name: 'end_time') String? endTime,
       @JsonKey(name: 'introduction') String? introduction,
       @JsonKey(name: 'amended_from') String? amendedFrom,
-      @JsonKey(name: 'employee_emails') String? employeeEmails});
+      @JsonKey(name: 'employee_emails') String? employeeEmails,
+      @JsonKey(name: 'employee_details') EmployeeDetails? employeeDetails});
+
+  $EmployeeDetailsCopyWith<$Res>? get employeeDetails;
 }
 
 /// @nodoc
@@ -152,6 +157,7 @@ class _$TrainingEventCopyWithImpl<$Res, $Val extends TrainingEvent>
     Object? introduction = freezed,
     Object? amendedFrom = freezed,
     Object? employeeEmails = freezed,
+    Object? employeeDetails = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -258,7 +264,23 @@ class _$TrainingEventCopyWithImpl<$Res, $Val extends TrainingEvent>
           ? _value.employeeEmails
           : employeeEmails // ignore: cast_nullable_to_non_nullable
               as String?,
+      employeeDetails: freezed == employeeDetails
+          ? _value.employeeDetails
+          : employeeDetails // ignore: cast_nullable_to_non_nullable
+              as EmployeeDetails?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $EmployeeDetailsCopyWith<$Res>? get employeeDetails {
+    if (_value.employeeDetails == null) {
+      return null;
+    }
+
+    return $EmployeeDetailsCopyWith<$Res>(_value.employeeDetails!, (value) {
+      return _then(_value.copyWith(employeeDetails: value) as $Val);
+    });
   }
 }
 
@@ -296,7 +318,11 @@ abstract class _$$TrainingEventImplCopyWith<$Res>
       @JsonKey(name: 'end_time') String? endTime,
       @JsonKey(name: 'introduction') String? introduction,
       @JsonKey(name: 'amended_from') String? amendedFrom,
-      @JsonKey(name: 'employee_emails') String? employeeEmails});
+      @JsonKey(name: 'employee_emails') String? employeeEmails,
+      @JsonKey(name: 'employee_details') EmployeeDetails? employeeDetails});
+
+  @override
+  $EmployeeDetailsCopyWith<$Res>? get employeeDetails;
 }
 
 /// @nodoc
@@ -336,6 +362,7 @@ class __$$TrainingEventImplCopyWithImpl<$Res>
     Object? introduction = freezed,
     Object? amendedFrom = freezed,
     Object? employeeEmails = freezed,
+    Object? employeeDetails = freezed,
   }) {
     return _then(_$TrainingEventImpl(
       status: freezed == status
@@ -442,6 +469,10 @@ class __$$TrainingEventImplCopyWithImpl<$Res>
           ? _value.employeeEmails
           : employeeEmails // ignore: cast_nullable_to_non_nullable
               as String?,
+      employeeDetails: freezed == employeeDetails
+          ? _value.employeeDetails
+          : employeeDetails // ignore: cast_nullable_to_non_nullable
+              as EmployeeDetails?,
     ));
   }
 }
@@ -475,7 +506,8 @@ class _$TrainingEventImpl implements _TrainingEvent {
       @JsonKey(name: 'end_time') this.endTime,
       @JsonKey(name: 'introduction') this.introduction,
       @JsonKey(name: 'amended_from') this.amendedFrom,
-      @JsonKey(name: 'employee_emails') this.employeeEmails});
+      @JsonKey(name: 'employee_emails') this.employeeEmails,
+      @JsonKey(name: 'employee_details') this.employeeDetails});
 
   factory _$TrainingEventImpl.fromJson(Map<String, dynamic> json) =>
       _$$TrainingEventImplFromJson(json);
@@ -557,10 +589,13 @@ class _$TrainingEventImpl implements _TrainingEvent {
   @override
   @JsonKey(name: 'employee_emails')
   final String? employeeEmails;
+  @override
+  @JsonKey(name: 'employee_details')
+  final EmployeeDetails? employeeDetails;
 
   @override
   String toString() {
-    return 'TrainingEvent(status: $status, name: $name, owner: $owner, creationDate: $creationDate, modifiedDate: $modifiedDate, modifiedBy: $modifiedBy, docStatus: $docStatus, idx: $idx, eventName: $eventName, trainingProgram: $trainingProgram, eventStatus: $eventStatus, hasCertificate: $hasCertificate, type: $type, level: $level, company: $company, trainerName: $trainerName, trainerEmail: $trainerEmail, supplier: $supplier, contactNumber: $contactNumber, course: $course, location: $location, startTime: $startTime, endTime: $endTime, introduction: $introduction, amendedFrom: $amendedFrom, employeeEmails: $employeeEmails)';
+    return 'TrainingEvent(status: $status, name: $name, owner: $owner, creationDate: $creationDate, modifiedDate: $modifiedDate, modifiedBy: $modifiedBy, docStatus: $docStatus, idx: $idx, eventName: $eventName, trainingProgram: $trainingProgram, eventStatus: $eventStatus, hasCertificate: $hasCertificate, type: $type, level: $level, company: $company, trainerName: $trainerName, trainerEmail: $trainerEmail, supplier: $supplier, contactNumber: $contactNumber, course: $course, location: $location, startTime: $startTime, endTime: $endTime, introduction: $introduction, amendedFrom: $amendedFrom, employeeEmails: $employeeEmails, employeeDetails: $employeeDetails)';
   }
 
   @override
@@ -610,7 +645,9 @@ class _$TrainingEventImpl implements _TrainingEvent {
             (identical(other.amendedFrom, amendedFrom) ||
                 other.amendedFrom == amendedFrom) &&
             (identical(other.employeeEmails, employeeEmails) ||
-                other.employeeEmails == employeeEmails));
+                other.employeeEmails == employeeEmails) &&
+            (identical(other.employeeDetails, employeeDetails) ||
+                other.employeeDetails == employeeDetails));
   }
 
   @JsonKey(ignore: true)
@@ -642,7 +679,8 @@ class _$TrainingEventImpl implements _TrainingEvent {
         endTime,
         introduction,
         amendedFrom,
-        employeeEmails
+        employeeEmails,
+        employeeDetails
       ]);
 
   @JsonKey(ignore: true)
@@ -661,33 +699,34 @@ class _$TrainingEventImpl implements _TrainingEvent {
 
 abstract class _TrainingEvent implements TrainingEvent {
   const factory _TrainingEvent(
-          {final String? status,
-          @JsonKey(name: 'name') final String? name,
-          @JsonKey(name: 'owner') final String? owner,
-          @JsonKey(name: 'creation') final String? creationDate,
-          @JsonKey(name: 'modified') final String? modifiedDate,
-          @JsonKey(name: 'modified_by') final String? modifiedBy,
-          @JsonKey(name: 'docstatus') final int? docStatus,
-          @JsonKey(name: 'idx') final int? idx,
-          @JsonKey(name: 'event_name') final String? eventName,
-          @JsonKey(name: 'training_program') final String? trainingProgram,
-          @JsonKey(name: 'event_status') final String? eventStatus,
-          @JsonKey(name: 'has_certificate') final int? hasCertificate,
-          @JsonKey(name: 'type') final String? type,
-          @JsonKey(name: 'level') final String? level,
-          @JsonKey(name: 'company') final String? company,
-          @JsonKey(name: 'trainer_name') final String? trainerName,
-          @JsonKey(name: 'trainer_email') final String? trainerEmail,
-          @JsonKey(name: 'supplier') final String? supplier,
-          @JsonKey(name: 'contact_number') final String? contactNumber,
-          @JsonKey(name: 'course') final String? course,
-          @JsonKey(name: 'location') final String? location,
-          @JsonKey(name: 'start_time') final String? startTime,
-          @JsonKey(name: 'end_time') final String? endTime,
-          @JsonKey(name: 'introduction') final String? introduction,
-          @JsonKey(name: 'amended_from') final String? amendedFrom,
-          @JsonKey(name: 'employee_emails') final String? employeeEmails}) =
-      _$TrainingEventImpl;
+      {final String? status,
+      @JsonKey(name: 'name') final String? name,
+      @JsonKey(name: 'owner') final String? owner,
+      @JsonKey(name: 'creation') final String? creationDate,
+      @JsonKey(name: 'modified') final String? modifiedDate,
+      @JsonKey(name: 'modified_by') final String? modifiedBy,
+      @JsonKey(name: 'docstatus') final int? docStatus,
+      @JsonKey(name: 'idx') final int? idx,
+      @JsonKey(name: 'event_name') final String? eventName,
+      @JsonKey(name: 'training_program') final String? trainingProgram,
+      @JsonKey(name: 'event_status') final String? eventStatus,
+      @JsonKey(name: 'has_certificate') final int? hasCertificate,
+      @JsonKey(name: 'type') final String? type,
+      @JsonKey(name: 'level') final String? level,
+      @JsonKey(name: 'company') final String? company,
+      @JsonKey(name: 'trainer_name') final String? trainerName,
+      @JsonKey(name: 'trainer_email') final String? trainerEmail,
+      @JsonKey(name: 'supplier') final String? supplier,
+      @JsonKey(name: 'contact_number') final String? contactNumber,
+      @JsonKey(name: 'course') final String? course,
+      @JsonKey(name: 'location') final String? location,
+      @JsonKey(name: 'start_time') final String? startTime,
+      @JsonKey(name: 'end_time') final String? endTime,
+      @JsonKey(name: 'introduction') final String? introduction,
+      @JsonKey(name: 'amended_from') final String? amendedFrom,
+      @JsonKey(name: 'employee_emails') final String? employeeEmails,
+      @JsonKey(name: 'employee_details')
+      final EmployeeDetails? employeeDetails}) = _$TrainingEventImpl;
 
   factory _TrainingEvent.fromJson(Map<String, dynamic> json) =
       _$TrainingEventImpl.fromJson;
@@ -769,6 +808,9 @@ abstract class _TrainingEvent implements TrainingEvent {
   @override
   @JsonKey(name: 'employee_emails')
   String? get employeeEmails;
+  @override
+  @JsonKey(name: 'employee_details')
+  EmployeeDetails? get employeeDetails;
   @override
   @JsonKey(ignore: true)
   _$$TrainingEventImplCopyWith<_$TrainingEventImpl> get copyWith =>

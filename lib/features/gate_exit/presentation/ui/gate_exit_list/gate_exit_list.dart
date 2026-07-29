@@ -21,6 +21,7 @@ class GateExitListScrn extends StatelessWidget {
       backgroundColor: AppColors.shyMoment,
       onNew: () async {
         final refresh = await AppRoute.newGateExit.push<bool?>(context);
+        if(!context.mounted) return;
         if (refresh == true) {
           fetchInital(context);
         }
@@ -50,6 +51,7 @@ class GateExitListScrn extends StatelessWidget {
                     context,
                     extra: exit,
                   );
+                  if(!context.mounted) return;
                   if (refresh == true) {
                     fetchInital(context);
                   }

@@ -103,6 +103,19 @@ class AppHomePage extends StatelessWidget {
                             AppRoute.trainingEvent.push(context),
                           
                         ),
+                        AppFeatureWidget(
+                          icon: AppIcons.event.toWidget(
+                              height: 100, width: 120, fit: BoxFit.fill),
+                          title: FittedBox(
+                            child: Text('Packing',
+                                style:
+                                    AppTextStyles.featureLabelStyle(context)),
+                          ),
+                          featureColor: AppColors.packing,
+                          onTap: () =>
+                            AppRoute.packing.push(context),
+                          
+                        ),
 
                 
                    

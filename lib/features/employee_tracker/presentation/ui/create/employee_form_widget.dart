@@ -867,6 +867,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                       initialTime: TimeOfDay.now(),
                                     );
                                     if (time == null) return;
+                                    if(!context.mounted) return;
 
                                     final combined = DateTime(
                                       date.year,
@@ -1000,6 +1001,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                         initialTime: TimeOfDay.now(),
                                       );
                                       if (time == null) return;
+                                      if(!context.mounted) return;
 
                                       final combined = DateTime(
                                         date.year,

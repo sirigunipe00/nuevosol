@@ -14,6 +14,7 @@ enum PageMode2 {
   gateexit('Gate Exit'),
   employeeTracker('Gate Pass'),
   trainingEvent('Traning Event'),
+  packing('Packing'),
   dipatchGaylord('Dispatch Gaylord'),
   poapprovallist('PO Approval List'),
   dashbaords('Dashbaords');
@@ -63,7 +64,17 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
     final isHod = userRoles.any(
   (r) => r.toString().toLowerCase().contains('hod (hr)'),
 );
-
+final isHrUser = userRoles.any(
+  
+      (r) => r.toString().toLowerCase().contains('hr user'),
+  
+);
+final isTrainee = userRoles.any(
+  (r) => r.toString().toLowerCase().contains('trainee'),
+);
+final hideSearchAndStatus =
+    widget.mode == PageMode2.dashbaords ||
+    (widget.mode == PageMode2.trainingEvent && isTrainee);
     final isSecurity = userRoles.any((r) {
       final role = r.toString().toLowerCase();
       return role.contains('nepl-unit-1-gate') ||
@@ -75,6 +86,9 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
     final hideFabForSecurity =
     widget.mode == PageMode2.employeeTracker && isSecurity;
     final hideFabForTraining = widget.mode == PageMode2.trainingEvent;
+    final showTrailingAction =
+    (widget.mode == PageMode2.employeeTracker && isHod) ||
+    (widget.mode == PageMode2.trainingEvent && isHrUser);
     T? cubit;
     try {
       cubit = context.read<T>();
@@ -85,6 +99,7 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
       PageMode2.gateexit => 'Search Gate Exit - ID',
       PageMode2.employeeTracker => 'Search Gate Pass - ID',
       PageMode2.dipatchGaylord => 'Serach Delivery Note - ID',
+      PageMode2.packing => 'Search Packing',
       PageMode2.poapprovallist => 'Search PO - ID',
       PageMode2.dashbaords => '',
       PageMode2.trainingEvent => 'Search Event'
@@ -150,7 +165,8 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
             ),
           ),
 
-          if (widget.mode != PageMode2.dashbaords) ...[
+          // if (widget.mode != PageMode2.dashbaords) ...[
+          if(!hideSearchAndStatus)...[
             Positioned(
               top: kToolbarHeight + 32,
               left: 0,
@@ -181,7 +197,9 @@ class _AppPageView2State<T extends FiltersCubit> extends State<AppPageView2<T>> 
                         ),
                       ),
                     ],
-                    if (widget.mode == PageMode2.employeeTracker && isHod
+        //             if ((widget.mode == PageMode2.employeeTracker ||
+        // widget.mode == PageMode2.trainingEvent) && isHod && isHrUser
+        if(showTrailingAction
              ) ...[
             const SizedBox(width: 8),
             Expanded(
