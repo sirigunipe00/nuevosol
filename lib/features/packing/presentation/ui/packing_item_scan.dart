@@ -3,26 +3,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/packing/model/bom_items.dart';
 import 'package:nuevosol/features/packing/model/component_scanning_data.dart';
-import 'package:nuevosol/features/packing/model/operator.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
+import 'package:nuevosol/features/packing/model/packing_quality_args.dart';
 import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
+import 'package:nuevosol/widgets/buttons/app_btn.dart';
 import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
-import 'package:nuevosol/widgets/multi_dropdown.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 import 'package:nuevosol/widgets/title_status_app_bar.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
-class PackingItemScanScrn extends StatelessWidget {
+class PackingItemScanScrn extends StatefulWidget {
   const PackingItemScanScrn({super.key, required this.packing});
 
   final PackingModel packing;
 
   @override
+  State<PackingItemScanScrn> createState() => _PackingItemScanScrnState();
+}
+
+class _PackingItemScanScrnState extends State<PackingItemScanScrn> {
+  late PackingModel _packing;
+
+  @override
+  void initState() {
+    super.initState();
+    _packing = widget.packing;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final status = packing.docstatus ?? 0;
-    final name = packing.name.valueOrEmpty;
+    final status = _packing.docstatus ?? 0;
+    final name = _packing.name.valueOrEmpty;
 
     return Scaffold(
       appBar:
@@ -39,40 +52,7 @@ class PackingItemScanScrn extends StatelessWidget {
           child: SpacedColumn(
             defaultHeight: 12,
             children: [
-              BlocBuilder<OperatorCubit, OperatorState>(
-                builder: (_, state) {
-                  return state.maybeWhen(
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
-                    success: (items) {
-                      return SearchMultiDropDownList<Operator>(
-                        title: 'Operators',
-                        hint: 'Operators',
-                        items: items,
-                        readOnly: true,
-                        color: AppColors.packing,
-                        defaultSelection: items,
-                        listItemBuilder:
-                            (_, item, __, ___) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.operatorName ?? item.name ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                if (item.operatorUserName.containsValidValue)
-                                  Text(item.operatorUserName ?? ''),
-                              ],
-                            ),
-                        onSelected: (_) {},
-                      );
-                    },
-                    orElse: () => const SizedBox.shrink(),
-                  );
-                },
-              ),
+              _PackingScanHeader(packing: _packing),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -128,7 +108,7 @@ class PackingItemScanScrn extends StatelessWidget {
 
                       return _BomItemsScanTable(
                         items: items,
-                        packing: packing,
+                        packing: _packing,
                         existingScans: existingScans,
                       );
                     },
@@ -144,11 +124,70 @@ class PackingItemScanScrn extends StatelessWidget {
   }
 }
 
+class _PackingScanHeader extends StatelessWidget {
+  const _PackingScanHeader({required this.packing});
+
+  final PackingModel packing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          _headerRow('Process', packing.selectProcess ?? '-'),
+          const Divider(height: 16),
+          _headerRow('Item', packing.rawMaterialName ?? '-'),
+          const Divider(height: 16),
+          _headerRow(
+            'Qty',
+            packing.bomQtyItem == null ? '-' : packing.bomQtyItem.toString(),
+          ),
+          const Divider(height: 16),
+          _headerRow(
+            'Ok Qty',
+            packing.okQty == null ? '-' : packing.okQty.toString(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _headerRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 80,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+            ),
+          ),
+        ),
+        const Text(':  '),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _ScanRowData {
-  _ScanRowData({
-    required this.item,
-    required this.scanNo,
-  });
+  _ScanRowData({required this.item, required this.scanNo});
 
   final BomItems item;
   final int scanNo;
@@ -163,7 +202,6 @@ class _ScanRowData {
 
 class _BomItemsScanTable extends StatefulWidget {
   const _BomItemsScanTable({
-    super.key,
     required this.items,
     required this.packing,
     required this.existingScans,
@@ -179,11 +217,44 @@ class _BomItemsScanTable extends StatefulWidget {
 
 class _BomItemsScanTableState extends State<_BomItemsScanTable> {
   late final List<_ScanRowData> _scanRows;
+  bool _isSubmitting = false;
+  bool _isSubmitted = false;
+  bool _isCreatingInspection = false;
+  bool _isLoadingInspectionLot = false;
+  String? _existingInspectionLotId;
 
   @override
   void initState() {
     super.initState();
     _scanRows = _buildScanRows(widget.items, widget.existingScans);
+    _isSubmitted = (widget.packing.docstatus ?? 0) >= 1;
+    if (_isSubmitted) {
+      _loadExistingInspectionLot();
+    }
+  }
+
+  Future<void> _loadExistingInspectionLot() async {
+    final productionPosting = widget.packing.name ?? '';
+    if (productionPosting.isEmpty) return;
+
+    setState(() => _isLoadingInspectionLot = true);
+    final response = await PackingBlocProvider.get().repo.fetchInspectionLotId(
+      productionPosting,
+    );
+    if (!mounted) return;
+
+    response.fold(
+      (_) {
+        setState(() => _isLoadingInspectionLot = false);
+      },
+      (lotId) {
+        setState(() {
+          _isLoadingInspectionLot = false;
+          _existingInspectionLotId =
+              (lotId != null && lotId.trim().isNotEmpty) ? lotId.trim() : null;
+        });
+      },
+    );
   }
 
   @override
@@ -208,7 +279,7 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
     final scansByItem = <String, List<ComponentScanningData>>{};
 
     for (final scan in existingScans) {
-      final itemCode = (scan.item ?? '').trim();
+      final itemCode = (scan.item ?? '').trim().toLowerCase();
       if (itemCode.isEmpty) continue;
       scansByItem.putIfAbsent(itemCode, () => []).add(scan);
     }
@@ -219,7 +290,7 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
 
       final itemCode = (item.itemCode ?? '').trim();
       final savedScans = List<ComponentScanningData>.from(
-        scansByItem[itemCode] ?? const [],
+        scansByItem[itemCode.toLowerCase()] ?? const [],
       );
       final remainingForItem = (scanCount - savedScans.length).clamp(
         0,
@@ -312,6 +383,12 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
             Navigator.of(context, rootNavigator: true).pop();
           },
         );
+        if (!mounted) return;
+        setState(() {
+          row
+            ..scannedValue = ''
+            ..controller.clear();
+        });
       },
       (result) async {
         setState(() {
@@ -351,6 +428,130 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
     );
   }
 
+  Future<void> _submitPacking() async {
+    if (_isSubmitting || _isSubmitted) return;
+
+    final name = widget.packing.name ?? '';
+    if (name.isEmpty) {
+      await AppDialog.showErrorDialog(
+        context,
+        title: 'Error',
+        content: 'Packing document name is missing',
+        onTapDismiss: () {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    final response = await PackingBlocProvider.get().repo.submitPacking(name);
+
+    if (!mounted) return;
+
+    await response.fold(
+      (failure) async {
+        setState(() => _isSubmitting = false);
+        if (!mounted) return;
+        await AppDialog.showErrorDialog(
+          context,
+          title: failure.title ?? 'Submit Error',
+          content: failure.error,
+          onTapDismiss: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        );
+      },
+      (result) async {
+        setState(() {
+          _isSubmitting = false;
+          _isSubmitted = true;
+        });
+        if (!mounted) return;
+        await AppDialog.showSuccessDialog(
+          context,
+          title: 'Success',
+          content: result.first.isNotEmpty
+              ? result.first
+              : 'Packing submitted successfully',
+          onTapDismiss: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _createQualityInspection() async {
+    if (_isCreatingInspection) return;
+
+    final productionPosting = widget.packing.name ?? '';
+    if (productionPosting.isEmpty) {
+      await AppDialog.showErrorDialog(
+        context,
+        title: 'Error',
+        content: 'Packing document name is missing',
+        onTapDismiss: () {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+      );
+      return;
+    }
+
+    setState(() => _isCreatingInspection = true);
+
+    final response = await PackingBlocProvider.get().repo.createInspectionLot(
+      productionPosting,
+    );
+
+    if (!mounted) return;
+
+    await response.fold(
+      (failure) async {
+        setState(() => _isCreatingInspection = false);
+        if (!mounted) return;
+        await AppDialog.showErrorDialog(
+          context,
+          title: failure.title ?? 'Error',
+          content: failure.error,
+          onTapDismiss: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        );
+      },
+      (result) async {
+        setState(() {
+          _isCreatingInspection = false;
+          _existingInspectionLotId = result.second;
+        });
+        if (!mounted) return;
+        await AppDialog.showSuccessDialog(
+          context,
+          title: 'Success',
+          content: result.first.isNotEmpty
+              ? '${result.first}\n${result.second}'
+              : 'Quality Inspection ${result.second} created successfully',
+          onTapDismiss: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        );
+        if (!mounted) return;
+        _openQualityInspection(result.second);
+      },
+    );
+  }
+
+  void _openQualityInspection(String inspectionLotId) {
+    AppRoute.packingQualityParameter.push(
+      context,
+      extra: PackingQualityArgs(
+        packing: widget.packing,
+        inspectionLotId: inspectionLotId,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_scanRows.isEmpty) {
@@ -361,6 +562,8 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
     }
 
     final completedCount = _scanRows.where((e) => e.isSuccess).length;
+    final allScansDone =
+        completedCount == _scanRows.length && _scanRows.isNotEmpty;
 
     return Column(
       children: [
@@ -512,9 +715,7 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
                             Icons.qr_code_scanner,
                             size: 40,
                             color:
-                                row.isSuccess
-                                    ? Colors.green
-                                    : AppColors.black,
+                                row.isSuccess ? Colors.green : AppColors.black,
                           ),
                         ),
                     ],
@@ -524,6 +725,31 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
             ),
           );
         }),
+        AppSpacer.p12(),
+        AppButton(
+          width: double.infinity,
+          label:
+              !_isSubmitted
+                  ? 'Submit'
+                  : (_existingInspectionLotId != null
+                      ? 'Next'
+                      : 'Create Quality Inspection'),
+          bgColor: AppColors.haintBlue,
+          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          isLoading:
+              _isSubmitting ||
+              _isCreatingInspection ||
+              _isLoadingInspectionLot,
+          onPressed:
+              !_isSubmitted
+                  ? (allScansDone && !_isSubmitting ? _submitPacking : null)
+                  : _isLoadingInspectionLot || _isCreatingInspection
+                  ? null
+                  : (_existingInspectionLotId != null
+                      ? () =>
+                          _openQualityInspection(_existingInspectionLotId!)
+                      : _createQualityInspection),
+        ),
       ],
     );
   }

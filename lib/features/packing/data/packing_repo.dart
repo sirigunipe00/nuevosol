@@ -8,6 +8,7 @@ import 'package:nuevosol/features/packing/model/machine_no.dart';
 import 'package:nuevosol/features/packing/model/operator.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
 import 'package:nuevosol/features/packing/model/packing_scan_result.dart';
+import 'package:nuevosol/features/packing/model/quality_inspection_reading.dart';
 import 'package:nuevosol/features/packing/model/select_process.dart';
 
 abstract interface class PackingRepo {
@@ -31,5 +32,17 @@ abstract interface class PackingRepo {
     required String bom,
     required String item,
     required String scannedValue,
+  });
+  AsyncValueOf<Pair<String, String>> submitPacking(String name);
+  AsyncValueOf<Pair<String, String>> createInspectionLot(
+    String productionPosting,
+  );
+  AsyncValueOf<String?> fetchInspectionLotId(String productionPosting);
+  AsyncValueOf<List<QualityInspectionReading>> fetchQualityInspectionReadings(
+    String inspectionLotId,
+  );
+  AsyncValueOf<Pair<String, String>> submitInspectionLot({
+    required String name,
+    required List<Map<String, dynamic>> readings,
   });
 }

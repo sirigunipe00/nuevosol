@@ -17,6 +17,7 @@ _$UserRolesImpl _$$UserRolesImplFromJson(Map<String, dynamic> json) =>
           (json['Show Gate Registration in Mobile App'] as num?)?.toInt() ?? 0,
       exit: (json['Show Gate Exit in Mobile App'] as num?)?.toInt() ?? 0,
       entry: (json['Show Gate Entry in Mobile App'] as num?)?.toInt() ?? 0,
+      packing: (json['Packing mobile app'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$UserRolesImplToJson(_$UserRolesImpl instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$$UserRolesImplToJson(_$UserRolesImpl instance) =>
       'Show Gate Registration in Mobile App': instance.registration,
       'Show Gate Exit in Mobile App': instance.exit,
       'Show Gate Entry in Mobile App': instance.entry,
+      'Packing mobile app': instance.packing,
     };

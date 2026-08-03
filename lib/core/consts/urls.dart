@@ -5,7 +5,7 @@ final _reqisteredUrl = $sl.get<Urls>(instanceName: 'baseUrl');
 class Urls {
 
   factory Urls.nuevosolUat() => const Urls('https://nuevosoluat.easycloud.co.in/api');
-  factory Urls.local() => const Urls('http://192.168.1.104:8000/api');
+  factory Urls.local() => const Urls('http://192.168.1.108:8000/api');
     factory Urls.live() => const Urls('https://livenuevosol.easycloud.co.in/api');
 
 
@@ -49,4 +49,8 @@ static String filepath(String path) {
 
   static final createPacking = '$cusWs/nuevosol.packing.create_production_posting_fc_and_packing';
   static final packingqrScanning = '$cusWs/nuevosol.packing.validate_and_save_component_scan';
+  static final submitPacking = '$cusWs/nuevosol.packing.submit_production_posting_fc_and_packing';
+  static final createInspectionLot =
+      '$cusWs/nuevosol.packing.create_inspection_lot_from_fc_packing';
+  static final submitInspectionLot = '$cusWs/nuevosol.packing.submit_inspection_lot_and_decision';
 }

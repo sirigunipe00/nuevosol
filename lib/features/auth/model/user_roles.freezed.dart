@@ -32,6 +32,8 @@ mixin _$UserRoles {
   int get exit => throw _privateConstructorUsedError;
   @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
   int get entry => throw _privateConstructorUsedError;
+  @JsonKey(name: 'Packing mobile app', defaultValue: 0)
+  int get packing => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,7 +57,8 @@ abstract class $UserRolesCopyWith<$Res> {
       int registration,
       @JsonKey(name: 'Show Gate Exit in Mobile App', defaultValue: 0) int exit,
       @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
-      int entry});
+      int entry,
+      @JsonKey(name: 'Packing mobile app', defaultValue: 0) int packing});
 }
 
 /// @nodoc
@@ -77,6 +80,7 @@ class _$UserRolesCopyWithImpl<$Res, $Val extends UserRoles>
     Object? registration = null,
     Object? exit = null,
     Object? entry = null,
+    Object? packing = null,
   }) {
     return _then(_value.copyWith(
       dashbaords: null == dashbaords
@@ -103,6 +107,10 @@ class _$UserRolesCopyWithImpl<$Res, $Val extends UserRoles>
           ? _value.entry
           : entry // ignore: cast_nullable_to_non_nullable
               as int,
+      packing: null == packing
+          ? _value.packing
+          : packing // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -126,7 +134,8 @@ abstract class _$$UserRolesImplCopyWith<$Res>
       int registration,
       @JsonKey(name: 'Show Gate Exit in Mobile App', defaultValue: 0) int exit,
       @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
-      int entry});
+      int entry,
+      @JsonKey(name: 'Packing mobile app', defaultValue: 0) int packing});
 }
 
 /// @nodoc
@@ -146,6 +155,7 @@ class __$$UserRolesImplCopyWithImpl<$Res>
     Object? registration = null,
     Object? exit = null,
     Object? entry = null,
+    Object? packing = null,
   }) {
     return _then(_$UserRolesImpl(
       dashbaords: null == dashbaords
@@ -172,6 +182,10 @@ class __$$UserRolesImplCopyWithImpl<$Res>
           ? _value.entry
           : entry // ignore: cast_nullable_to_non_nullable
               as int,
+      packing: null == packing
+          ? _value.packing
+          : packing // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -191,7 +205,9 @@ class _$UserRolesImpl extends _UserRoles {
       @JsonKey(name: 'Show Gate Exit in Mobile App', defaultValue: 0)
       required this.exit,
       @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
-      required this.entry})
+      required this.entry,
+      @JsonKey(name: 'Packing mobile app', defaultValue: 0)
+      required this.packing})
       : super._();
 
   factory _$UserRolesImpl.fromJson(Map<String, dynamic> json) =>
@@ -215,10 +231,13 @@ class _$UserRolesImpl extends _UserRoles {
   @override
   @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
   final int entry;
+  @override
+  @JsonKey(name: 'Packing mobile app', defaultValue: 0)
+  final int packing;
 
   @override
   String toString() {
-    return 'UserRoles(dashbaords: $dashbaords, approval: $approval, gaylord: $gaylord, registration: $registration, exit: $exit, entry: $entry)';
+    return 'UserRoles(dashbaords: $dashbaords, approval: $approval, gaylord: $gaylord, registration: $registration, exit: $exit, entry: $entry, packing: $packing)';
   }
 
   @override
@@ -234,13 +253,14 @@ class _$UserRolesImpl extends _UserRoles {
             (identical(other.registration, registration) ||
                 other.registration == registration) &&
             (identical(other.exit, exit) || other.exit == exit) &&
-            (identical(other.entry, entry) || other.entry == entry));
+            (identical(other.entry, entry) || other.entry == entry) &&
+            (identical(other.packing, packing) || other.packing == packing));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, dashbaords, approval, gaylord, registration, exit, entry);
+  int get hashCode => Object.hash(runtimeType, dashbaords, approval, gaylord,
+      registration, exit, entry, packing);
 
   @JsonKey(ignore: true)
   @override
@@ -269,7 +289,9 @@ abstract class _UserRoles extends UserRoles {
       @JsonKey(name: 'Show Gate Exit in Mobile App', defaultValue: 0)
       required final int exit,
       @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
-      required final int entry}) = _$UserRolesImpl;
+      required final int entry,
+      @JsonKey(name: 'Packing mobile app', defaultValue: 0)
+      required final int packing}) = _$UserRolesImpl;
   const _UserRoles._() : super._();
 
   factory _UserRoles.fromJson(Map<String, dynamic> json) =
@@ -293,6 +315,9 @@ abstract class _UserRoles extends UserRoles {
   @override
   @JsonKey(name: 'Show Gate Entry in Mobile App', defaultValue: 0)
   int get entry;
+  @override
+  @JsonKey(name: 'Packing mobile app', defaultValue: 0)
+  int get packing;
   @override
   @JsonKey(ignore: true)
   _$$UserRolesImplCopyWith<_$UserRolesImpl> get copyWith =>

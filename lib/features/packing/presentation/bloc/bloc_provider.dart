@@ -11,6 +11,7 @@ import 'package:nuevosol/features/packing/model/finished_component.dart';
 import 'package:nuevosol/features/packing/model/machine_no.dart';
 import 'package:nuevosol/features/packing/model/operator.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
+import 'package:nuevosol/features/packing/model/quality_inspection_reading.dart';
 import 'package:nuevosol/features/packing/model/select_process.dart';
 
 typedef PackingCubit =
@@ -32,6 +33,10 @@ typedef ComponentScanningCubit =
     NetworkRequestCubit<List<ComponentScanningData>, String>;
 typedef ComponentScanningState =
     NetworkRequestState<List<ComponentScanningData>>;
+typedef QualityInspectionReadingsCubit =
+    NetworkRequestCubit<List<QualityInspectionReading>, String>;
+typedef QualityInspectionReadingsState =
+    NetworkRequestState<List<QualityInspectionReading>>;
 
 @lazySingleton
 class PackingBlocProvider {
@@ -77,4 +82,11 @@ class PackingBlocProvider {
     onRequest:
         (params, state) => repo.fetchComponentScanningData(params ?? ''),
   );
+
+  QualityInspectionReadingsCubit fetchQualityInspectionReadings() =>
+      QualityInspectionReadingsCubit(
+        onRequest:
+            (params, state) =>
+                repo.fetchQualityInspectionReadings(params ?? ''),
+      );
 }

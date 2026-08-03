@@ -57,7 +57,12 @@ class PackingWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ViewBtn(onPressed: onTap),
-                    DocStatusWidget(status: StringUtils.docStatus(packing.docstatus ?? 0),),
+                    DocStatusWidget(
+                      status:
+                          packing.status.containsValidValue
+                              ? packing.status!
+                              : StringUtils.docStatus(packing.docstatus ?? 0),
+                    ),
                   ],
                 ),
               ],

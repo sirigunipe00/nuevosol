@@ -66,13 +66,13 @@ class InputField extends StatelessWidget {
           margin: EdgeInsets.zero,
           padding: EdgeInsets.zero,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: readOnly ? const Color(0xFFEEEEEE) : Colors.white,
             border: Border.all(color: AppColors.white),
             boxShadow: [
               BoxShadow(
                 color: borderColor ?? AppColors.white,
                 blurRadius: 2,
-                offset: const Offset(2, 2)
+                offset: const Offset(2, 2),
               ),
             ],
             borderRadius: BorderRadius.circular(16.0),
@@ -88,9 +88,9 @@ class InputField extends StatelessWidget {
               contentPadding: const EdgeInsets.all(16.0),
               suffixIcon: suffixIcon,
               counterText: '',
-              filled: readOnly, 
-              fillColor: readOnly ? AppColors.white : Colors.white,
-
+              filled: true,
+              fillColor:
+                  readOnly ? const Color(0xFFEEEEEE) : Colors.white,
             ),
             obscuringCharacter: '*',
             textInputAction: TextInputAction.done,

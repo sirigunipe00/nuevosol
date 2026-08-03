@@ -8,7 +8,7 @@ part 'logged_in_user.g.dart';
 class LoggedInUser with _$LoggedInUser {
   const LoggedInUser._();
   const factory LoggedInUser({
-    required  String name,
+    required String name,
     required String username,
     @JsonKey(name: 'first_name', defaultValue: '') String? firstName,
     @JsonKey(name: 'last_name', defaultValue: '') String? lastName,
@@ -34,8 +34,39 @@ class LoggedInUser with _$LoggedInUser {
   }) = _LoggedInUser;
 
   factory LoggedInUser.fromJson(Map<String, dynamic> json) =>
-      _$LoggedInUserFromJson(json);
+      _$LoggedInUserFromJson(_enrichLoggedInUserJson(json));
 }
 
+Map<String, dynamic> _enrichLoggedInUserJson(Map<String, dynamic> json) {
+  final enriched = Map<String, dynamic>.from(json);
+  final roleList =
+      (enriched['roles'] as List?)?.map((e) => e.toString()).toList() ??
+      const <String>[];
+  final roleStatus = Map<String, dynamic>.from(
+    (enriched['role_status'] as Map?)?.map(
+          (key, value) => MapEntry(key.toString(), value),
+        ) ??
+        const <String, dynamic>{},
+  );
 
+  // Backend may put feature access only in `roles` (not `role_status`).
+  const featureRoles = [
+    'Show Dashboards in Mobile App',
+    'Show PO Approval List in Mobile App',
+    'Show Dispatch Gaylord in Mobile App',
+    'Show Gate Registration in Mobile App',
+    'Show Gate Exit in Mobile App',
+    'Show Gate Entry in Mobile App',
+    'Packing mobile app',
+  ];
+  for (final role in featureRoles) {
+    if (roleList.contains(role)) {
+      roleStatus[role] = 1;
+    }
+  }
+  if (roleStatus.isNotEmpty) {
+    enriched['role_status'] = roleStatus;
+  }
 
+  return enriched;
+}

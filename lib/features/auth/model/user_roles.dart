@@ -13,6 +13,7 @@ class UserRoles with _$UserRoles {
     @JsonKey(name: 'Show Gate Registration in Mobile App', defaultValue: 0) required int registration,
     @JsonKey(name: 'Show Gate Exit in Mobile App', defaultValue: 0)  required int exit,
     @JsonKey(name: 'Show Gate Entry in Mobile App',defaultValue: 0) required int entry,
+    @JsonKey(name: 'Packing mobile app',defaultValue: 0) required int packing,
   }) = _UserRoles;
 
   factory UserRoles.fromJson(Map<String, dynamic> json) =>

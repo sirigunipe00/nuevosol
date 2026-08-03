@@ -27,6 +27,8 @@ abstract class _AppRoutePaths {
   static const packing = '/home/packing';
   static const newPacking = '/home/packing/newPacking';
   static const packingItemScan = '/home/packing/newPacking/itemScan';
+  static const packingQualityParameter =
+      '/home/packing/newPacking/itemScan/qualityParameter';
   static const account = '/account';
 }
 
@@ -56,6 +58,7 @@ enum AppRoute {
   packing(_AppRoutePaths.packing),
   newPacking(_AppRoutePaths.newPacking),
   packingItemScan(_AppRoutePaths.packingItemScan),
+  packingQualityParameter(_AppRoutePaths.packingQualityParameter),
 
   account(_AppRoutePaths.account);
 

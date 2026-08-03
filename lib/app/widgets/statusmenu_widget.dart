@@ -27,40 +27,50 @@ class _StatusMenuWidgetState extends State<StatusMenuWidget> {
     _selectedDuration = widget.defaultStatus ?? widget.items.firstOrNull;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      isDense: true,
-      isExpanded: true,
-      value: _selectedDuration,
-      dropdownColor: AppColors.white,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: AppColors.white,
-            ),
-            borderRadius: BorderRadius.circular(8)),
-        fillColor: Colors.white,
-        filled: true,
-        border: InputBorder.none,
+@override
+Widget build(BuildContext context) {
+  return DropdownButtonFormField(
+    isDense: true,
+    isExpanded: true,
+    value: _selectedDuration,
+    dropdownColor: AppColors.white,
+    decoration: InputDecoration(
+      constraints: const BoxConstraints(maxHeight: 40, minHeight: 40),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColors.white),
+        borderRadius: BorderRadius.circular(4),
       ),
-      items: widget.items.map((e) {
-        return DropdownMenuItem<String>(
-          value: e,
-          alignment: Alignment.center,
-          child: Text(e,
-              style: context.textTheme.labelLarge
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-        );
-      }).toList(),
-      onChanged: (String? value) {
-        if(value == _selectedDuration) return;
-        setState(() {
-          _selectedDuration = value;
-        });
-        widget.onChange.call(value!);
-      },
-    );
-  }
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColors.white),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColors.white),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      fillColor: Colors.white,
+      filled: true,
+      border: InputBorder.none,
+    ),
+    items: widget.items.map((e) {
+      return DropdownMenuItem<String>(
+        value: e,
+        alignment: Alignment.center,
+        child: Text(
+          e,
+          style: context.textTheme.labelLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+      );
+    }).toList(),
+    onChanged: (String? value) {
+      if (value == _selectedDuration) return;
+      setState(() {
+        _selectedDuration = value;
+      });
+      widget.onChange.call(value!);
+    },
+  );
+}
 }

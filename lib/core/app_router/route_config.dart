@@ -25,10 +25,12 @@ import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_exit/c
 import 'package:nuevosol/features/gate_exit/presentation/ui/create/new_gate_exit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/gate_exit_list/gate_exit_list.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
+import 'package:nuevosol/features/packing/model/packing_quality_args.dart';
 import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/packing/presentation/bloc/create_packing_cubit/create_packing_cubit.dart';
 import 'package:nuevosol/features/packing/presentation/ui/new_packing.dart';
 import 'package:nuevosol/features/packing/presentation/ui/packing_item_scan.dart';
+import 'package:nuevosol/features/packing/presentation/ui/packing_quality_parameter.dart';
 import 'package:nuevosol/features/packing/presentation/widget/packing_list.dart';
 import 'package:nuevosol/features/po_approval_list/model/po_approval.dart';
 import 'package:nuevosol/features/po_approval_list/presentation/bloc/bloc_provider.dart';
@@ -439,12 +441,6 @@ class AppRouterConfig {
                                   BlocProvider(
                                     create:
                                         (_) =>
-                                            provider.fetchOperator()
-                                              ..request(form.name ?? ''),
-                                  ),
-                                  BlocProvider(
-                                    create:
-                                        (_) =>
                                             provider.fetchComponentScanning()
                                               ..request(form.name ?? ''),
                                   ),
@@ -452,6 +448,41 @@ class AppRouterConfig {
                                 child: PackingItemScanScrn(packing: form),
                               );
                             },
+                            routes: [
+                              GoRoute(
+                                path: _getPath(
+                                  AppRoute.packingQualityParameter,
+                                ),
+                                builder: (_, state) {
+                                  final provider = PackingBlocProvider.get();
+                                  final extra = state.extra;
+                                  final PackingQualityArgs args;
+                                  if (extra is PackingQualityArgs) {
+                                    args = extra;
+                                  } else if (extra is PackingModel) {
+                                    args = PackingQualityArgs(
+                                      packing: extra,
+                                      inspectionLotId: '',
+                                    );
+                                  } else {
+                                    args = const PackingQualityArgs(
+                                      packing: PackingModel(),
+                                      inspectionLotId: '',
+                                    );
+                                  }
+                                  return BlocProvider(
+                                    create:
+                                        (_) =>
+                                            provider
+                                                .fetchQualityInspectionReadings()
+                                              ..request(args.inspectionLotId),
+                                    child: PackingQualityParameterScrn(
+                                      args: args,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
