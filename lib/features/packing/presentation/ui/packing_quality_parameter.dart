@@ -53,6 +53,12 @@ class _PackingQualityParameterScrnState
   bool _requiresPhoto(QualityInspectionReading reading) =>
       (reading.customRequiredPhoto ?? 0) == 1;
 
+  bool _isInspectionSubmitted(List<QualityInspectionReading> readings) {
+    if (readings.any((r) => (r.docstatus ?? 0) >= 1)) return true;
+    final packingStatus = (widget.args.packing.status ?? '').trim().toLowerCase();
+    return packingStatus == 'submitted';
+  }
+
   @override
   void dispose() {
     for (final controller in _readingControllers.values) {
@@ -67,7 +73,7 @@ class _PackingQualityParameterScrnState
   TextEditingController _controllerFor(QualityInspectionReading reading) {
     final key = _keyFor(reading);
     return _readingControllers.putIfAbsent(key, () {
-      final existing = reading.readingValue;
+      final existing = reading.savedReading;
       // Don't prefill non-numeric values into numeric field
       final initial =
           existing != null && double.tryParse(existing) != null ? existing : '';
@@ -88,7 +94,7 @@ class _PackingQualityParameterScrnState
     final key = _keyFor(reading);
     if (_okSelections.containsKey(key)) return _okSelections[key]!;
     final existing =
-        (reading.readingValue ?? reading.status ?? '').trim().toLowerCase();
+        (reading.savedReading ?? reading.status ?? '').trim().toLowerCase();
     if (existing.contains('not') || existing == 'rejected') {
       return false;
     }
@@ -139,22 +145,24 @@ class _PackingQualityParameterScrnState
     canvas.drawImage(image, Offset.zero, Paint());
 
     final stamp = DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now());
-    final fontSize = (image.width * 0.035).clamp(14.0, 42.0);
+    final fontSize = (image.width * 0.07).clamp(32.0, 110.0);
+    final padding = (fontSize * 0.35).clamp(10.0, 28.0);
     final textPainter = TextPainter(
       text: TextSpan(
-        text: stamp,
+        text: '  $stamp  ',
         style: TextStyle(
           color: Colors.white,
           fontSize: fontSize,
-          fontWeight: FontWeight.w700,
-          backgroundColor: Colors.black54,
+          fontWeight: FontWeight.w800,
+          backgroundColor: Colors.black87,
+          letterSpacing: 0.5,
         ),
       ),
       textDirection: ui.TextDirection.ltr,
     )..layout(maxWidth: image.width.toDouble());
 
-    final dx = 16.0;
-    final dy = image.height - textPainter.height - 16.0;
+    final dx = padding;
+    final dy = image.height - textPainter.height - padding;
     textPainter.paint(canvas, Offset(dx, dy));
 
     final picture = recorder.endRecording();
@@ -236,6 +244,86 @@ class _PackingQualityParameterScrnState
     );
   }
 
+  void _previewNetworkPhoto(String url) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AspectRatio(
+                aspectRatio: 3 / 4,
+                child: Image.network(
+                  url,
+                  fit: BoxFit.contain,
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (_, __, ___) => const Center(
+                    child: Icon(Icons.broken_image, size: 48, color: Colors.red),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _networkPhotoPreview(String attachmentPath) {
+    final url = Urls.filepath(attachmentPath);
+    return GestureDetector(
+      onTap: () => _previewNetworkPhoto(url),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.network(
+          url,
+          height: 160,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, progress) {
+            if (progress == null) return child;
+            return Container(
+              height: 160,
+              alignment: Alignment.center,
+              color: Colors.grey.shade100,
+              child: const CircularProgressIndicator(),
+            );
+          },
+          errorBuilder: (_, __, ___) => Container(
+            height: 160,
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade400),
+              color: Colors.grey.shade100,
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.broken_image, size: 36, color: Colors.red),
+                SizedBox(height: 6),
+                Text(
+                  'Failed to load photo',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _onSubmit(List<QualityInspectionReading> readings) async {
     if (!_allComplete(readings)) {
       await AppDialog.showErrorDialog(
@@ -305,7 +393,7 @@ class _PackingQualityParameterScrnState
             },
           );
           if (!mounted) return;
-          Navigator.of(context).pop(true);
+          AppRoute.packing.go(context);
         },
       );
     } catch (e) {
@@ -377,39 +465,45 @@ class _PackingQualityParameterScrnState
   @override
   Widget build(BuildContext context) {
     final packing = widget.args.packing;
-    final status = packing.docstatus ?? 0;
     final name = packing.name.valueOrEmpty;
     final lotId = widget.args.inspectionLotId;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar:
-          TitleStatusAppBar(
-                title: 'Quality Inspection',
-                docNo: lotId.isNotEmpty ? lotId : name,
-                status: StringUtils.docStatus(status),
-                textColor: AppColors.packing,
-              )
-              as PreferredSizeWidget,
-      body: SafeArea(
-        child: BlocBuilder<
-          QualityInspectionReadingsCubit,
-          QualityInspectionReadingsState
-        >(
-          builder: (context, state) {
-            return state.maybeWhen(
+    return BlocBuilder<
+      QualityInspectionReadingsCubit,
+      QualityInspectionReadingsState
+    >(
+      builder: (context, state) {
+        final isReadOnly = state.maybeWhen(
+          success: _isInspectionSubmitted,
+          orElse: () {
+            final packingStatus =
+                (packing.status ?? '').trim().toLowerCase();
+            return packingStatus == 'submitted';
+          },
+        );
+        final appBarStatus = isReadOnly ? 'Submitted' : 'Draft';
+
+        return Scaffold(
+          backgroundColor: const Color(0xFFF5F7FA),
+          appBar: TitleStatusAppBar(
+            title: 'Quality Inspection',
+            docNo: lotId.isNotEmpty ? lotId : name,
+            status: appBarStatus,
+            textColor: AppColors.packing,
+          ) as PreferredSizeWidget,
+          body: SafeArea(
+            child: state.maybeWhen(
               orElse: () => const Center(child: LoadingIndicator()),
-              failure:
-                  (failure) => Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        failure.error,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    ),
+              failure: (failure) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    failure.error,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
                   ),
+                ),
+              ),
               success: (readings) {
                 if (readings.isEmpty) {
                   return const Center(
@@ -417,7 +511,7 @@ class _PackingQualityParameterScrnState
                   );
                 }
 
-                final canSubmit = _allComplete(readings);
+                final canSubmit = !isReadOnly && _allComplete(readings);
 
                 return Column(
                   children: [
@@ -431,27 +525,31 @@ class _PackingQualityParameterScrnState
                             return _headerInfo(packing, lotId);
                           }
                           final reading = readings[index - 1];
-                          return _readingCard(reading, index);
+                          return _readingCard(
+                            reading,
+                            index,
+                            isReadOnly: isReadOnly,
+                          );
                         },
                       ),
                     ),
-                    AppButton(
-                      label: 'Submit',
-                      bgColor: AppColors.haintBlue,
-                      margin: const EdgeInsets.all(12),
-                      isLoading: _isSubmitting,
-                      onPressed:
-                          canSubmit && !_isSubmitting
-                              ? () => _onSubmit(readings)
-                              : null,
-                    ),
+                    if (!isReadOnly)
+                      AppButton(
+                        label: 'Submit',
+                        bgColor: AppColors.haintBlue,
+                        margin: const EdgeInsets.all(12),
+                        isLoading: _isSubmitting,
+                        onPressed: canSubmit && !_isSubmitting
+                            ? () => _onSubmit(readings)
+                            : null,
+                      ),
                   ],
                 );
               },
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -481,7 +579,11 @@ class _PackingQualityParameterScrnState
     );
   }
 
-  Widget _readingCard(QualityInspectionReading reading, int siNo) {
+  Widget _readingCard(
+    QualityInspectionReading reading,
+    int siNo, {
+    required bool isReadOnly,
+  }) {
     final isNumeric = _isNumeric(reading);
 
     return Container(
@@ -512,7 +614,7 @@ class _PackingQualityParameterScrnState
                   ),
                 ),
                 const SizedBox(height: 8),
-                _instrumentNoRow(reading),
+                _instrumentNoRow(reading, isReadOnly: isReadOnly),
                 const SizedBox(height: 8),
                 if (isNumeric)
                   Text(
@@ -546,18 +648,18 @@ class _PackingQualityParameterScrnState
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                   const SizedBox(height: 8),
-                  _numericReadingField(reading),
+                  _numericReadingField(reading, isReadOnly: isReadOnly),
                 ] else ...[
                   const Text(
                     'Actual value Reading 1',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                   const SizedBox(height: 8),
-                  _okNotOkButtons(reading),
+                  _okNotOkButtons(reading, isReadOnly: isReadOnly),
                 ],
                 if (_requiresPhoto(reading)) ...[
                   const SizedBox(height: 12),
-                  _photoSection(reading),
+                  _photoSection(reading, isReadOnly: isReadOnly),
                 ],
               ],
             ),
@@ -567,7 +669,10 @@ class _PackingQualityParameterScrnState
     );
   }
 
-  Widget _instrumentNoRow(QualityInspectionReading reading) {
+  Widget _instrumentNoRow(
+    QualityInspectionReading reading, {
+    required bool isReadOnly,
+  }) {
     final controller = _instrumentControllerFor(reading);
 
     return Row(
@@ -580,12 +685,16 @@ class _PackingQualityParameterScrnState
         Expanded(
           child: TextField(
             controller: controller,
-            onChanged: (_) => setState(() {}),
+            readOnly: isReadOnly,
+            enableInteractiveSelection: !isReadOnly,
+            onChanged: isReadOnly ? null : (_) => setState(() {}),
             decoration: InputDecoration(
               isDense: true,
               hintText: 'Enter / Scan',
               filled: true,
-              fillColor: const Color(0xFFFFF59D),
+              fillColor: isReadOnly
+                  ? Colors.grey.shade200
+                  : const Color(0xFFFFF59D),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 10,
                 vertical: 10,
@@ -598,27 +707,33 @@ class _PackingQualityParameterScrnState
                 borderRadius: BorderRadius.circular(6),
                 borderSide: BorderSide(color: Colors.grey.shade500),
               ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6),
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              ),
             ),
           ),
         ),
-        const SizedBox(width: 8),
-        InkWell(
-          onTap: () => _scanInstrumentNo(reading),
-          borderRadius: BorderRadius.circular(6),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: Colors.grey.shade600),
-            ),
-            child: Icon(
-              Icons.qr_code_scanner,
-              size: 20,
-              color: Colors.grey.shade800,
+        if (!isReadOnly) ...[
+          const SizedBox(width: 8),
+          InkWell(
+            onTap: () => _scanInstrumentNo(reading),
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Colors.grey.shade600),
+              ),
+              child: Icon(
+                Icons.qr_code_scanner,
+                size: 20,
+                color: Colors.grey.shade800,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -648,7 +763,10 @@ class _PackingQualityParameterScrnState
     });
   }
 
-  Widget _numericReadingField(QualityInspectionReading reading) {
+  Widget _numericReadingField(
+    QualityInspectionReading reading, {
+    required bool isReadOnly,
+  }) {
     final text = _controllerFor(reading).text.trim();
     final hasValue = text.isNotEmpty;
     final inRange = hasValue && _isReadingInRange(reading);
@@ -658,6 +776,8 @@ class _PackingQualityParameterScrnState
             ? Colors.green.shade100
             : outOfRange
             ? Colors.red.shade100
+            : isReadOnly
+            ? Colors.grey.shade200
             : null;
     final borderColor =
         inRange
@@ -668,9 +788,11 @@ class _PackingQualityParameterScrnState
 
     return TextField(
       controller: _controllerFor(reading),
+      readOnly: isReadOnly,
+      enableInteractiveSelection: !isReadOnly,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-      onChanged: (_) => setState(() {}),
+      onChanged: isReadOnly ? null : (_) => setState(() {}),
       decoration: InputDecoration(
         isDense: true,
         hintText: 'Enter reading',
@@ -692,11 +814,18 @@ class _PackingQualityParameterScrnState
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: borderColor, width: 1.8),
         ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: borderColor, width: 1.5),
+        ),
       ),
     );
   }
 
-  Widget _okNotOkButtons(QualityInspectionReading reading) {
+  Widget _okNotOkButtons(
+    QualityInspectionReading reading, {
+    required bool isReadOnly,
+  }) {
     final key = _keyFor(reading);
     final isOk = _okValueFor(reading);
 
@@ -707,9 +836,11 @@ class _PackingQualityParameterScrnState
             label: 'OK',
             selected: isOk,
             selectedColor: Colors.green,
-            onTap: () {
-              setState(() => _okSelections[key] = true);
-            },
+            onTap: isReadOnly
+                ? null
+                : () {
+                    setState(() => _okSelections[key] = true);
+                  },
           ),
         ),
         const SizedBox(width: 10),
@@ -718,9 +849,11 @@ class _PackingQualityParameterScrnState
             label: 'Not OK',
             selected: !isOk,
             selectedColor: Colors.red,
-            onTap: () {
-              setState(() => _okSelections[key] = false);
-            },
+            onTap: isReadOnly
+                ? null
+                : () {
+                    setState(() => _okSelections[key] = false);
+                  },
           ),
         ),
       ],
@@ -731,7 +864,7 @@ class _PackingQualityParameterScrnState
     required String label,
     required bool selected,
     required Color selectedColor,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
   }) {
     return InkWell(
       onTap: onTap,
@@ -759,7 +892,10 @@ class _PackingQualityParameterScrnState
     );
   }
 
-  Widget _photoSection(QualityInspectionReading reading) {
+  Widget _photoSection(
+    QualityInspectionReading reading, {
+    required bool isReadOnly,
+  }) {
     final key = _keyFor(reading);
     final photo = _photos[key];
     final timestamp = _photoTimestamps[key];
@@ -800,32 +936,83 @@ class _PackingQualityParameterScrnState
                           timestamp,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ),
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.black54,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        iconSize: 16,
-                        onPressed: () {
-                          setState(() {
-                            _photos.remove(key);
-                            _photoTimestamps.remove(key);
-                          });
-                        },
-                        icon: const Icon(Icons.close, color: Colors.white),
+                  if (!isReadOnly)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.black54,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          iconSize: 16,
+                          onPressed: () {
+                            setState(() {
+                              _photos.remove(key);
+                              _photoTimestamps.remove(key);
+                            });
+                          },
+                          icon: const Icon(Icons.close, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          )
+        else if (existingUrl.isNotEmpty)
+          Column(
+            children: [
+              _networkPhotoPreview(existingUrl),
+              if (!isReadOnly) ...[
+                const SizedBox(height: 8),
+                InkWell(
+                  onTap:
+                      _isCapturingPhoto ? null : () => _capturePhoto(reading),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    height: 44,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.packing, width: 1.5),
+                      color: AppColors.packing.withValues(alpha: 0.06),
+                    ),
+                    child: Text(
+                      _isCapturingPhoto ? 'Capturing...' : 'Retake Photo',
+                      style: const TextStyle(
+                        color: AppColors.packing,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ],
+          )
+        else if (isReadOnly)
+          Container(
+            height: 56,
+            width: double.infinity,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade400),
+              color: Colors.grey.shade100,
+            ),
+            child: Text(
+              'No photo',
+              style: TextStyle(
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           )
@@ -845,20 +1032,18 @@ class _PackingQualityParameterScrnState
               child:
                   _isCapturingPhoto
                       ? const CircularProgressIndicator()
-                      : Column(
+                      : const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.camera_alt,
                             size: 36,
                             color: AppColors.packing,
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 6),
                           Text(
-                            existingUrl.isNotEmpty
-                                ? 'Retake Photo'
-                                : 'Photo',
-                            style: const TextStyle(
+                            'Photo',
+                            style: TextStyle(
                               color: AppColors.packing,
                               fontWeight: FontWeight.w600,
                             ),

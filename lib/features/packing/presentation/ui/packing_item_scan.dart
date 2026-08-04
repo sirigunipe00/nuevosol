@@ -9,7 +9,7 @@ import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
-import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
+import 'package:nuevosol/widgets/dailogs/app_dialogs.dart'; 
 import 'package:nuevosol/widgets/spaced_column.dart';
 import 'package:nuevosol/widgets/title_status_app_bar.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';

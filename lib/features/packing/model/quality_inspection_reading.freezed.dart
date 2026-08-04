@@ -27,10 +27,14 @@ mixin _$QualityInspectionReading {
   int? get idx => throw _privateConstructorUsedError;
   @JsonKey(name: 'parent')
   String? get parent => throw _privateConstructorUsedError;
+  @JsonKey(name: 'docstatus')
+  int? get docstatus => throw _privateConstructorUsedError;
   @JsonKey(name: 'specification')
   String? get specification => throw _privateConstructorUsedError;
   @JsonKey(name: 'reading_value')
   String? get readingValue => throw _privateConstructorUsedError;
+  @JsonKey(name: 'reading_1', fromJson: _reading1FromJson)
+  String? get reading1 => throw _privateConstructorUsedError;
   @JsonKey(name: 'custom_required_photo', defaultValue: 0)
   int? get customRequiredPhoto => throw _privateConstructorUsedError;
   @JsonKey(name: 'custom_photo_attachment')
@@ -62,8 +66,10 @@ abstract class $QualityInspectionReadingCopyWith<$Res> {
       {@JsonKey(name: 'name') String? name,
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'parent') String? parent,
+      @JsonKey(name: 'docstatus') int? docstatus,
       @JsonKey(name: 'specification') String? specification,
       @JsonKey(name: 'reading_value') String? readingValue,
+      @JsonKey(name: 'reading_1', fromJson: _reading1FromJson) String? reading1,
       @JsonKey(name: 'custom_required_photo', defaultValue: 0)
       int? customRequiredPhoto,
       @JsonKey(name: 'custom_photo_attachment') String? customPhotoAttachment,
@@ -91,8 +97,10 @@ class _$QualityInspectionReadingCopyWithImpl<$Res,
     Object? name = freezed,
     Object? idx = freezed,
     Object? parent = freezed,
+    Object? docstatus = freezed,
     Object? specification = freezed,
     Object? readingValue = freezed,
+    Object? reading1 = freezed,
     Object? customRequiredPhoto = freezed,
     Object? customPhotoAttachment = freezed,
     Object? customInstrumentNo = freezed,
@@ -114,6 +122,10 @@ class _$QualityInspectionReadingCopyWithImpl<$Res,
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as String?,
+      docstatus: freezed == docstatus
+          ? _value.docstatus
+          : docstatus // ignore: cast_nullable_to_non_nullable
+              as int?,
       specification: freezed == specification
           ? _value.specification
           : specification // ignore: cast_nullable_to_non_nullable
@@ -121,6 +133,10 @@ class _$QualityInspectionReadingCopyWithImpl<$Res,
       readingValue: freezed == readingValue
           ? _value.readingValue
           : readingValue // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reading1: freezed == reading1
+          ? _value.reading1
+          : reading1 // ignore: cast_nullable_to_non_nullable
               as String?,
       customRequiredPhoto: freezed == customRequiredPhoto
           ? _value.customRequiredPhoto
@@ -167,8 +183,10 @@ abstract class _$$QualityInspectionReadingImplCopyWith<$Res>
       {@JsonKey(name: 'name') String? name,
       @JsonKey(name: 'idx') int? idx,
       @JsonKey(name: 'parent') String? parent,
+      @JsonKey(name: 'docstatus') int? docstatus,
       @JsonKey(name: 'specification') String? specification,
       @JsonKey(name: 'reading_value') String? readingValue,
+      @JsonKey(name: 'reading_1', fromJson: _reading1FromJson) String? reading1,
       @JsonKey(name: 'custom_required_photo', defaultValue: 0)
       int? customRequiredPhoto,
       @JsonKey(name: 'custom_photo_attachment') String? customPhotoAttachment,
@@ -195,8 +213,10 @@ class __$$QualityInspectionReadingImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? idx = freezed,
     Object? parent = freezed,
+    Object? docstatus = freezed,
     Object? specification = freezed,
     Object? readingValue = freezed,
+    Object? reading1 = freezed,
     Object? customRequiredPhoto = freezed,
     Object? customPhotoAttachment = freezed,
     Object? customInstrumentNo = freezed,
@@ -218,6 +238,10 @@ class __$$QualityInspectionReadingImplCopyWithImpl<$Res>
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as String?,
+      docstatus: freezed == docstatus
+          ? _value.docstatus
+          : docstatus // ignore: cast_nullable_to_non_nullable
+              as int?,
       specification: freezed == specification
           ? _value.specification
           : specification // ignore: cast_nullable_to_non_nullable
@@ -225,6 +249,10 @@ class __$$QualityInspectionReadingImplCopyWithImpl<$Res>
       readingValue: freezed == readingValue
           ? _value.readingValue
           : readingValue // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reading1: freezed == reading1
+          ? _value.reading1
+          : reading1 // ignore: cast_nullable_to_non_nullable
               as String?,
       customRequiredPhoto: freezed == customRequiredPhoto
           ? _value.customRequiredPhoto
@@ -265,8 +293,10 @@ class _$QualityInspectionReadingImpl extends _QualityInspectionReading {
       {@JsonKey(name: 'name') this.name,
       @JsonKey(name: 'idx') this.idx,
       @JsonKey(name: 'parent') this.parent,
+      @JsonKey(name: 'docstatus') this.docstatus,
       @JsonKey(name: 'specification') this.specification,
       @JsonKey(name: 'reading_value') this.readingValue,
+      @JsonKey(name: 'reading_1', fromJson: _reading1FromJson) this.reading1,
       @JsonKey(name: 'custom_required_photo', defaultValue: 0)
       this.customRequiredPhoto,
       @JsonKey(name: 'custom_photo_attachment') this.customPhotoAttachment,
@@ -290,11 +320,17 @@ class _$QualityInspectionReadingImpl extends _QualityInspectionReading {
   @JsonKey(name: 'parent')
   final String? parent;
   @override
+  @JsonKey(name: 'docstatus')
+  final int? docstatus;
+  @override
   @JsonKey(name: 'specification')
   final String? specification;
   @override
   @JsonKey(name: 'reading_value')
   final String? readingValue;
+  @override
+  @JsonKey(name: 'reading_1', fromJson: _reading1FromJson)
+  final String? reading1;
   @override
   @JsonKey(name: 'custom_required_photo', defaultValue: 0)
   final int? customRequiredPhoto;
@@ -319,7 +355,7 @@ class _$QualityInspectionReadingImpl extends _QualityInspectionReading {
 
   @override
   String toString() {
-    return 'QualityInspectionReading(name: $name, idx: $idx, parent: $parent, specification: $specification, readingValue: $readingValue, customRequiredPhoto: $customRequiredPhoto, customPhotoAttachment: $customPhotoAttachment, customInstrumentNo: $customInstrumentNo, numeric: $numeric, minValue: $minValue, maxValue: $maxValue, status: $status)';
+    return 'QualityInspectionReading(name: $name, idx: $idx, parent: $parent, docstatus: $docstatus, specification: $specification, readingValue: $readingValue, reading1: $reading1, customRequiredPhoto: $customRequiredPhoto, customPhotoAttachment: $customPhotoAttachment, customInstrumentNo: $customInstrumentNo, numeric: $numeric, minValue: $minValue, maxValue: $maxValue, status: $status)';
   }
 
   @override
@@ -330,10 +366,14 @@ class _$QualityInspectionReadingImpl extends _QualityInspectionReading {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.idx, idx) || other.idx == idx) &&
             (identical(other.parent, parent) || other.parent == parent) &&
+            (identical(other.docstatus, docstatus) ||
+                other.docstatus == docstatus) &&
             (identical(other.specification, specification) ||
                 other.specification == specification) &&
             (identical(other.readingValue, readingValue) ||
                 other.readingValue == readingValue) &&
+            (identical(other.reading1, reading1) ||
+                other.reading1 == reading1) &&
             (identical(other.customRequiredPhoto, customRequiredPhoto) ||
                 other.customRequiredPhoto == customRequiredPhoto) &&
             (identical(other.customPhotoAttachment, customPhotoAttachment) ||
@@ -355,8 +395,10 @@ class _$QualityInspectionReadingImpl extends _QualityInspectionReading {
       name,
       idx,
       parent,
+      docstatus,
       specification,
       readingValue,
+      reading1,
       customRequiredPhoto,
       customPhotoAttachment,
       customInstrumentNo,
@@ -385,8 +427,11 @@ abstract class _QualityInspectionReading extends QualityInspectionReading {
       {@JsonKey(name: 'name') final String? name,
       @JsonKey(name: 'idx') final int? idx,
       @JsonKey(name: 'parent') final String? parent,
+      @JsonKey(name: 'docstatus') final int? docstatus,
       @JsonKey(name: 'specification') final String? specification,
       @JsonKey(name: 'reading_value') final String? readingValue,
+      @JsonKey(name: 'reading_1', fromJson: _reading1FromJson)
+      final String? reading1,
       @JsonKey(name: 'custom_required_photo', defaultValue: 0)
       final int? customRequiredPhoto,
       @JsonKey(name: 'custom_photo_attachment')
@@ -412,11 +457,17 @@ abstract class _QualityInspectionReading extends QualityInspectionReading {
   @JsonKey(name: 'parent')
   String? get parent;
   @override
+  @JsonKey(name: 'docstatus')
+  int? get docstatus;
+  @override
   @JsonKey(name: 'specification')
   String? get specification;
   @override
   @JsonKey(name: 'reading_value')
   String? get readingValue;
+  @override
+  @JsonKey(name: 'reading_1', fromJson: _reading1FromJson)
+  String? get reading1;
   @override
   @JsonKey(name: 'custom_required_photo', defaultValue: 0)
   int? get customRequiredPhoto;
