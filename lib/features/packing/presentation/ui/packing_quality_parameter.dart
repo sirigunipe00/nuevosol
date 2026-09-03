@@ -905,7 +905,7 @@ class _PackingQualityParameterScrnState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Weighment Photo',
+          'Photo',
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
         ),
         const SizedBox(height: 8),

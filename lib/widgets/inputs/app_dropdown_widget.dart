@@ -21,6 +21,9 @@ class AppDropDownWidget<T> extends StatefulWidget {
     this.borderColor,
     this.showScanner = false,
     this.onScannerTap,
+    this.searchHintText,
+    this.excludeSelected = true,
+    this.initialSearchText,
   });
 
   final String? title;
@@ -37,6 +40,10 @@ class AppDropDownWidget<T> extends StatefulWidget {
   final bool showScanner;
   final VoidCallback? onScannerTap;
   final dynamic Function(T? item)? onSelected;
+  final String? searchHintText;
+  final bool excludeSelected;
+  /// Prefills the dropdown search field when opened (e.g. "Packing").
+  final String? initialSearchText;
 
   @override
   State<AppDropDownWidget<T>> createState() => _AppDropDownWidgetState<T>();
@@ -54,7 +61,6 @@ class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
   @override
   void didUpdateWidget(covariant AppDropDownWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // If defaultSelection changes, update the internal _selectedValue
     if (widget.defaultSelection != oldWidget.defaultSelection) {
       setState(() {
         selectedValue = widget.defaultSelection;
@@ -102,9 +108,11 @@ class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
                         ),
                       ],
                     ),
-
                     futureRequest: widget.futureRequest,
                     hintText: widget.hint,
+                    searchHintText: widget.searchHintText ?? 'Search',
+                    initialSearchText: widget.initialSearchText,
+                    excludeSelected: widget.excludeSelected,
                     items: widget.items,
                     headerBuilder: widget.headerBuilder,
                     listItemBuilder: widget.listItemBuilder,
@@ -113,7 +121,6 @@ class _AppDropDownWidgetState<T> extends State<AppDropDownWidget<T>> {
                   ),
                 ),
               ),
-
               if (widget.showScanner) ...[
                 const SizedBox(width: 8),
                 InkWell(

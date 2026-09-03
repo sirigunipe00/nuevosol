@@ -25,6 +25,7 @@ class SearchMultiDropDownList<T> extends StatefulWidget {
     this.closedFillColor,
     this.focusNode,
     this.color = AppColors.black,
+    this.borderColor,
     this.showScanner = false,
     this.onScannerTap,
   });
@@ -42,6 +43,7 @@ class SearchMultiDropDownList<T> extends StatefulWidget {
   final bool readOnly;
   final bool isloading;
   final Color color;
+  final Color? borderColor;
   final Color? closedFillColor;
   final void Function(List<T> items) onSelected;
   final FocusNode? focusNode;
@@ -74,13 +76,13 @@ class _SearchMultiDropDownListState<T>
 
   @override
   Widget build(BuildContext context) {
-    final isReadOnlyMode = widget.readOnly;
-    final backgroundColor =
-        isReadOnlyMode ? AppColors.grey.withValues(alpha: 0.20) : Colors.white;
-    final borderColor =
-        isReadOnlyMode
-            ? Colors.grey.withValues(alpha: 0.3)
-            : AppColors.grey.withValues(alpha: 0.30);
+    // final isReadOnlyMode = widget.readOnly;
+    // final backgroundColor =
+    //     isReadOnlyMode ? AppColors.grey.withValues(alpha: 0.20) : Colors.white;
+    // final borderColor =
+    //     isReadOnlyMode
+    //         ? Colors.grey.withValues(alpha: 0.3)
+    //         : AppColors.grey.withValues(alpha: 0.30);
 
     return Focus(
       focusNode: widget.focusNode,
@@ -106,9 +108,19 @@ class _SearchMultiDropDownListState<T>
                       width: double.infinity,
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: Border.all(color: borderColor, width: 1),
-                        borderRadius: BorderRadius.circular(8.0),
+                        color:
+                            widget.readOnly
+                                ? const Color(0xFFEEEEEE)
+                                : Colors.white,
+                       border: Border.all(color: AppColors.black),
+                        boxShadow: [
+                          BoxShadow(
+                            color: widget.color,
+                            blurRadius: 2,
+                            offset: const Offset(2, 2),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child:
                           widget.isloading
@@ -146,9 +158,7 @@ class _SearchMultiDropDownListState<T>
                               : Text(
                                 widget.hint ?? 'Select items',
                                 style: context.textTheme.titleMedium?.copyWith(
-                                  color: AppColors.black.withValues(
-                                    alpha: 0.6,
-                                  ),
+                                  color: AppColors.black.withValues(alpha: 0.6),
                                   fontWeight: FontWeight.w400,
                                   fontFamily: 'Urbanist',
                                 ),

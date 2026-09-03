@@ -31,6 +31,7 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
     String? creationDate,
     String? owner,
     int? docStatus,
+    String? qualityInspectionTemplate,
     String? company,
     String? modifiedDate,
     String? modifiedBy,
@@ -62,6 +63,7 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
       productionStartTime: productionStartTime ?? form.productionStartTime,
       productionEndTime: productionEndTime ?? form.productionEndTime,
       docstatus: docStatus ?? form.docstatus,
+      qualityInspectionTemplate: qualityInspectionTemplate ?? form.qualityInspectionTemplate,
       modified: modifiedBy ?? form.modified,
       rawMaterialName: rawMaterialName ?? form.rawMaterialName,
       uom: uom ?? form.uom,
@@ -109,6 +111,7 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
         okQty: entry.okQty,
         totalQty: entry.totalQty,
         batchNo: entry.batchNo,
+        qualityInspectionTemplate: entry.qualityInspectionTemplate,
         operatorName: entry.operatorName,
         amendedFrom: entry.amendedFrom,
       );
@@ -289,7 +292,7 @@ class CreatePackingState with _$CreatePackingState {
     // final entryDate = DFU.ddMMyyyy(DFU.now());
 
     return const CreatePackingState(
-      form: PackingModel(),
+      form: PackingModel(selectProcess: 'Packing'),
       view: PackingView.create,
       isLoading: false,
       isSuccess: false,

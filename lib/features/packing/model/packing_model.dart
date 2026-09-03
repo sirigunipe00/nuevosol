@@ -54,6 +54,7 @@ class PackingModel with _$PackingModel {
     @JsonKey(name: 'operator_name') List<String>? operatorName,
 
     @JsonKey(name: 'amended_from') String? amendedFrom,
+    String? qualityInspectionTemplate,
   }) = _PackingModel;
 
   factory PackingModel.fromJson(Map<String, dynamic> json) =>

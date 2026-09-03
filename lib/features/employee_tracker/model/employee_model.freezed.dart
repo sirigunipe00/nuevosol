@@ -55,6 +55,8 @@ mixin _$EmployeeTracker {
   String? get movementType => throw _privateConstructorUsedError;
   @JsonKey(name: 'to_location')
   String? get toLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: '2nd_hod')
+  String? get secondHod => throw _privateConstructorUsedError;
   @JsonKey(name: 'expected_exit_date_time')
   String? get expectedExitDateTime => throw _privateConstructorUsedError;
   @JsonKey(name: 'expected_duration_min')
@@ -91,6 +93,8 @@ mixin _$EmployeeTracker {
   int? get actualDurationT2Min => throw _privateConstructorUsedError;
   @JsonKey(name: 'amended_from')
   String? get amendedFrom => throw _privateConstructorUsedError;
+  @JsonKey(name: 'remarks')
+  String? get remarks => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -123,6 +127,7 @@ abstract class $EmployeeTrackerCopyWith<$Res> {
       @JsonKey(name: 'from_location') String? fromLocation,
       @JsonKey(name: 'movement_type') String? movementType,
       @JsonKey(name: 'to_location') String? toLocation,
+      @JsonKey(name: '2nd_hod') String? secondHod,
       @JsonKey(name: 'expected_exit_date_time') String? expectedExitDateTime,
       @JsonKey(name: 'expected_duration_min') int? expectedDurationMin,
       @JsonKey(name: 'expected_return_date_time')
@@ -144,7 +149,8 @@ abstract class $EmployeeTrackerCopyWith<$Res> {
       @JsonKey(name: 'gate_entry_date_and_time_return')
       String? gateEntryDateAndTimeReturn,
       @JsonKey(name: 'actual_duration_t2_min') int? actualDurationT2Min,
-      @JsonKey(name: 'amended_from') String? amendedFrom});
+      @JsonKey(name: 'amended_from') String? amendedFrom,
+      @JsonKey(name: 'remarks') String? remarks});
 }
 
 /// @nodoc
@@ -178,6 +184,7 @@ class _$EmployeeTrackerCopyWithImpl<$Res, $Val extends EmployeeTracker>
     Object? fromLocation = freezed,
     Object? movementType = freezed,
     Object? toLocation = freezed,
+    Object? secondHod = freezed,
     Object? expectedExitDateTime = freezed,
     Object? expectedDurationMin = freezed,
     Object? expectedReturnDateTime = freezed,
@@ -196,6 +203,7 @@ class _$EmployeeTrackerCopyWithImpl<$Res, $Val extends EmployeeTracker>
     Object? gateEntryDateAndTimeReturn = freezed,
     Object? actualDurationT2Min = freezed,
     Object? amendedFrom = freezed,
+    Object? remarks = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -270,6 +278,10 @@ class _$EmployeeTrackerCopyWithImpl<$Res, $Val extends EmployeeTracker>
           ? _value.toLocation
           : toLocation // ignore: cast_nullable_to_non_nullable
               as String?,
+      secondHod: freezed == secondHod
+          ? _value.secondHod
+          : secondHod // ignore: cast_nullable_to_non_nullable
+              as String?,
       expectedExitDateTime: freezed == expectedExitDateTime
           ? _value.expectedExitDateTime
           : expectedExitDateTime // ignore: cast_nullable_to_non_nullable
@@ -342,6 +354,10 @@ class _$EmployeeTrackerCopyWithImpl<$Res, $Val extends EmployeeTracker>
           ? _value.amendedFrom
           : amendedFrom // ignore: cast_nullable_to_non_nullable
               as String?,
+      remarks: freezed == remarks
+          ? _value.remarks
+          : remarks // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -373,6 +389,7 @@ abstract class _$$EmployeeTrackerImplCopyWith<$Res>
       @JsonKey(name: 'from_location') String? fromLocation,
       @JsonKey(name: 'movement_type') String? movementType,
       @JsonKey(name: 'to_location') String? toLocation,
+      @JsonKey(name: '2nd_hod') String? secondHod,
       @JsonKey(name: 'expected_exit_date_time') String? expectedExitDateTime,
       @JsonKey(name: 'expected_duration_min') int? expectedDurationMin,
       @JsonKey(name: 'expected_return_date_time')
@@ -394,7 +411,8 @@ abstract class _$$EmployeeTrackerImplCopyWith<$Res>
       @JsonKey(name: 'gate_entry_date_and_time_return')
       String? gateEntryDateAndTimeReturn,
       @JsonKey(name: 'actual_duration_t2_min') int? actualDurationT2Min,
-      @JsonKey(name: 'amended_from') String? amendedFrom});
+      @JsonKey(name: 'amended_from') String? amendedFrom,
+      @JsonKey(name: 'remarks') String? remarks});
 }
 
 /// @nodoc
@@ -426,6 +444,7 @@ class __$$EmployeeTrackerImplCopyWithImpl<$Res>
     Object? fromLocation = freezed,
     Object? movementType = freezed,
     Object? toLocation = freezed,
+    Object? secondHod = freezed,
     Object? expectedExitDateTime = freezed,
     Object? expectedDurationMin = freezed,
     Object? expectedReturnDateTime = freezed,
@@ -444,6 +463,7 @@ class __$$EmployeeTrackerImplCopyWithImpl<$Res>
     Object? gateEntryDateAndTimeReturn = freezed,
     Object? actualDurationT2Min = freezed,
     Object? amendedFrom = freezed,
+    Object? remarks = freezed,
   }) {
     return _then(_$EmployeeTrackerImpl(
       status: freezed == status
@@ -518,6 +538,10 @@ class __$$EmployeeTrackerImplCopyWithImpl<$Res>
           ? _value.toLocation
           : toLocation // ignore: cast_nullable_to_non_nullable
               as String?,
+      secondHod: freezed == secondHod
+          ? _value.secondHod
+          : secondHod // ignore: cast_nullable_to_non_nullable
+              as String?,
       expectedExitDateTime: freezed == expectedExitDateTime
           ? _value.expectedExitDateTime
           : expectedExitDateTime // ignore: cast_nullable_to_non_nullable
@@ -590,6 +614,10 @@ class __$$EmployeeTrackerImplCopyWithImpl<$Res>
           ? _value.amendedFrom
           : amendedFrom // ignore: cast_nullable_to_non_nullable
               as String?,
+      remarks: freezed == remarks
+          ? _value.remarks
+          : remarks // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -616,6 +644,7 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
       @JsonKey(name: 'from_location') this.fromLocation,
       @JsonKey(name: 'movement_type') this.movementType,
       @JsonKey(name: 'to_location') this.toLocation,
+      @JsonKey(name: '2nd_hod') this.secondHod,
       @JsonKey(name: 'expected_exit_date_time') this.expectedExitDateTime,
       @JsonKey(name: 'expected_duration_min') this.expectedDurationMin,
       @JsonKey(name: 'expected_return_date_time') this.expectedReturnDateTime,
@@ -636,7 +665,8 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
       @JsonKey(name: 'gate_entry_date_and_time_return')
       this.gateEntryDateAndTimeReturn,
       @JsonKey(name: 'actual_duration_t2_min') this.actualDurationT2Min,
-      @JsonKey(name: 'amended_from') this.amendedFrom});
+      @JsonKey(name: 'amended_from') this.amendedFrom,
+      @JsonKey(name: 'remarks') this.remarks});
 
   factory _$EmployeeTrackerImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmployeeTrackerImplFromJson(json);
@@ -695,6 +725,9 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
   @JsonKey(name: 'to_location')
   final String? toLocation;
   @override
+  @JsonKey(name: '2nd_hod')
+  final String? secondHod;
+  @override
   @JsonKey(name: 'expected_exit_date_time')
   final String? expectedExitDateTime;
   @override
@@ -748,10 +781,13 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
   @override
   @JsonKey(name: 'amended_from')
   final String? amendedFrom;
+  @override
+  @JsonKey(name: 'remarks')
+  final String? remarks;
 
   @override
   String toString() {
-    return 'EmployeeTracker(status: $status, name: $name, owner: $owner, creation: $creation, modified: $modified, modifiedBy: $modifiedBy, docstatus: $docstatus, idx: $idx, workflowState: $workflowState, employeeNo: $employeeNo, hod: $hod, company: $company, employeeName: $employeeName, department: $department, reasonOfGateExit: $reasonOfGateExit, fromLocation: $fromLocation, movementType: $movementType, toLocation: $toLocation, expectedExitDateTime: $expectedExitDateTime, expectedDurationMin: $expectedDurationMin, expectedReturnDateTime: $expectedReturnDateTime, sendForApprovalDateTime: $sendForApprovalDateTime, approvedDateTime: $approvedDateTime, approvedBy: $approvedBy, rejectReason: $rejectReason, gateExitDateAndTime: $gateExitDateAndTime, expectedDurationT1Min: $expectedDurationT1Min, status1: $status1, gateEntryDateAndTime: $gateEntryDateAndTime, actualDurationT1Min: $actualDurationT1Min, gateExitDateAndTimeReturn: $gateExitDateAndTimeReturn, expectedDurationT2Min: $expectedDurationT2Min, status2: $status2, gateEntryDateAndTimeReturn: $gateEntryDateAndTimeReturn, actualDurationT2Min: $actualDurationT2Min, amendedFrom: $amendedFrom)';
+    return 'EmployeeTracker(status: $status, name: $name, owner: $owner, creation: $creation, modified: $modified, modifiedBy: $modifiedBy, docstatus: $docstatus, idx: $idx, workflowState: $workflowState, employeeNo: $employeeNo, hod: $hod, company: $company, employeeName: $employeeName, department: $department, reasonOfGateExit: $reasonOfGateExit, fromLocation: $fromLocation, movementType: $movementType, toLocation: $toLocation, secondHod: $secondHod, expectedExitDateTime: $expectedExitDateTime, expectedDurationMin: $expectedDurationMin, expectedReturnDateTime: $expectedReturnDateTime, sendForApprovalDateTime: $sendForApprovalDateTime, approvedDateTime: $approvedDateTime, approvedBy: $approvedBy, rejectReason: $rejectReason, gateExitDateAndTime: $gateExitDateAndTime, expectedDurationT1Min: $expectedDurationT1Min, status1: $status1, gateEntryDateAndTime: $gateEntryDateAndTime, actualDurationT1Min: $actualDurationT1Min, gateExitDateAndTimeReturn: $gateExitDateAndTimeReturn, expectedDurationT2Min: $expectedDurationT2Min, status2: $status2, gateEntryDateAndTimeReturn: $gateEntryDateAndTimeReturn, actualDurationT2Min: $actualDurationT2Min, amendedFrom: $amendedFrom, remarks: $remarks)';
   }
 
   @override
@@ -789,6 +825,8 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
                 other.movementType == movementType) &&
             (identical(other.toLocation, toLocation) ||
                 other.toLocation == toLocation) &&
+            (identical(other.secondHod, secondHod) ||
+                other.secondHod == secondHod) &&
             (identical(other.expectedExitDateTime, expectedExitDateTime) ||
                 other.expectedExitDateTime == expectedExitDateTime) &&
             (identical(other.expectedDurationMin, expectedDurationMin) ||
@@ -826,7 +864,8 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
             (identical(other.actualDurationT2Min, actualDurationT2Min) ||
                 other.actualDurationT2Min == actualDurationT2Min) &&
             (identical(other.amendedFrom, amendedFrom) ||
-                other.amendedFrom == amendedFrom));
+                other.amendedFrom == amendedFrom) &&
+            (identical(other.remarks, remarks) || other.remarks == remarks));
   }
 
   @JsonKey(ignore: true)
@@ -851,6 +890,7 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
         fromLocation,
         movementType,
         toLocation,
+        secondHod,
         expectedExitDateTime,
         expectedDurationMin,
         expectedReturnDateTime,
@@ -868,7 +908,8 @@ class _$EmployeeTrackerImpl implements _EmployeeTracker {
         status2,
         gateEntryDateAndTimeReturn,
         actualDurationT2Min,
-        amendedFrom
+        amendedFrom,
+        remarks
       ]);
 
   @JsonKey(ignore: true)
@@ -906,6 +947,7 @@ abstract class _EmployeeTracker implements EmployeeTracker {
       @JsonKey(name: 'from_location') final String? fromLocation,
       @JsonKey(name: 'movement_type') final String? movementType,
       @JsonKey(name: 'to_location') final String? toLocation,
+      @JsonKey(name: '2nd_hod') final String? secondHod,
       @JsonKey(name: 'expected_exit_date_time')
       final String? expectedExitDateTime,
       @JsonKey(name: 'expected_duration_min') final int? expectedDurationMin,
@@ -932,8 +974,8 @@ abstract class _EmployeeTracker implements EmployeeTracker {
       @JsonKey(name: 'gate_entry_date_and_time_return')
       final String? gateEntryDateAndTimeReturn,
       @JsonKey(name: 'actual_duration_t2_min') final int? actualDurationT2Min,
-      @JsonKey(name: 'amended_from')
-      final String? amendedFrom}) = _$EmployeeTrackerImpl;
+      @JsonKey(name: 'amended_from') final String? amendedFrom,
+      @JsonKey(name: 'remarks') final String? remarks}) = _$EmployeeTrackerImpl;
 
   factory _EmployeeTracker.fromJson(Map<String, dynamic> json) =
       _$EmployeeTrackerImpl.fromJson;
@@ -992,6 +1034,9 @@ abstract class _EmployeeTracker implements EmployeeTracker {
   @JsonKey(name: 'to_location')
   String? get toLocation;
   @override
+  @JsonKey(name: '2nd_hod')
+  String? get secondHod;
+  @override
   @JsonKey(name: 'expected_exit_date_time')
   String? get expectedExitDateTime;
   @override
@@ -1045,6 +1090,9 @@ abstract class _EmployeeTracker implements EmployeeTracker {
   @override
   @JsonKey(name: 'amended_from')
   String? get amendedFrom;
+  @override
+  @JsonKey(name: 'remarks')
+  String? get remarks;
   @override
   @JsonKey(ignore: true)
   _$$EmployeeTrackerImplCopyWith<_$EmployeeTrackerImpl> get copyWith =>

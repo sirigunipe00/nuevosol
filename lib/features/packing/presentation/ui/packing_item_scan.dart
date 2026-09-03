@@ -9,7 +9,8 @@ import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/styles/app_color.dart';
 import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
-import 'package:nuevosol/widgets/dailogs/app_dialogs.dart'; 
+import 'package:nuevosol/widgets/dailogs/app_dialogs.dart';
+import 'package:nuevosol/widgets/dailogs/app_snack_bar_widget.dart';
 import 'package:nuevosol/widgets/spaced_column.dart';
 import 'package:nuevosol/widgets/title_status_app_bar.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -105,11 +106,49 @@ class _PackingItemScanScrnState extends State<PackingItemScanScrn> {
                         success: (data) => data,
                         orElse: () => <ComponentScanningData>[],
                       );
+                      final carriedTemplate =
+                          _packing.qualityInspectionTemplate?.trim() ?? '';
+                      if (carriedTemplate.isNotEmpty) {
+                        return _BomItemsScanTable(
+                          items: items,
+                          packing: _packing,
+                          existingScans: existingScans,
+                          qualityInspectionTemplate: carriedTemplate,
+                          isQualityTemplateLoading: false,
+                        );
+                      }
+                      return BlocBuilder<FinishedList, FinshedState>(
+                        builder: (_, finishedState) {
+                          final isFinishedListLoading = finishedState.maybeWhen(
+                            loading: () => true,
+                            orElse: () => false,
+                          );
 
-                      return _BomItemsScanTable(
-                        items: items,
-                        packing: _packing,
-                        existingScans: existingScans,
+                          final lookedUpTemplate = finishedState.maybeWhen(
+                            success: (finishedComponents) {
+                              for (final component in finishedComponents) {
+                                if ((component.componentName ?? '')
+                                        .trim()
+                                        .toLowerCase() ==
+                                    (_packing.rawMaterialName ?? '')
+                                        .trim()
+                                        .toLowerCase()) {
+                                  return component.qualityInspectionTemplate;
+                                }
+                              }
+                              return null;
+                            },
+                            orElse: () => null,
+                          );
+
+                          return _BomItemsScanTable(
+                            items: items,
+                            packing: _packing,
+                            existingScans: existingScans,
+                            qualityInspectionTemplate: lookedUpTemplate,
+                            isQualityTemplateLoading: isFinishedListLoading,
+                          );
+                        },
                       );
                     },
                   );
@@ -205,11 +244,15 @@ class _BomItemsScanTable extends StatefulWidget {
     required this.items,
     required this.packing,
     required this.existingScans,
+    required this.qualityInspectionTemplate,
+    required this.isQualityTemplateLoading,
   });
 
   final List<BomItems> items;
   final PackingModel packing;
   final List<ComponentScanningData> existingScans;
+  final String? qualityInspectionTemplate;
+  final bool isQualityTemplateLoading;
 
   @override
   State<_BomItemsScanTable> createState() => _BomItemsScanTableState();
@@ -285,6 +328,10 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
     }
 
     for (final item in items) {
+      final isComponentScanningEnabled =
+          item.customComponentScanning?.trim().toLowerCase() == 'yes';
+      if (!isComponentScanningEnabled) continue;
+
       final scanCount = (item.customNoOfScan ?? 0).round();
       if (scanCount <= 0) continue;
 
@@ -375,13 +422,9 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
             ..isSuccess = false;
         });
         if (!mounted) return;
-        await AppDialog.showErrorDialog(
-          context,
-          title: failure.title ?? 'Scan Error',
-          content: failure.error,
-          onTapDismiss: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
+        context.showSnackbar(
+          failure.error,
+          AppSnackBarType.error,
         );
         if (!mounted) return;
         setState(() {
@@ -411,13 +454,9 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
         });
 
         if (!mounted) return;
-        await AppDialog.showSuccessDialog(
-          context,
-          title: 'Success',
-          content: result.dialogContent(isSuccess: true),
-          onTapDismiss: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
+        context.showSnackbar(
+          result.dialogContent(isSuccess: true),
+          AppSnackBarType.success,
         );
 
         if (!mounted) return;
@@ -565,6 +604,14 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
     final allScansDone =
         completedCount == _scanRows.length && _scanRows.isNotEmpty;
 
+    // Strict check: only a non-empty (after trimming) template string
+    // counts as "has a template". Null AND empty string both mean "no
+    // template" — neither should show the Create Quality Inspection button.
+    // This is only meaningful once isQualityTemplateLoading is false —
+    // see the bottom action area below.
+    final template = widget.qualityInspectionTemplate?.trim() ?? '';
+    final hasQualityInspectionTemplate = template.isNotEmpty;
+
     return Column(
       children: [
         Container(
@@ -645,15 +692,6 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
                     'Qty: ${item.qty ?? 0}',
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                   ),
-                  // if (row.remainingScans != null)
-                  //   Text(
-                  //     'Remaining scans: ${row.remainingScans}',
-                  //     style: TextStyle(
-                  //       color: Colors.grey.shade700,
-                  //       fontSize: 12,
-                  //       fontWeight: FontWeight.w600,
-                  //     ),
-                  //   ),
                   AppSpacer.p8(),
                   Row(
                     children: [
@@ -662,11 +700,19 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
                           controller: row.controller,
                           readOnly: true,
                           enabled: !row.isSuccess,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             hintText:
                                 row.isSuccess
                                     ? 'Scan completed'
                                     : 'Tap scanner to scan',
+                            hintStyle: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey.shade500,
+                            ),
                             filled: row.isSuccess,
                             fillColor:
                                 row.isSuccess
@@ -692,8 +738,8 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
                               ),
                             ),
                             contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 10,
+                              horizontal: 10,
+                              vertical: 8,
                             ),
                           ),
                         ),
@@ -725,31 +771,52 @@ class _BomItemsScanTableState extends State<_BomItemsScanTable> {
             ),
           );
         }),
-        AppSpacer.p12(),
-        AppButton(
-          width: double.infinity,
-          label:
-              !_isSubmitted
-                  ? 'Submit'
-                  : (_existingInspectionLotId != null
-                      ? 'Next'
-                      : 'Create Quality Inspection'),
-          bgColor: AppColors.haintBlue,
-          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-          isLoading:
-              _isSubmitting ||
-              _isCreatingInspection ||
-              _isLoadingInspectionLot,
-          onPressed:
-              !_isSubmitted
-                  ? (allScansDone && !_isSubmitting ? _submitPacking : null)
-                  : _isLoadingInspectionLot || _isCreatingInspection
-                  ? null
-                  : (_existingInspectionLotId != null
-                      ? () =>
-                          _openQualityInspection(_existingInspectionLotId!)
-                      : _createQualityInspection),
-        ),
+        if (!_isSubmitted) ...[
+          AppSpacer.p12(),
+          AppButton(
+            width: double.infinity,
+            label: 'Submit',
+            bgColor: AppColors.haintBlue,
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            isLoading: _isSubmitting,
+            onPressed: allScansDone && !_isSubmitting ? _submitPacking : null,
+          ),
+        ] else if (widget.isQualityTemplateLoading) ...[
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ] else if (hasQualityInspectionTemplate) ...[
+          AppSpacer.p12(),
+          AppButton(
+            width: double.infinity,
+            label:
+                _existingInspectionLotId != null
+                    ? 'Next'
+                    : 'Create Quality Inspection',
+            bgColor: AppColors.haintBlue,
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            isLoading: _isCreatingInspection || _isLoadingInspectionLot,
+            onPressed:
+                _isLoadingInspectionLot || _isCreatingInspection
+                    ? null
+                    : (_existingInspectionLotId != null
+                        ? () => _openQualityInspection(_existingInspectionLotId!)
+                        : _createQualityInspection),
+          ),
+        ] else ...[
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              'For this item there is No Quality Inspection Template.',
+              style: TextStyle(
+                color: Colors.orange,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ],
     );
   }

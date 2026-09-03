@@ -24,6 +24,7 @@ class EmployeeTracker with _$EmployeeTracker {
     @JsonKey(name: 'from_location') String? fromLocation,
     @JsonKey(name: 'movement_type') String? movementType,
     @JsonKey(name: 'to_location') String? toLocation,
+    @JsonKey(name: '2nd_hod') String? secondHod,
     @JsonKey(name: 'expected_exit_date_time')
     String? expectedExitDateTime,
     @JsonKey(name: 'expected_duration_min')
@@ -60,6 +61,7 @@ class EmployeeTracker with _$EmployeeTracker {
     int? actualDurationT2Min,
     @JsonKey(name: 'amended_from')
     String? amendedFrom,
+    @JsonKey(name: 'remarks') String? remarks
   }) = _EmployeeTracker;
 
   factory EmployeeTracker.fromJson(

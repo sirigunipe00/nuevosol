@@ -921,13 +921,13 @@ class _QRScannerSheet extends StatefulWidget {
   @override
   State<_QRScannerSheet> createState() => _QRScannerSheetState();
 }
-
 class _QRScannerSheetState extends State<_QRScannerSheet> {
   _ScanStep _step = _ScanStep.scanQR;
 
   final MobileScannerController _qrController = MobileScannerController();
 
   String? _scannedGatePassId;
+  bool _capturePhotoOption = false;
 
   CameraController? _cameraController;
   bool _cameraReady = false;
@@ -945,19 +945,6 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     super.dispose();
   }
 
-  // void _onQRDetect(BarcodeCapture capture) {
-  //   if (_step != _ScanStep.scanQR) return;
-  //   final barcode = capture.barcodes.firstOrNull;
-  //   if (barcode?.rawValue == null) return;
-
-  //   _qrController.stop();
-
-  //   setState(() {
-  //     _scannedGatePassId = barcode!.rawValue;
-  //     _step = _ScanStep.capturePhoto;
-  //   });
-  //   _initCamera();
-  // }
   Future<void> _onQRDetect(BarcodeCapture capture) async {
     if (_step != _ScanStep.scanQR) return;
 
@@ -967,45 +954,83 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     _qrController.stop();
 
     final gatePassId = barcode!.rawValue!;
+    bool wantsPhoto = false;
 
     await showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (dialogContext) => AlertDialog(
-            title: const Text('QR Scanned Successfully'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Scanned Gate Pass'),
-                const SizedBox(height: 10),
-                Text(
-                  gatePassId,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('QR Scanned Successfully'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Scanned Gate Pass'),
+                  const SizedBox(height: 10),
+                  Text(
+                    gatePassId,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {
+                      setDialogState(() => wantsPhoto = !wantsPhoto);
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: wantsPhoto,
+                            activeColor: AppColors.registration,
+                            onChanged: (val) {
+                              setDialogState(() => wantsPhoto = val ?? false);
+                            },
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'Capture employee photo for verification',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: const Text('OK'),
                 ),
               ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
+            );
+          },
+        );
+      },
     );
 
     if (!mounted) return;
 
     setState(() {
       _scannedGatePassId = gatePassId;
-      _step = _ScanStep.capturePhoto;
+      _capturePhotoOption = wantsPhoto;
     });
 
-    await _initCamera();
+    if (wantsPhoto) {
+      setState(() => _step = _ScanStep.capturePhoto);
+      await _initCamera();
+    } else {
+      await _submitToApi(photoPath: null);
+    }
   }
 
   Future<void> _initCamera() async {
@@ -1057,6 +1082,141 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
     setState(() => _cameraReady = false);
     _submitToApi(photoPath: null);
   }
+// class _QRScannerSheetState extends State<_QRScannerSheet> {
+//   _ScanStep _step = _ScanStep.scanQR;
+
+//   final MobileScannerController _qrController = MobileScannerController();
+
+//   String? _scannedGatePassId;
+
+//   CameraController? _cameraController;
+//   bool _cameraReady = false;
+//   bool _capturing = false;
+//   String? _photoPath;
+
+//   QrCodeModel? _apiResult;
+//   bool _isSubmitting = false;
+//   String? _errorMsg;
+
+//   @override
+//   void dispose() {
+//     _qrController.dispose();
+//     _cameraController?.dispose();
+//     super.dispose();
+//   }
+
+//   // void _onQRDetect(BarcodeCapture capture) {
+//   //   if (_step != _ScanStep.scanQR) return;
+//   //   final barcode = capture.barcodes.firstOrNull;
+//   //   if (barcode?.rawValue == null) return;
+
+//   //   _qrController.stop();
+
+//   //   setState(() {
+//   //     _scannedGatePassId = barcode!.rawValue;
+//   //     _step = _ScanStep.capturePhoto;
+//   //   });
+//   //   _initCamera();
+//   // }
+//   Future<void> _onQRDetect(BarcodeCapture capture) async {
+//     if (_step != _ScanStep.scanQR) return;
+
+//     final barcode = capture.barcodes.firstOrNull;
+//     if (barcode?.rawValue == null) return;
+
+//     _qrController.stop();
+
+//     final gatePassId = barcode!.rawValue!;
+
+//     await showDialog(
+//       context: context,
+//       barrierDismissible: false,
+//       builder:
+//           (dialogContext) => AlertDialog(
+//             title: const Text('QR Scanned Successfully'),
+//             content: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 const Text('Scanned Gate Pass'),
+//                 const SizedBox(height: 10),
+//                 Text(
+//                   gatePassId,
+//                   style: const TextStyle(
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 16,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             actions: [
+//               TextButton(
+//                 onPressed: () => Navigator.pop(dialogContext),
+//                 child: const Text('OK'),
+//               ),
+//             ],
+//           ),
+//     );
+
+//     if (!mounted) return;
+
+//     setState(() {
+//       _scannedGatePassId = gatePassId;
+//       _step = _ScanStep.capturePhoto;
+//     });
+
+//     await _initCamera();
+//   }
+
+//   Future<void> _initCamera() async {
+//     final cameras = await availableCameras();
+//     if (cameras.isEmpty) {
+//       await _submitToApi(photoPath: null);
+//       return;
+//     }
+//     final camera = cameras.firstWhere(
+//       (c) => c.lensDirection == CameraLensDirection.back,
+//       orElse: () => cameras.first,
+//     );
+//     _cameraController = CameraController(
+//       camera,
+//       ResolutionPreset.high,
+//       enableAudio: false,
+//     );
+//     try {
+//       await _cameraController!.initialize();
+//       if (mounted) setState(() => _cameraReady = true);
+//     } catch (e) {
+//       debugPrint('Camera init error: $e');
+//       await _submitToApi(photoPath: null);
+//     }
+//   }
+
+//   Future<void> _capturePhoto() async {
+//     if (_cameraController == null || !_cameraReady || _capturing) return;
+//     setState(() => _capturing = true);
+//     try {
+//       final file = await _cameraController!.takePicture();
+//       _cameraController?.dispose();
+//       _cameraController = null;
+//       setState(() {
+//         _photoPath = file.path;
+//         _capturing = false;
+//       });
+//       await _submitToApi(photoPath: file.path);
+//     } catch (e) {
+//       debugPrint('Photo capture error: $e');
+//       setState(() => _capturing = false);
+//       await _submitToApi(photoPath: null);
+//     }
+//   }
+
+//   void _skipPhoto() {
+//     _cameraController?.dispose();
+//     _cameraController = null;
+//     setState(() => _cameraReady = false);
+//     _submitToApi(photoPath: null);
+//   }
 
   Future<void> _submitToApi({required String? photoPath}) async {
     if (_scannedGatePassId == null) return;
@@ -1159,33 +1319,66 @@ class _QRScannerSheetState extends State<_QRScannerSheet> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _StepIndicator(current: _step),
+                // _StepIndicator(current: _step),
+                _StepIndicator(current: _step, hasError: _errorMsg != null),
                 const SizedBox(height: 16),
 
+                // Text(
+                //   _step == _ScanStep.scanQR
+                //       ? 'Scan Gate Pass QR'
+                //       : _step == _ScanStep.capturePhoto
+                //       ? 'Capture Employee Photo'
+                //       : 'Verification Complete',
+                //   style: const TextStyle(
+                //     fontSize: 17,
+                //     fontWeight: FontWeight.w700,
+                //   ),
+                // ),
+                // const SizedBox(height: 4),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 32),
+                //   child: Text(
+                //     _step == _ScanStep.scanQR
+                //         ? 'Point camera at the QR code shown by the employee'
+                //         : _step == _ScanStep.capturePhoto
+                //         ? 'Take a photo of the employee for verification'
+                //         : 'QR scanned and submitted successfully',
+                //     style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
                 Text(
-                  _step == _ScanStep.scanQR
-                      ? 'Scan Gate Pass QR'
-                      : _step == _ScanStep.capturePhoto
-                      ? 'Capture Employee Photo'
-                      : 'Verification Complete',
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    _step == _ScanStep.scanQR
-                        ? 'Point camera at the QR code shown by the employee'
-                        : _step == _ScanStep.capturePhoto
-                        ? 'Take a photo of the employee for verification'
-                        : 'QR scanned and submitted successfully',
-                    style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+  _step == _ScanStep.scanQR
+      ? 'Scan Gate Pass QR'
+      : _step == _ScanStep.capturePhoto
+      ? 'Capture Employee Photo'
+      : _isSubmitting
+      ? 'Verifying...'
+      : _errorMsg != null
+      ? 'Verification Failed'
+      : 'Verification Complete',
+  style: const TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w700,
+  ),
+),
+const SizedBox(height: 4),
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 32),
+  child: Text(
+    _step == _ScanStep.scanQR
+        ? 'Point camera at the QR code shown by the employee'
+        : _step == _ScanStep.capturePhoto
+        ? 'Take a photo of the employee for verification'
+        : _isSubmitting
+        ? 'Submitting scan details...'
+        : _errorMsg != null
+        ? _errorMsg!
+        : 'QR scanned and submitted successfully',
+    style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+    textAlign: TextAlign.center,
+  ),
+),
                 const SizedBox(height: 16),
 
                 Expanded(
@@ -1494,16 +1687,89 @@ class _VerificationResult extends StatelessWidget {
   }
 }
 
+// class _StepIndicator extends StatelessWidget {
+//   const _StepIndicator({required this.current});
+//   final _ScanStep current;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final steps = [
+//       (_ScanStep.scanQR, Icons.qr_code_scanner_rounded, 'Scan QR'),
+//       (_ScanStep.capturePhoto, Icons.camera_alt_rounded, 'Photo'),
+//       (_ScanStep.result, Icons.verified_rounded, 'Verified'),
+//     ];
+//     final currentIndex = _ScanStep.values.indexOf(current);
+
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: List.generate(steps.length * 2 - 1, (i) {
+//         if (i.isOdd) {
+//           final filled = currentIndex > i ~/ 2;
+//           return Container(
+//             width: 40,
+//             height: 2,
+//             color: filled ? AppColors.registration : Colors.grey.shade200,
+//           );
+//         }
+//         final idx = i ~/ 2;
+//         final (step, icon, label) = steps[idx];
+//         final isDone = currentIndex > idx;
+//         final isCurrent = current == step;
+
+//         return Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             AnimatedContainer(
+//               duration: const Duration(milliseconds: 250),
+//               width: 36,
+//               height: 36,
+//               decoration: BoxDecoration(
+//                 shape: BoxShape.circle,
+//                 color:
+//                     isDone || isCurrent
+//                         ? AppColors.registration
+//                         : Colors.grey.shade100,
+//                 border: Border.all(
+//                   color:
+//                       isDone || isCurrent
+//                           ? AppColors.registration
+//                           : Colors.grey.shade300,
+//                 ),
+//               ),
+//               child: Icon(
+//                 isDone ? Icons.check_rounded : icon,
+//                 size: 18,
+//                 color:
+//                     isDone || isCurrent ? Colors.white : Colors.grey.shade400,
+//               ),
+//             ),
+//             const SizedBox(height: 4),
+//             Text(
+//               label,
+//               style: TextStyle(
+//                 fontSize: 10,
+//                 fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w400,
+//                 color:
+//                     isCurrent ? AppColors.registration : Colors.grey.shade400,
+//               ),
+//             ),
+//           ],
+//         );
+//       }),
+//     );
+//   }
+// }
 class _StepIndicator extends StatelessWidget {
-  const _StepIndicator({required this.current});
+  const _StepIndicator({required this.current, this.hasError = false});
   final _ScanStep current;
+  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
     final steps = [
       (_ScanStep.scanQR, Icons.qr_code_scanner_rounded, 'Scan QR'),
       (_ScanStep.capturePhoto, Icons.camera_alt_rounded, 'Photo'),
-      (_ScanStep.result, Icons.verified_rounded, 'Verified'),
+      (_ScanStep.result, hasError ? Icons.error_rounded : Icons.verified_rounded, hasError ? 'Failed' : 'Verified'),
     ];
     final currentIndex = _ScanStep.values.indexOf(current);
 
@@ -1522,6 +1788,7 @@ class _StepIndicator extends StatelessWidget {
         final (step, icon, label) = steps[idx];
         final isDone = currentIndex > idx;
         final isCurrent = current == step;
+        final isErrorStep = isCurrent && step == _ScanStep.result && hasError;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -1532,22 +1799,23 @@ class _StepIndicator extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    isDone || isCurrent
+                color: isErrorStep
+                    ? Colors.red
+                    : (isDone || isCurrent
                         ? AppColors.registration
-                        : Colors.grey.shade100,
+                        : Colors.grey.shade100),
                 border: Border.all(
-                  color:
-                      isDone || isCurrent
+                  color: isErrorStep
+                      ? Colors.red
+                      : (isDone || isCurrent
                           ? AppColors.registration
-                          : Colors.grey.shade300,
+                          : Colors.grey.shade300),
                 ),
               ),
               child: Icon(
-                isDone ? Icons.check_rounded : icon,
+                isErrorStep ? Icons.close_rounded : (isDone ? Icons.check_rounded : icon),
                 size: 18,
-                color:
-                    isDone || isCurrent ? Colors.white : Colors.grey.shade400,
+                color: (isDone || isCurrent) ? Colors.white : Colors.grey.shade400,
               ),
             ),
             const SizedBox(height: 4),
@@ -1556,8 +1824,9 @@ class _StepIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w400,
-                color:
-                    isCurrent ? AppColors.registration : Colors.grey.shade400,
+                color: isErrorStep
+                    ? Colors.red
+                    : (isCurrent ? AppColors.registration : Colors.grey.shade400),
               ),
             ),
           ],

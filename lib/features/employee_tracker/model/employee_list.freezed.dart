@@ -30,8 +30,12 @@ mixin _$EmployeeList {
   String? get company => throw _privateConstructorUsedError;
   @JsonKey(name: 'reports_to')
   String? get reportsTo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'custom_2nd_hod')
+  String? get secondHod => throw _privateConstructorUsedError;
   @JsonKey(name: 'custom_reports_to_name')
   String? get reportsToName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'custom_2nd_hod_name')
+  String? get secondHodName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +55,9 @@ abstract class $EmployeeListCopyWith<$Res> {
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'reports_to') String? reportsTo,
-      @JsonKey(name: 'custom_reports_to_name') String? reportsToName});
+      @JsonKey(name: 'custom_2nd_hod') String? secondHod,
+      @JsonKey(name: 'custom_reports_to_name') String? reportsToName,
+      @JsonKey(name: 'custom_2nd_hod_name') String? secondHodName});
 }
 
 /// @nodoc
@@ -72,7 +78,9 @@ class _$EmployeeListCopyWithImpl<$Res, $Val extends EmployeeList>
     Object? department = freezed,
     Object? company = freezed,
     Object? reportsTo = freezed,
+    Object? secondHod = freezed,
     Object? reportsToName = freezed,
+    Object? secondHodName = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -95,9 +103,17 @@ class _$EmployeeListCopyWithImpl<$Res, $Val extends EmployeeList>
           ? _value.reportsTo
           : reportsTo // ignore: cast_nullable_to_non_nullable
               as String?,
+      secondHod: freezed == secondHod
+          ? _value.secondHod
+          : secondHod // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportsToName: freezed == reportsToName
           ? _value.reportsToName
           : reportsToName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      secondHodName: freezed == secondHodName
+          ? _value.secondHodName
+          : secondHodName // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -117,7 +133,9 @@ abstract class _$$EmployeeListImplCopyWith<$Res>
       @JsonKey(name: 'department') String? department,
       @JsonKey(name: 'company') String? company,
       @JsonKey(name: 'reports_to') String? reportsTo,
-      @JsonKey(name: 'custom_reports_to_name') String? reportsToName});
+      @JsonKey(name: 'custom_2nd_hod') String? secondHod,
+      @JsonKey(name: 'custom_reports_to_name') String? reportsToName,
+      @JsonKey(name: 'custom_2nd_hod_name') String? secondHodName});
 }
 
 /// @nodoc
@@ -136,7 +154,9 @@ class __$$EmployeeListImplCopyWithImpl<$Res>
     Object? department = freezed,
     Object? company = freezed,
     Object? reportsTo = freezed,
+    Object? secondHod = freezed,
     Object? reportsToName = freezed,
+    Object? secondHodName = freezed,
   }) {
     return _then(_$EmployeeListImpl(
       name: freezed == name
@@ -159,9 +179,17 @@ class __$$EmployeeListImplCopyWithImpl<$Res>
           ? _value.reportsTo
           : reportsTo // ignore: cast_nullable_to_non_nullable
               as String?,
+      secondHod: freezed == secondHod
+          ? _value.secondHod
+          : secondHod // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportsToName: freezed == reportsToName
           ? _value.reportsToName
           : reportsToName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      secondHodName: freezed == secondHodName
+          ? _value.secondHodName
+          : secondHodName // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -176,7 +204,9 @@ class _$EmployeeListImpl implements _EmployeeList {
       @JsonKey(name: 'department') this.department,
       @JsonKey(name: 'company') this.company,
       @JsonKey(name: 'reports_to') this.reportsTo,
-      @JsonKey(name: 'custom_reports_to_name') this.reportsToName});
+      @JsonKey(name: 'custom_2nd_hod') this.secondHod,
+      @JsonKey(name: 'custom_reports_to_name') this.reportsToName,
+      @JsonKey(name: 'custom_2nd_hod_name') this.secondHodName});
 
   factory _$EmployeeListImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmployeeListImplFromJson(json);
@@ -197,12 +227,18 @@ class _$EmployeeListImpl implements _EmployeeList {
   @JsonKey(name: 'reports_to')
   final String? reportsTo;
   @override
+  @JsonKey(name: 'custom_2nd_hod')
+  final String? secondHod;
+  @override
   @JsonKey(name: 'custom_reports_to_name')
   final String? reportsToName;
+  @override
+  @JsonKey(name: 'custom_2nd_hod_name')
+  final String? secondHodName;
 
   @override
   String toString() {
-    return 'EmployeeList(name: $name, employeeName: $employeeName, department: $department, company: $company, reportsTo: $reportsTo, reportsToName: $reportsToName)';
+    return 'EmployeeList(name: $name, employeeName: $employeeName, department: $department, company: $company, reportsTo: $reportsTo, secondHod: $secondHod, reportsToName: $reportsToName, secondHodName: $secondHodName)';
   }
 
   @override
@@ -218,14 +254,18 @@ class _$EmployeeListImpl implements _EmployeeList {
             (identical(other.company, company) || other.company == company) &&
             (identical(other.reportsTo, reportsTo) ||
                 other.reportsTo == reportsTo) &&
+            (identical(other.secondHod, secondHod) ||
+                other.secondHod == secondHod) &&
             (identical(other.reportsToName, reportsToName) ||
-                other.reportsToName == reportsToName));
+                other.reportsToName == reportsToName) &&
+            (identical(other.secondHodName, secondHodName) ||
+                other.secondHodName == secondHodName));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name, employeeName, department,
-      company, reportsTo, reportsToName);
+      company, reportsTo, secondHod, reportsToName, secondHodName);
 
   @JsonKey(ignore: true)
   @override
@@ -243,13 +283,15 @@ class _$EmployeeListImpl implements _EmployeeList {
 
 abstract class _EmployeeList implements EmployeeList {
   const factory _EmployeeList(
-      {@JsonKey(name: 'name') final String? name,
-      @JsonKey(name: 'employee_name') final String? employeeName,
-      @JsonKey(name: 'department') final String? department,
-      @JsonKey(name: 'company') final String? company,
-      @JsonKey(name: 'reports_to') final String? reportsTo,
-      @JsonKey(name: 'custom_reports_to_name')
-      final String? reportsToName}) = _$EmployeeListImpl;
+          {@JsonKey(name: 'name') final String? name,
+          @JsonKey(name: 'employee_name') final String? employeeName,
+          @JsonKey(name: 'department') final String? department,
+          @JsonKey(name: 'company') final String? company,
+          @JsonKey(name: 'reports_to') final String? reportsTo,
+          @JsonKey(name: 'custom_2nd_hod') final String? secondHod,
+          @JsonKey(name: 'custom_reports_to_name') final String? reportsToName,
+          @JsonKey(name: 'custom_2nd_hod_name') final String? secondHodName}) =
+      _$EmployeeListImpl;
 
   factory _EmployeeList.fromJson(Map<String, dynamic> json) =
       _$EmployeeListImpl.fromJson;
@@ -270,8 +312,14 @@ abstract class _EmployeeList implements EmployeeList {
   @JsonKey(name: 'reports_to')
   String? get reportsTo;
   @override
+  @JsonKey(name: 'custom_2nd_hod')
+  String? get secondHod;
+  @override
   @JsonKey(name: 'custom_reports_to_name')
   String? get reportsToName;
+  @override
+  @JsonKey(name: 'custom_2nd_hod_name')
+  String? get secondHodName;
   @override
   @JsonKey(ignore: true)
   _$$EmployeeListImplCopyWith<_$EmployeeListImpl> get copyWith =>

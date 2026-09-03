@@ -8,9 +8,9 @@ part 'finished_component.g.dart';
 class FinishedComponent with _$FinishedComponent {
   const factory FinishedComponent({
     @JsonKey(name: 'name') String? componentName,
-    @JsonKey(name: 'default_bom') String? deafultBom,
+    @JsonKey(name: 'default_bom') String? defaultBom,
+    @JsonKey(name: 'quality_inspection_template') String? qualityInspectionTemplate,
      }) = _FinishedComponent;
-
-  factory FinishedComponent.fromJson(Map<String, dynamic> json) =>
+factory FinishedComponent.fromJson(Map<String, dynamic> json) =>
       _$FinishedComponentFromJson(json);
 }

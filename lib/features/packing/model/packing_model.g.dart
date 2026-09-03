@@ -35,6 +35,7 @@ _$PackingModelImpl _$$PackingModelImplFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       amendedFrom: json['amended_from'] as String?,
+      qualityInspectionTemplate: json['qualityInspectionTemplate'] as String?,
     );
 
 Map<String, dynamic> _$$PackingModelImplToJson(_$PackingModelImpl instance) =>
@@ -64,4 +65,5 @@ Map<String, dynamic> _$$PackingModelImplToJson(_$PackingModelImpl instance) =>
       'batch_no': instance.batchNo,
       'operator_name': instance.operatorName,
       'amended_from': instance.amendedFrom,
+      'qualityInspectionTemplate': instance.qualityInspectionTemplate,
     };

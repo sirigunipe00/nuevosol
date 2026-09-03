@@ -12,7 +12,6 @@ import 'package:nuevosol/features/employee_tracker/presentation/ui/approve_rejec
 import 'package:nuevosol/features/employee_tracker/presentation/widget/employee_qr_pass_widget.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/widget/image_preview.dart';
 import 'package:nuevosol/styles/app_color.dart';
-import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
 import 'package:nuevosol/widgets/input_filed.dart';
 import 'package:nuevosol/widgets/inputs/app_dropdown_widget.dart';
@@ -32,6 +31,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
   final TextEditingController department = TextEditingController();
   final TextEditingController approver = TextEditingController();
   final TextEditingController reason = TextEditingController();
+  final TextEditingController remarks = TextEditingController();
 
   final indianFormat = NumberFormat.decimalPattern('en_IN');
   final invoiceAmountController = TextEditingController();
@@ -76,12 +76,69 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
     final canApprove = isHod && isPendingApproval && !isOwner;
     // final canApprove = isHod && isPendingApproval;
     final isApproved = form.workflowState?.toLowerCase().trim() == 'approved';
+    final showApproverDetails = {
+      'closed',
+      'movement ongoing',
+      'approved',
+    }.contains(form.workflowState?.toLowerCase().trim());
 
     final showSafetyInstruction = isApproved && !isHod && !issecurity;
+    final hasApprovalInfo =
+        showApproverDetails &&
+        form.approvedBy != null &&
+        form.approvedBy!.trim().isNotEmpty;
+
     return SpacedColumn(
       margin: const EdgeInsets.all(12.0),
       defaultHeight: 8,
       children: [
+        if (hasApprovalInfo) ...[
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.green.shade200),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.verified_rounded, color: Colors.green.shade600),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Approved by ${form.approvedBy}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      if (form.approvedDateTime != null &&
+                          form.approvedDateTime!.trim().isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          DFU.ddMMyyyyHHmmssFromStr(form.approvedDateTime!),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.green.shade700,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 5),
+        ],
         if (showSafetyInstruction) ...[
           Container(
             width: double.infinity,
@@ -276,91 +333,144 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 15),
-              BlocBuilder<EmployeeListCubit, EmployeeListState>(
-                builder: (_, state) {
-                  return state.maybeWhen(
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
+              const SizedBox(height: 10),
+              BlocListener<EmployeeListCubit, EmployeeListState>(
+                listener: (context, state) {
+                  state.maybeWhen(
                     success: (items) {
-                      return AppDropDownWidget<EmployeeList>(
-                        title: 'Employee No',
-                        items: items,
-                        isMandatory: true,
-                        // key: UniqueKey(),
-                        key: ValueKey(form.employeeNo),
-                        readOnly: isReadOnly,
-                        hint: 'Select Employee No',
-                        headerBuilder:
-                            (_, item, __) => Text(item.employeeName ?? ''),
-                        defaultSelection: state.maybeWhen(
-                          success: (data) {
-                            final selectedReason =
-                                context
-                                    .read<CreateEmployeeCubit>()
-                                    .state
-                                    .form
-                                    .employeeName;
-
-                            if (selectedReason == null) return null;
-
-                            return data.firstWhere(
-                              (e) =>
-                                  e.name == selectedReason ||
-                                  e.employeeName == selectedReason,
-                              orElse: () => const EmployeeList(),
-                            );
-                          },
-                          orElse: () => null,
-                        ),
-                        futureRequest: (query) async {
-                          if (query.isEmpty) return items;
-                          return items.where((item) {
-                            final orderNo = item.name?.toLowerCase() ?? '';
-                            final employeeName =
-                                item.employeeName?.toLowerCase() ?? '';
-
-                            final search = query.toLowerCase();
-                            return orderNo.contains(search) ||
-                                employeeName.contains(search);
-                          }).toList();
-                        },
-                        listItemBuilder:
-                            (_, item, isSelected, __) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Employee No: ${item.name ?? ''}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                AppSpacer.p4(),
-                                Text(
-                                  "Employee Name: ${item.employeeName ?? ''}",
-                                ),
-                              ],
-                            ),
-
-                        onSelected: (order) {
-                          if (order.isNull) return;
-                          context.cubit<CreateEmployeeCubit>().onValueChanged(
-                            employeeNo: order!.name ?? '',
-                            employeeName: order.employeeName,
-                            department: order.department,
-                            company: order.company,
-                            hod: order.reportsToName,
-                          );
-                          setState(() {});
-                        },
-                        borderColor: AppColors.registration,
-                      );
+                      if (items.isEmpty) return;
+                      final me = items.first;
+                      final currentForm =
+                          context.read<CreateEmployeeCubit>().state.form;
+                      if (currentForm.employeeNo == null ||
+                          currentForm.employeeNo!.isEmpty) {
+                        context.read<CreateEmployeeCubit>().onValueChanged(
+                          employeeNo: me.name ?? '',
+                          employeeName: me.employeeName,
+                          department: me.department,
+                          company: me.company,
+                          hod: me.reportsToName,
+                          secondHod: me.secondHodName,
+                        );
+                      }
                     },
-                    orElse: () => const SizedBox.shrink(),
+                    orElse: () {},
                   );
                 },
+                child: BlocBuilder<EmployeeListCubit, EmployeeListState>(
+                  builder: (_, state) {
+                    return state.maybeWhen(
+                      loading:
+                          () =>
+                              const Center(child: CircularProgressIndicator()),
+                      success: (items) {
+                        if (items.isEmpty) {
+                          return const Text(
+                            'No employee record found for your account.',
+                            style: TextStyle(color: Colors.red),
+                          );
+                        }
+                        final me = items.first;
+                        return InputField(
+                          title: 'Employee No',
+                          readOnly: true,
+                          maxLines: 2,
+                          initialValue:
+                              '${me.name ?? ''} - ${me.employeeName ?? ''}',
+                          borderColor: AppColors.registration,
+                        );
+                      },
+                      orElse: () => const SizedBox.shrink(),
+                    );
+                  },
+                ),
               ),
+
+              // const SizedBox(height: 15),
+              // BlocBuilder<EmployeeListCubit, EmployeeListState>(
+              //   builder: (_, state) {
+              //     return state.maybeWhen(
+              //       loading:
+              //           () => const Center(child: CircularProgressIndicator()),
+              //       success: (items) {
+              //         return AppDropDownWidget<EmployeeList>(
+              //           title: 'Employee No',
+              //           items: items,
+              //           isMandatory: true,
+              //           // key: UniqueKey(),
+              //           key: ValueKey(form.employeeNo),
+              //           readOnly: isReadOnly,
+              //           hint: 'Select Employee No',
+              //           headerBuilder:
+              //               (_, item, __) => Text(item.employeeName ?? ''),
+              //           defaultSelection: state.maybeWhen(
+              //             success: (data) {
+              //               final selectedReason =
+              //                   context
+              //                       .read<CreateEmployeeCubit>()
+              //                       .state
+              //                       .form
+              //                       .employeeName;
+
+              //               if (selectedReason == null) return null;
+
+              //               return data.firstWhere(
+              //                 (e) =>
+              //                     e.name == selectedReason ||
+              //                     e.employeeName == selectedReason,
+              //                 orElse: () => const EmployeeList(),
+              //               );
+              //             },
+              //             orElse: () => null,
+              //           ),
+              //           futureRequest: (query) async {
+              //             if (query.isEmpty) return items;
+              //             return items.where((item) {
+              //               final orderNo = item.name?.toLowerCase() ?? '';
+              //               final employeeName =
+              //                   item.employeeName?.toLowerCase() ?? '';
+
+              //               final search = query.toLowerCase();
+              //               return orderNo.contains(search) ||
+              //                   employeeName.contains(search);
+              //             }).toList();
+              //           },
+              //           listItemBuilder:
+              //               (_, item, isSelected, __) => Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Text(
+              //                     "Employee No: ${item.name ?? ''}",
+              //                     style: const TextStyle(
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   AppSpacer.p4(),
+              //                   Text(
+              //                     "Employee Name: ${item.employeeName ?? ''}",
+              //                   ),
+              //                 ],
+              //               ),
+
+              //           onSelected: (order) {
+              //             if (order.isNull) return;
+              //             context.cubit<CreateEmployeeCubit>().onValueChanged(
+              //               employeeNo: order!.name ?? '',
+              //               employeeName: order.employeeName,
+              //               department: order.department,
+              //               company: order.company,
+              //               hod: order.reportsToName,
+              //               secondHod: order.secondHodName,
+              //             );
+              //             setState(() {});
+              //           },
+              //           borderColor: AppColors.registration,
+              //         );
+              //       },
+              //       orElse: () => const SizedBox.shrink(),
+              //     );
+              //   },
+              // ),
               InputField(
                 title: 'HOD',
                 readOnly: true,
@@ -372,6 +482,19 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                 onChanged: (hodName) {
                   context.cubit<CreateEmployeeCubit>().onValueChanged(
                     hod: hodName,
+                  );
+                },
+              ),
+              InputField(
+                title: '2nd HOD',
+                readOnly: true,
+                hintText: 'Enter 2nd HOD Name',
+                isRequired: true,
+                initialValue: form.secondHod,
+                borderColor: AppColors.registration,
+                onChanged: (hodName) {
+                  context.cubit<CreateEmployeeCubit>().onValueChanged(
+                    secondHod: hodName,
                   );
                 },
               ),
@@ -510,25 +633,102 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
 
               const SizedBox(height: 5),
 
+              // BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
+              //   builder: (_, empState) {
+              //     final selectedReason = empState.form.reasonOfGateExit ?? '';
+
+              //     List<String> movementTypes;
+              //     if (selectedReason.toLowerCase() == 'inter plant movement') {
+              //       movementTypes = ['Exit - In', 'Exit - In & Exit - In'];
+              //     } else if (selectedReason.toLowerCase() == 'personal work') {
+              //       movementTypes = ['Exit', 'Exit - In'];
+              //     } else {
+              //       movementTypes = [
+              //         'Exit - In',
+              //         'Exit - In & Exit - In',
+              //         'Exit',
+              //         'Exit - In',
+              //       ];
+              //     }
+
+              //     return AppDropDownWidget<String>(
+              //       key: ValueKey(selectedReason),
+              //       title: 'Movement Type',
+              //       hint: 'Select Movement Type',
+              //       readOnly: isReadOnly,
+              //       borderColor: AppColors.registration,
+              //       items: movementTypes,
+              //       isMandatory: true,
+              //       defaultSelection:
+              //           movementTypes.contains(empState.form.movementType)
+              //               ? empState.form.movementType
+              //               : null,
+              //       headerBuilder: (_, item, __) => Text(item),
+              //       listItemBuilder:
+              //           (_, item, __, ___) => CompactListTile(title: item),
+              //       futureRequest: (searchText) async {
+              //         if (searchText.trim().isEmpty) return movementTypes;
+              //         return movementTypes
+              //             .where(
+              //               (item) => item.toLowerCase().contains(
+              //                 searchText.trim().toLowerCase(),
+              //               ),
+              //             )
+              //             .toList();
+              //       },
+              //       onSelected: (selected) {
+              //         context.cubit<CreateEmployeeCubit>().onValueChanged(
+              //           movementType: selected,
+              //           expectedReturnDateTime: null,
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
               BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
                 builder: (_, empState) {
-                  final selectedReason = empState.form.reasonOfGateExit ?? '';
+                  final selectedReason =
+                      (empState.form.reasonOfGateExit ?? '')
+                          .trim()
+                          .toLowerCase();
 
-                  List<String> movementTypes;
-                  if (selectedReason.toLowerCase() == 'inter plant movement') {
-                    movementTypes = ['Exit - In', 'Exit - In & Exit - In'];
-                  } else if (selectedReason.toLowerCase() == 'personal work') {
-                    movementTypes = ['Exit', 'Exit - In'];
+                  List<MovementTypeOption> movementTypes;
+
+                  if (selectedReason == 'inter plant movement') {
+                    movementTypes = const [
+                      MovementTypeOption('One Way', 'Exit - In'),
+                      MovementTypeOption('Round Trip', 'Exit - In & Exit - In'),
+                    ];
+                  } else if (selectedReason == 'personal work') {
+                    movementTypes = const [
+                      MovementTypeOption('Exit', 'Exit'),
+                      MovementTypeOption('Exit - In', 'Exit - In'),
+                    ];
+                  } else if (selectedReason == 'official work') {
+                    movementTypes = const [
+                      MovementTypeOption('Exit', 'Exit'),
+                      MovementTypeOption('Exit - In', 'Exit - In'),
+                    ];
                   } else {
-                    movementTypes = [
-                      'Exit - In',
-                      'Exit - In & Exit - In',
-                      'Exit',
-                      'Exit - In',
+                    movementTypes = const [
+                      MovementTypeOption('Exit - In', 'Exit - In'),
+                      MovementTypeOption(
+                        'Exit - In & Exit - In',
+                        'Exit - In & Exit - In',
+                      ),
+                      MovementTypeOption('Exit', 'Exit'),
                     ];
                   }
 
-                  return AppDropDownWidget<String>(
+                  MovementTypeOption? defaultOption;
+                  for (final option in movementTypes) {
+                    if (option.value == empState.form.movementType) {
+                      defaultOption = option;
+                      break;
+                    }
+                  }
+
+                  return AppDropDownWidget<MovementTypeOption>(
                     key: ValueKey(selectedReason),
                     title: 'Movement Type',
                     hint: 'Select Movement Type',
@@ -536,18 +736,16 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                     borderColor: AppColors.registration,
                     items: movementTypes,
                     isMandatory: true,
-                    defaultSelection:
-                        movementTypes.contains(empState.form.movementType)
-                            ? empState.form.movementType
-                            : null,
-                    headerBuilder: (_, item, __) => Text(item),
+                    defaultSelection: defaultOption,
+                    headerBuilder: (_, item, __) => Text(item.label),
                     listItemBuilder:
-                        (_, item, __, ___) => CompactListTile(title: item),
+                        (_, item, __, ___) =>
+                            CompactListTile(title: item.label),
                     futureRequest: (searchText) async {
                       if (searchText.trim().isEmpty) return movementTypes;
                       return movementTypes
                           .where(
-                            (item) => item.toLowerCase().contains(
+                            (item) => item.label.toLowerCase().contains(
                               searchText.trim().toLowerCase(),
                             ),
                           )
@@ -555,7 +753,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                     },
                     onSelected: (selected) {
                       context.cubit<CreateEmployeeCubit>().onValueChanged(
-                        movementType: selected,
+                        movementType: selected?.value,
                         expectedReturnDateTime: null,
                       );
                     },
@@ -867,7 +1065,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                       initialTime: TimeOfDay.now(),
                                     );
                                     if (time == null) return;
-                                    if(!context.mounted) return;
+                                    if (!context.mounted) return;
 
                                     final combined = DateTime(
                                       date.year,
@@ -1001,7 +1199,7 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                                         initialTime: TimeOfDay.now(),
                                       );
                                       if (time == null) return;
-                                      if(!context.mounted) return;
+                                      if (!context.mounted) return;
 
                                       final combined = DateTime(
                                         date.year,
@@ -1072,6 +1270,23 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                   ],
                 ],
               ),
+            );
+          },
+        ),
+        const SizedBox(height: 5),
+        InputField(
+          title: 'Remarks',
+          readOnly: isReadOnly,
+          hintText: 'Enter Remarks',
+          controller: remarks,
+          initialValue: form.remarks,
+          isRequired: false,
+          maxLines: 10,
+          // initialValue: form.hod,
+          borderColor: AppColors.registration,
+          onChanged: (remarks) {
+            context.cubit<CreateEmployeeCubit>().onValueChanged(
+              remarks: remarks,
             );
           },
         ),
@@ -1309,4 +1524,19 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
       ],
     );
   }
+}
+
+class MovementTypeOption {
+  const MovementTypeOption(this.label, this.value);
+
+  final String label;
+  final String value;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovementTypeOption && other.value == value;
+
+  @override
+  int get hashCode => value.hashCode;
 }

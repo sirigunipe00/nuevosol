@@ -120,16 +120,19 @@ class ApiClient {
 
         return result;
       } else {
-        if (statusCode == HttpStatus.unauthorized || statusCode <= HttpStatus.internalServerError) {
+        if (statusCode == HttpStatus.unauthorized) {
           final res = defaultErrorParser(jsonDecode(resBody), Errors.invalidcredentials);
           throw BaseApiException(res.error);
-        } else if (statusCode >= HttpStatus.badRequest &&
-            statusCode <= HttpStatus.clientClosedRequest) {
-          throw ClientException(Errors.clientError);
-        } else if ( statusCode <= HttpStatus.networkConnectTimeoutError) {
-          throw ServerException(Errors.internalServerError);
+        } else if (statusCode >= HttpStatus.badRequest && statusCode < HttpStatus.internalServerError) {
+          final res = defaultErrorParser(jsonDecode(resBody), Errors.clientError);
+          throw BaseApiException(res.error);
+        } else if (statusCode >= HttpStatus.internalServerError &&
+            statusCode <= HttpStatus.networkConnectTimeoutError) {
+          final res = defaultErrorParser(jsonDecode(resBody), Errors.internalServerError);
+          throw BaseApiException(res.error);
         } else {
-          throw UnknownException(Errors.unknown);
+          final res = defaultErrorParser(jsonDecode(resBody), Errors.unknown);
+          throw BaseApiException(res.error);
         }
       }
     } on SocketException catch(e,st) {

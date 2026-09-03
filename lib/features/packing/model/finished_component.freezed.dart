@@ -23,7 +23,9 @@ mixin _$FinishedComponent {
   @JsonKey(name: 'name')
   String? get componentName => throw _privateConstructorUsedError;
   @JsonKey(name: 'default_bom')
-  String? get deafultBom => throw _privateConstructorUsedError;
+  String? get defaultBom => throw _privateConstructorUsedError;
+  @JsonKey(name: 'quality_inspection_template')
+  String? get qualityInspectionTemplate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +41,9 @@ abstract class $FinishedComponentCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String? componentName,
-      @JsonKey(name: 'default_bom') String? deafultBom});
+      @JsonKey(name: 'default_bom') String? defaultBom,
+      @JsonKey(name: 'quality_inspection_template')
+      String? qualityInspectionTemplate});
 }
 
 /// @nodoc
@@ -56,16 +60,21 @@ class _$FinishedComponentCopyWithImpl<$Res, $Val extends FinishedComponent>
   @override
   $Res call({
     Object? componentName = freezed,
-    Object? deafultBom = freezed,
+    Object? defaultBom = freezed,
+    Object? qualityInspectionTemplate = freezed,
   }) {
     return _then(_value.copyWith(
       componentName: freezed == componentName
           ? _value.componentName
           : componentName // ignore: cast_nullable_to_non_nullable
               as String?,
-      deafultBom: freezed == deafultBom
-          ? _value.deafultBom
-          : deafultBom // ignore: cast_nullable_to_non_nullable
+      defaultBom: freezed == defaultBom
+          ? _value.defaultBom
+          : defaultBom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      qualityInspectionTemplate: freezed == qualityInspectionTemplate
+          ? _value.qualityInspectionTemplate
+          : qualityInspectionTemplate // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -81,7 +90,9 @@ abstract class _$$FinishedComponentImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String? componentName,
-      @JsonKey(name: 'default_bom') String? deafultBom});
+      @JsonKey(name: 'default_bom') String? defaultBom,
+      @JsonKey(name: 'quality_inspection_template')
+      String? qualityInspectionTemplate});
 }
 
 /// @nodoc
@@ -96,16 +107,21 @@ class __$$FinishedComponentImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? componentName = freezed,
-    Object? deafultBom = freezed,
+    Object? defaultBom = freezed,
+    Object? qualityInspectionTemplate = freezed,
   }) {
     return _then(_$FinishedComponentImpl(
       componentName: freezed == componentName
           ? _value.componentName
           : componentName // ignore: cast_nullable_to_non_nullable
               as String?,
-      deafultBom: freezed == deafultBom
-          ? _value.deafultBom
-          : deafultBom // ignore: cast_nullable_to_non_nullable
+      defaultBom: freezed == defaultBom
+          ? _value.defaultBom
+          : defaultBom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      qualityInspectionTemplate: freezed == qualityInspectionTemplate
+          ? _value.qualityInspectionTemplate
+          : qualityInspectionTemplate // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -116,7 +132,9 @@ class __$$FinishedComponentImplCopyWithImpl<$Res>
 class _$FinishedComponentImpl implements _FinishedComponent {
   const _$FinishedComponentImpl(
       {@JsonKey(name: 'name') this.componentName,
-      @JsonKey(name: 'default_bom') this.deafultBom});
+      @JsonKey(name: 'default_bom') this.defaultBom,
+      @JsonKey(name: 'quality_inspection_template')
+      this.qualityInspectionTemplate});
 
   factory _$FinishedComponentImpl.fromJson(Map<String, dynamic> json) =>
       _$$FinishedComponentImplFromJson(json);
@@ -126,11 +144,14 @@ class _$FinishedComponentImpl implements _FinishedComponent {
   final String? componentName;
   @override
   @JsonKey(name: 'default_bom')
-  final String? deafultBom;
+  final String? defaultBom;
+  @override
+  @JsonKey(name: 'quality_inspection_template')
+  final String? qualityInspectionTemplate;
 
   @override
   String toString() {
-    return 'FinishedComponent(componentName: $componentName, deafultBom: $deafultBom)';
+    return 'FinishedComponent(componentName: $componentName, defaultBom: $defaultBom, qualityInspectionTemplate: $qualityInspectionTemplate)';
   }
 
   @override
@@ -140,13 +161,17 @@ class _$FinishedComponentImpl implements _FinishedComponent {
             other is _$FinishedComponentImpl &&
             (identical(other.componentName, componentName) ||
                 other.componentName == componentName) &&
-            (identical(other.deafultBom, deafultBom) ||
-                other.deafultBom == deafultBom));
+            (identical(other.defaultBom, defaultBom) ||
+                other.defaultBom == defaultBom) &&
+            (identical(other.qualityInspectionTemplate,
+                    qualityInspectionTemplate) ||
+                other.qualityInspectionTemplate == qualityInspectionTemplate));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, componentName, deafultBom);
+  int get hashCode => Object.hash(
+      runtimeType, componentName, defaultBom, qualityInspectionTemplate);
 
   @JsonKey(ignore: true)
   @override
@@ -165,9 +190,10 @@ class _$FinishedComponentImpl implements _FinishedComponent {
 
 abstract class _FinishedComponent implements FinishedComponent {
   const factory _FinishedComponent(
-          {@JsonKey(name: 'name') final String? componentName,
-          @JsonKey(name: 'default_bom') final String? deafultBom}) =
-      _$FinishedComponentImpl;
+      {@JsonKey(name: 'name') final String? componentName,
+      @JsonKey(name: 'default_bom') final String? defaultBom,
+      @JsonKey(name: 'quality_inspection_template')
+      final String? qualityInspectionTemplate}) = _$FinishedComponentImpl;
 
   factory _FinishedComponent.fromJson(Map<String, dynamic> json) =
       _$FinishedComponentImpl.fromJson;
@@ -177,7 +203,10 @@ abstract class _FinishedComponent implements FinishedComponent {
   String? get componentName;
   @override
   @JsonKey(name: 'default_bom')
-  String? get deafultBom;
+  String? get defaultBom;
+  @override
+  @JsonKey(name: 'quality_inspection_template')
+  String? get qualityInspectionTemplate;
   @override
   @JsonKey(ignore: true)
   _$$FinishedComponentImplCopyWith<_$FinishedComponentImpl> get copyWith =>

@@ -10,12 +10,14 @@ _$FinishedComponentImpl _$$FinishedComponentImplFromJson(
         Map<String, dynamic> json) =>
     _$FinishedComponentImpl(
       componentName: json['name'] as String?,
-      deafultBom: json['default_bom'] as String?,
+      defaultBom: json['default_bom'] as String?,
+      qualityInspectionTemplate: json['quality_inspection_template'] as String?,
     );
 
 Map<String, dynamic> _$$FinishedComponentImplToJson(
         _$FinishedComponentImpl instance) =>
     <String, dynamic>{
       'name': instance.componentName,
-      'default_bom': instance.deafultBom,
+      'default_bom': instance.defaultBom,
+      'quality_inspection_template': instance.qualityInspectionTemplate,
     };

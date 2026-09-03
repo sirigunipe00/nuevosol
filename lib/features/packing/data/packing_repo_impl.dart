@@ -259,6 +259,7 @@ class PackingRepoImpl extends BaseApiRepository implements PackingRepo {
           'filters': jsonEncode([
             ['item', '=', name],
             ['is_active', '=', 1],
+            // ['is_default', '=', 1],
           ]),
           'doctype': 'BOM',
           'fields': ['*'],
@@ -298,7 +299,7 @@ class PackingRepoImpl extends BaseApiRepository implements PackingRepo {
       );
 
       final response = await get(config);
-      $logger.devLog('response.....$response');
+      $logger.devLog('finished.....$response');
       return response.processAsync((r) async {
         return right((r.data!));
       });

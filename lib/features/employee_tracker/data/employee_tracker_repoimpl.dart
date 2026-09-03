@@ -16,7 +16,34 @@ import 'package:nuevosol/features/employee_tracker/model/reason_exit_type.dart';
 
 @LazySingleton(as: EmployeeRepo)
 class EmployeeRepoImpl extends BaseApiRepository implements EmployeeRepo {
-  const EmployeeRepoImpl(super.client);
+   const EmployeeRepoImpl(super.client);
+
+  Future<String?> resolveCurrentEmployeeName(String email) async {
+    final config = RequestConfig(
+      url: Urls.getList,
+      parser: (json) {
+        final data = json['message'] as List<dynamic>;
+        if (data.isEmpty) return null;
+        return data.first['employee_name'] as String?;
+      },
+      reqParams: {
+        'filters': jsonEncode([
+          ['company_email', '=', email],
+        ]),
+        'limit_page_length': 'None',
+        'doctype': 'Employee',
+        'fields': jsonEncode(['employee_name']),
+      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    );
+
+    final response = await get(config);
+    $logger.devLog('resolveCurrentEmployeeName response.....$response');
+    $logger.devLog('resolveCurrentEmployeeName config.....$config');
+    final result = response.process((r) => right(r.data));
+
+    return result.fold((l) => null, (employeeName) => employeeName);
+  }
 
  @override
 AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
@@ -51,7 +78,39 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
   final isHod = userRole.role!.any(
     (e) => e.toString().toLowerCase().contains('hod (hr)'),
   );
-  
+//  if (isHod) {
+//       final email = userRole.email;
+//       if (email != null && email.isNotEmpty) {
+//         final hodEmployeeName = await _resolveCurrentEmployeeName(email);
+//         if (hodEmployeeName != null && hodEmployeeName.isNotEmpty) {
+//           filters.add(['hod', '=', hodEmployeeName]);
+//         } else {
+//           filters.add(['hod', '=', '__no_match__']);
+//         }
+//       }
+//     }
+  if (isHod) {
+    final email = userRole.email;
+    String? hodEmployeeName;
+
+    if (email != null && email.isNotEmpty) {
+      hodEmployeeName = await resolveCurrentEmployeeName(email);
+    }
+    if (hodEmployeeName != null && hodEmployeeName.isNotEmpty) {
+      orFilters
+        ..add(['hod', '=', hodEmployeeName])
+        ..add(['2nd_hod', '=', hodEmployeeName]);   
+    }
+    if (email != null && email.isNotEmpty) {
+      orFilters.add(['owner', '=', email]);
+    }
+
+
+    if (orFilters.isEmpty) {
+      filters.add(['hod', '=', '__no_match__']);
+    }
+  }
+
 
   /// ONLY APPLY GATE FILTERS IF NOT HOD
   if (!isHod) {
@@ -200,11 +259,13 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
       body: jsonEncode({
         'employee_id': form.employeeNo,
         'hod': form.hod,
+        '2nd_hod': form.secondHod,
         'department': form.department,
         'reason_of_gate_exit': form.reasonOfGateExit,
         'from_location': form.fromLocation,
         'to_location': form.toLocation,
         'movement_type': form.movementType,
+        'remarks': form.remarks,
         'expected_exit_date_time': form.expectedExitDateTime,
         'expected_return_date_time': form.expectedReturnDateTime,
       }),
@@ -304,11 +365,13 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
         'gate_pass_id': form.name,
         'state': 'Pending For Approval',
         'employee': form.employeeNo,
+        '2nd_hod': form.secondHod,
         'hod': form.hod,
         'department': form.department,
         'reason_of_gate_exit': form.reasonOfGateExit,
         'from_location': form.fromLocation,
         'to_location': form.toLocation,
+        'remarks': form.remarks,
         'movement_type': form.movementType,
         'expected_exit_date_time': form.expectedExitDateTime,
         'expected_return_date_time': form.expectedReturnDateTime,
@@ -334,7 +397,8 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
     return await executeSafely(() async {
       final config = RequestConfig(
         url: Urls.approveGatePass,
-        body: jsonEncode({'gate_pass_id': form.name}),
+        body: jsonEncode({'gate_pass_id': form.name,
+        'approved_by': user().username}),
         parser: (json) {
           final message = json['message'] as String? ?? 'Approved';
           final data = json['data']['gate_pass_id'] as String? ?? '';
@@ -343,7 +407,6 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
       final response = await post(config);
-      $logger.devLog(response);
       return response.process(
         (r) => right(Pair(r.data!.first, r.data!.second)),
       );
@@ -470,6 +533,14 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
   @override
   AsyncValueOf<List<EmployeeList>> fetchEmployeeList(String name) async {
     return await executeSafely(() async {
+      final userRole = $sl.get<LoggedInUser>();
+    final email = userRole.email;
+
+    final filters = <List<dynamic>>[];
+    if (email != null && email.isNotEmpty) {
+      filters.add(['company_email', '=', email]);
+    }
+
       final config = RequestConfig(
         url: Urls.getList,
 
@@ -483,6 +554,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
           'order_by': 'creation desc',
           'doctype': 'Employee',
           'fields': ['*'],
+          'filters': jsonEncode(filters)
         },
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
@@ -517,7 +589,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
         },
         reqParams: {
         'limit_page_length': 'None',
-        'order_by': 'creation desc',
+        'order_by': 'name asc',
         'doctype': 'Department',
         'fields': ['*'],
         if (filters.isNotEmpty)

@@ -38,6 +38,7 @@ class CreateEmployeeCubit extends AppBaseCubit<CreateEmployeeState> {
     String? workflowState,
     String? employeeNo,
     String? hod,
+    String? secondHod,
     String? vendorInvoiceNo,
     String? company,
     int? expectedDurationMin,
@@ -63,6 +64,7 @@ class CreateEmployeeCubit extends AppBaseCubit<CreateEmployeeState> {
     String? status2,
     String? gateEntryDateAndTimeReturn,
     int? actualDurationT2Min,
+    String? remarks,
 }) async {
     shouldAskForConfirmation.value = true;
     final form = state.form;
@@ -76,6 +78,7 @@ class CreateEmployeeCubit extends AppBaseCubit<CreateEmployeeState> {
       modifiedBy: modifiedBy ?? form.modifiedBy,
       modified: modifiedDate ?? form.modified,
       hod: hod ?? form.hod,
+      secondHod: secondHod ?? form.secondHod,
       company: company ?? form.company,
       expectedDurationMin: expectedDurationMin ?? form.expectedDurationMin,
       sendForApprovalDateTime: sendForApprovalDateTime ?? form.sendForApprovalDateTime,
@@ -85,6 +88,7 @@ class CreateEmployeeCubit extends AppBaseCubit<CreateEmployeeState> {
       movementType: movementType ?? form.movementType,
       reasonOfGateExit: reasonOfGateExit ?? form.reasonOfGateExit,
       fromLocation: fromLocation ?? form.fromLocation,
+      remarks: remarks ?? form.remarks,
       toLocation: toLocation ?? form.toLocation,
       expectedExitDateTime: expectedExitDateTime ?? form.expectedExitDateTime,
       approvedDateTime: approvedDateTime ?? form.approvedDateTime,
@@ -119,6 +123,7 @@ void initDetails(Object? entry) {
         name: entry.name,
         creation: entry.creation,
         hod: entry.hod,
+        secondHod: entry.secondHod,
         employeeNo: entry.employeeNo,
         owner: entry.owner,
         docstatus: entry.docstatus,
@@ -133,6 +138,7 @@ void initDetails(Object? entry) {
         reasonOfGateExit: entry.reasonOfGateExit,
         fromLocation: entry.fromLocation,
         toLocation: entry.toLocation, 
+        remarks: entry.remarks,
         movementType: entry.movementType,
           expectedExitDateTime: entry.expectedExitDateTime, 
           approvedDateTime: entry.approvedDateTime,
@@ -311,7 +317,10 @@ void reject(String reason) async {
     } else 
     if (form.reasonOfGateExit == null && form.reasonOfGateExit?.trim().isEmpty == true) {
       return optionOf(const Pair('Missing Reason for Gate Exit', 0));
-    } 
+    }  else if (form.reasonOfGateExit == 'Official Work' &&
+      (form.remarks == null || form.remarks!.trim().isEmpty)) {
+    return optionOf(const Pair('Remarks is required for Official Work', 0));
+  }
     else if (form.hod == null && form.hod?.trim().isEmpty == true) {
       return optionOf(const Pair('HOD Name is required', 0));
     }

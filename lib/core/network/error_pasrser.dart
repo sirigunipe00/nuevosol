@@ -7,6 +7,16 @@ Failure defaultErrorParser(
 ) {
   try {
     if (response.containsKey('_server_messages')) {
+      final message = response['message'];
+      if (message is String && message.isNotEmpty) {
+        return Failure(error: message, title: 'Message');
+      }
+      if (message is Map<String, dynamic>) {
+        return Failure(
+          error: message['message']?.toString() ?? defErrorMessage,
+          title: 'Message',
+        );
+      }
       return Failure(
         error: response['exc_type']?.toString() ?? defErrorMessage,
         title: 'Message',

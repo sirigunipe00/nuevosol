@@ -34,7 +34,7 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
     final isCreating = formState.view == PackingView.create;
     final isReadOnly = !isCreating;
     final form = formState.form;
-      // bool _hasAppliedDefaultProcess = false;
+    // bool _hasAppliedDefaultProcess = false;
 
     return SpacedColumn(
       margin: const EdgeInsets.all(12.0),
@@ -171,187 +171,95 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
             );
           },
         ),
-        //  BlocBuilder<SelectProcessList, SelectProcessState>(
-        //   builder: (_, state) {
-        //     return state.maybeWhen(
-        //       loading: () => const Center(child: CircularProgressIndicator()),
-        //       success: (items) {
-        //         return AppDropDownWidget<SelectProcess>(
-        //           title: 'Select Process',
-        //           items: items,
-        //           isMandatory: true,
-        //           showScanner: !isReadOnly,
-        //           key: ValueKey(form.selectProcess),
-        //           readOnly: isReadOnly,
-        //           hint: 'Select Process',
-        //           headerBuilder: (_, item, __) => Text(item.processName ?? ''),
-        //           defaultSelection: state.maybeWhen(
-        //             success: (data) {
-        //               final selectedReason =
-        //                   context
-        //                       .read<CreatePackingCubit>()
-        //                       .state
-        //                       .form
-        //                       .selectProcess;
-
-        //               if (selectedReason == null) return null;
-
-        //               return data.firstWhere(
-        //                 (e) => e.processName == selectedReason,
-        //                 orElse: () => const SelectProcess(),
-        //               );
-        //             },
-        //             orElse: () => null,
-        //           ),
-        //           futureRequest: (query) async {
-        //             if (query.isEmpty) return items;
-        //             return items.where((item) {
-        //               final orderNo = item.processName?.toLowerCase() ?? '';
-        //               final search = query.toLowerCase();
-        //               return orderNo.contains(search);
-        //             }).toList();
-        //           },
-        //           listItemBuilder:
-        //               (_, item, isSelected, __) => Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     item.processName ?? '',
-        //                     style: const TextStyle(fontWeight: FontWeight.bold),
-        //                   ),
-        //                 ],
-        //               ),
-        //           onSelected: (order) {
-        //             if (order.isNull) return;
-        //             context.cubit<CreatePackingCubit>().onValueChanged(
-        //               selectProcess: order!.processName ?? '',
-        //             );
-        //             setState(() {});
-        //           },
-        //           onScannerTap: () async {
-        //             if (isReadOnly) return;
-        //             final scanResult = await Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                 builder:
-        //                     (context) => const SimpleBarcodeScannerPage(
-        //                       scanType: ScanType.barcode,
-        //                       appBarTitle: 'Scan Process',
-        //                       isShowFlashIcon: true,
-        //                     ),
-        //               ),
-        //             );
-
-        //             if (scanResult == null || !context.mounted) return;
-        //             final scannedValue =
-        //                 scanResult.toString().trim().toUpperCase();
-        //             final matched = items.cast<SelectProcess?>().firstWhere(
-        //               (m) =>
-        //                   (m?.processName ?? '').trim().toUpperCase() ==
-        //                   scannedValue,
-        //               orElse: () => null,
-        //             );
-
-        //             if (matched != null) {
-        //               context.cubit<CreatePackingCubit>().onValueChanged(
-        //                 selectProcess: matched.processName ?? '',
-        //               );
-        //               setState(() {});
-        //             } else {
-        //               _showScanMismatchDialog(
-        //                 context,
-        //                 'Scanned Process is not matched with existing processes.',
-        //               );
-        //             }
-        //           },
-        //           borderColor: AppColors.packing,
-        //         );
-        //       },
-        //       orElse: () => const SizedBox.shrink(),
-        //     );
-        //   },
-        // ),
         BlocBuilder<SelectProcessList, SelectProcessState>(
-  builder: (_, state) {
-    return state.maybeWhen(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      success: (items) {
-        final currentSelection =
-            context.read<CreatePackingCubit>().state.form.selectProcess;
-        if (isCreating && currentSelection == null) {
-          final defaultProcess = items.firstWhere(
-            (e) => (e.processName ?? '').trim().toLowerCase() == 'packing',
-            orElse: () => const SelectProcess(),
-          );
-          if (defaultProcess.processName != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!context.mounted) return;
-              context.cubit<CreatePackingCubit>().onValueChanged(
-                selectProcess: defaultProcess.processName!,
-              );
-            });
-          }
-        }
+          builder: (_, state) {
+            return state.maybeWhen(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              success: (items) {
+                SelectProcess? findPacking() {
+                  try {
+                    return items.firstWhere(
+                      (e) =>
+                          (e.processName ?? '').trim().toLowerCase() ==
+                          'packing',
+                    );
+                  } catch (_) {
+                    return null;
+                  }
+                }
 
-        return AppDropDownWidget<SelectProcess>(
-          title: 'Select Process',
-          items: items,
-          isMandatory: true,
-          showScanner: !isReadOnly,
-          key: ValueKey(form.selectProcess),
-          readOnly: isReadOnly,
-          hint: 'Select Process',
-          headerBuilder: (_, item, __) => Text(item.processName ?? ''),
-          defaultSelection: state.maybeWhen(
-            success: (data) {
-              final selectedReason =
-                  context
-                      .read<CreatePackingCubit>()
-                      .state
-                      .form
-                      .selectProcess;
+                SelectProcess? findByName(String? name) {
+                  if (name.doesNotHaveValue) return null;
+                  try {
+                    return items.firstWhere(
+                      (e) =>
+                          (e.processName ?? '').trim().toLowerCase() ==
+                          name!.trim().toLowerCase(),
+                    );
+                  } catch (_) {
+                    return null;
+                  }
+                }
 
-              if (selectedReason == null) {
-                return data.firstWhere(
-                  (e) =>
-                      (e.processName ?? '').trim().toLowerCase() ==
-                      'packing',
-                  orElse: () => const SelectProcess(),
-                );
-              }
+                final currentSelection =
+                    context.read<CreatePackingCubit>().state.form.selectProcess;
+                final packingProcess = findPacking();
+                final selectedProcess =
+                    findByName(currentSelection) ?? packingProcess;
 
-              return data.firstWhere(
-                (e) => e.processName == selectedReason,
-                orElse: () => const SelectProcess(),
-              );
-            },
-            orElse: () => null,
-          ),
-          futureRequest: (query) async {
-            if (query.isEmpty) return items;
-            return items.where((item) {
-              final orderNo = item.processName?.toLowerCase() ?? '';
-              final search = query.toLowerCase();
-              return orderNo.contains(search);
-            }).toList();
-          },
-          listItemBuilder:
-              (_, item, isSelected, __) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.processName ?? '',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                if (isCreating &&
+                    currentSelection.doesNotHaveValue &&
+                    packingProcess?.processName != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!context.mounted) return;
+                    context.cubit<CreatePackingCubit>().onValueChanged(
+                      selectProcess: packingProcess!.processName!,
+                    );
+                  });
+                }
+
+                return AppDropDownWidget<SelectProcess>(
+                  title: 'Select Process',
+                  items: items,
+                  isMandatory: true,
+                  showScanner: !isReadOnly,
+                  key: ValueKey(
+                    selectedProcess?.processName ?? form.selectProcess,
                   ),
-                ],
-              ),
-          onSelected: (order) {
-            if (order.isNull) return;
-            context.cubit<CreatePackingCubit>().onValueChanged(
-              selectProcess: order!.processName ?? '',
-            );
-            setState(() {});
-          },
+                  readOnly: isReadOnly,
+                  hint: 'Select Process',
+                  searchHintText: 'Packing',
+                  initialSearchText: 'Packing',
+                  excludeSelected: false,
+                  headerBuilder:
+                      (_, item, __) => Text(item.processName ?? ''),
+                  defaultSelection: selectedProcess,
+                  futureRequest: (query) async {
+                    final search = query.trim().toLowerCase();
+                    if (search.isEmpty) return items;
+                    return items.where((item) {
+                      final orderNo =
+                          item.processName?.toLowerCase() ?? '';
+                      return orderNo.contains(search);
+                    }).toList();
+                  },
+                  listItemBuilder:
+                      (_, item, isSelected, __) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.processName ?? '',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                  onSelected: (order) {
+                    if (order.isNull) return;
+                    context.cubit<CreatePackingCubit>().onValueChanged(
+                      selectProcess: order!.processName ?? '',
+                    );
+                    setState(() {});
+                  },
                   onScannerTap: () async {
                     if (isReadOnly) return;
                     final scanResult = await Navigator.push(
@@ -395,56 +303,6 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
             );
           },
         ),
-        // DateSelectionField(
-        //   title: 'Production Start Time',
-        //   hintText: 'Select Date & Time',
-        //   isRequired: true,
-        //   includeTime: true,
-        //   initialValue: DFU.ddMMyyyyHHmmssFromStr(
-        //     form.productionStartTime ?? '',
-        //   ),
-        //   readOnly: isReadOnly,
-        //   onDateSelect: (date) {
-        //     setState(() {
-        //       context.cubit<CreatePackingCubit>().onValueChanged(
-        //         productionStartTime: DateFormat(
-        //           'yyyy-MM-dd HH:mm:ss',
-        //         ).format(date),
-        //       );
-        //     });
-        //   },
-        //   borderColor: AppColors.packing,
-        //   suffixIcon: const Icon(
-        //     Icons.calendar_month_outlined,
-        //     color: AppColors.chimneySweep,
-        //   ),
-        //   firstDate: DateTime(2000),
-        //   lastDate: DateTime.now(),
-        // ),
-        // DateSelectionField(
-        //   title: 'Production End Time',
-        //   hintText: 'Select Date & Time',
-        //   isRequired: true,
-        //   includeTime: true,
-        //   initialValue: DFU.ddMMyyyyHHmmssFromStr(form.productionEndTime ?? ''),
-        //   readOnly: isReadOnly,
-        //   onDateSelect: (date) {
-        //     setState(() {
-        //       context.cubit<CreatePackingCubit>().onValueChanged(
-        //         productionEndTime: DateFormat(
-        //           'yyyy-MM-dd HH:mm:ss',
-        //         ).format(date),
-        //       );
-        //     });
-        //   },
-        //   borderColor: AppColors.packing,
-        //   suffixIcon: const Icon(
-        //     Icons.calendar_month_outlined,
-        //     color: AppColors.chimneySweep,
-        //   ),
-        //   firstDate: DateTime(2000),
-        //   lastDate: DateTime.now(),
-        // ),
         if (isCreating)
           BlocBuilder<EmployeeListCubit, EmployeeListState>(
             builder: (_, state) {
@@ -639,8 +497,13 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
                       ),
                   onSelected: (order) {
                     if (order.isNull) return;
+                    // Capture the quality inspection template here, at
+                    // selection time, so the scan screen doesn't need to
+                    // re-fetch/re-match FinishedList to find it later.
                     context.cubit<CreatePackingCubit>().onValueChanged(
                       rawMaterialName: order!.componentName ?? '',
+                      qualityInspectionTemplate:
+                          order.qualityInspectionTemplate ?? '',
                     );
                     context.read<BomCubit>().request(order.componentName ?? '');
                     setState(() {});
@@ -672,6 +535,8 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
                     if (matched != null) {
                       context.cubit<CreatePackingCubit>().onValueChanged(
                         rawMaterialName: matched.componentName ?? '',
+                        qualityInspectionTemplate:
+                            matched.qualityInspectionTemplate ?? '',
                       );
                       context.read<BomCubit>().request(
                         matched.componentName ?? '',

@@ -27,6 +27,7 @@ _$EmployeeTrackerImpl _$$EmployeeTrackerImplFromJson(
       fromLocation: json['from_location'] as String?,
       movementType: json['movement_type'] as String?,
       toLocation: json['to_location'] as String?,
+      secondHod: json['2nd_hod'] as String?,
       expectedExitDateTime: json['expected_exit_date_time'] as String?,
       expectedDurationMin: (json['expected_duration_min'] as num?)?.toInt(),
       expectedReturnDateTime: json['expected_return_date_time'] as String?,
@@ -49,6 +50,7 @@ _$EmployeeTrackerImpl _$$EmployeeTrackerImplFromJson(
           json['gate_entry_date_and_time_return'] as String?,
       actualDurationT2Min: (json['actual_duration_t2_min'] as num?)?.toInt(),
       amendedFrom: json['amended_from'] as String?,
+      remarks: json['remarks'] as String?,
     );
 
 Map<String, dynamic> _$$EmployeeTrackerImplToJson(
@@ -72,6 +74,7 @@ Map<String, dynamic> _$$EmployeeTrackerImplToJson(
       'from_location': instance.fromLocation,
       'movement_type': instance.movementType,
       'to_location': instance.toLocation,
+      '2nd_hod': instance.secondHod,
       'expected_exit_date_time': instance.expectedExitDateTime,
       'expected_duration_min': instance.expectedDurationMin,
       'expected_return_date_time': instance.expectedReturnDateTime,
@@ -90,4 +93,5 @@ Map<String, dynamic> _$$EmployeeTrackerImplToJson(
       'gate_entry_date_and_time_return': instance.gateEntryDateAndTimeReturn,
       'actual_duration_t2_min': instance.actualDurationT2Min,
       'amended_from': instance.amendedFrom,
+      'remarks': instance.remarks,
     };

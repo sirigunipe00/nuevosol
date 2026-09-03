@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "nuevosol",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "nuevosol (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "nuevosol (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "animated_custom_dropdown",
+            "cwd": "packages/animated_custom_dropdown",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "animated_custom_dropdown (profile mode)",
+            "cwd": "packages/animated_custom_dropdown",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "animated_custom_dropdown (release mode)",
+            "cwd": "packages/animated_custom_dropdown",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

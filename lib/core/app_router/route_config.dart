@@ -444,6 +444,11 @@ class AppRouterConfig {
                                             provider.fetchComponentScanning()
                                               ..request(form.name ?? ''),
                                   ),
+                                  BlocProvider(
+                                    create:
+                                        (_) =>
+                                            provider.fetchFinished()..request(''),
+                                  ),
                                 ],
                                 child: PackingItemScanScrn(packing: form),
                               );

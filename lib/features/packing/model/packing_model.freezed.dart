@@ -69,6 +69,7 @@ mixin _$PackingModel {
   List<String>? get operatorName => throw _privateConstructorUsedError;
   @JsonKey(name: 'amended_from')
   String? get amendedFrom => throw _privateConstructorUsedError;
+  String? get qualityInspectionTemplate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -107,7 +108,8 @@ abstract class $PackingModelCopyWith<$Res> {
       @JsonKey(name: 'rejected_qty_warehouse') String? rejectedQtyWarehouse,
       @JsonKey(name: 'batch_no') String? batchNo,
       @JsonKey(name: 'operator_name') List<String>? operatorName,
-      @JsonKey(name: 'amended_from') String? amendedFrom});
+      @JsonKey(name: 'amended_from') String? amendedFrom,
+      String? qualityInspectionTemplate});
 }
 
 /// @nodoc
@@ -148,6 +150,7 @@ class _$PackingModelCopyWithImpl<$Res, $Val extends PackingModel>
     Object? batchNo = freezed,
     Object? operatorName = freezed,
     Object? amendedFrom = freezed,
+    Object? qualityInspectionTemplate = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -250,6 +253,10 @@ class _$PackingModelCopyWithImpl<$Res, $Val extends PackingModel>
           ? _value.amendedFrom
           : amendedFrom // ignore: cast_nullable_to_non_nullable
               as String?,
+      qualityInspectionTemplate: freezed == qualityInspectionTemplate
+          ? _value.qualityInspectionTemplate
+          : qualityInspectionTemplate // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -287,7 +294,8 @@ abstract class _$$PackingModelImplCopyWith<$Res>
       @JsonKey(name: 'rejected_qty_warehouse') String? rejectedQtyWarehouse,
       @JsonKey(name: 'batch_no') String? batchNo,
       @JsonKey(name: 'operator_name') List<String>? operatorName,
-      @JsonKey(name: 'amended_from') String? amendedFrom});
+      @JsonKey(name: 'amended_from') String? amendedFrom,
+      String? qualityInspectionTemplate});
 }
 
 /// @nodoc
@@ -326,6 +334,7 @@ class __$$PackingModelImplCopyWithImpl<$Res>
     Object? batchNo = freezed,
     Object? operatorName = freezed,
     Object? amendedFrom = freezed,
+    Object? qualityInspectionTemplate = freezed,
   }) {
     return _then(_$PackingModelImpl(
       status: freezed == status
@@ -428,6 +437,10 @@ class __$$PackingModelImplCopyWithImpl<$Res>
           ? _value.amendedFrom
           : amendedFrom // ignore: cast_nullable_to_non_nullable
               as String?,
+      qualityInspectionTemplate: freezed == qualityInspectionTemplate
+          ? _value.qualityInspectionTemplate
+          : qualityInspectionTemplate // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -460,7 +473,8 @@ class _$PackingModelImpl implements _PackingModel {
       @JsonKey(name: 'rejected_qty_warehouse') this.rejectedQtyWarehouse,
       @JsonKey(name: 'batch_no') this.batchNo,
       @JsonKey(name: 'operator_name') final List<String>? operatorName,
-      @JsonKey(name: 'amended_from') this.amendedFrom})
+      @JsonKey(name: 'amended_from') this.amendedFrom,
+      this.qualityInspectionTemplate})
       : _operatorName = operatorName;
 
   factory _$PackingModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -548,10 +562,12 @@ class _$PackingModelImpl implements _PackingModel {
   @override
   @JsonKey(name: 'amended_from')
   final String? amendedFrom;
+  @override
+  final String? qualityInspectionTemplate;
 
   @override
   String toString() {
-    return 'PackingModel(status: $status, name: $name, owner: $owner, creation: $creation, modified: $modified, modifiedBy: $modifiedBy, docstatus: $docstatus, idx: $idx, company: $company, machineNameNo: $machineNameNo, selectProcess: $selectProcess, productionStartTime: $productionStartTime, productionEndTime: $productionEndTime, rawMaterialName: $rawMaterialName, uom: $uom, bomItem: $bomItem, bomQtyItem: $bomQtyItem, okQty: $okQty, rejectedQty: $rejectedQty, totalQty: $totalQty, okQtyWarehouse: $okQtyWarehouse, rejectedQtyWarehouse: $rejectedQtyWarehouse, batchNo: $batchNo, operatorName: $operatorName, amendedFrom: $amendedFrom)';
+    return 'PackingModel(status: $status, name: $name, owner: $owner, creation: $creation, modified: $modified, modifiedBy: $modifiedBy, docstatus: $docstatus, idx: $idx, company: $company, machineNameNo: $machineNameNo, selectProcess: $selectProcess, productionStartTime: $productionStartTime, productionEndTime: $productionEndTime, rawMaterialName: $rawMaterialName, uom: $uom, bomItem: $bomItem, bomQtyItem: $bomQtyItem, okQty: $okQty, rejectedQty: $rejectedQty, totalQty: $totalQty, okQtyWarehouse: $okQtyWarehouse, rejectedQtyWarehouse: $rejectedQtyWarehouse, batchNo: $batchNo, operatorName: $operatorName, amendedFrom: $amendedFrom, qualityInspectionTemplate: $qualityInspectionTemplate)';
   }
 
   @override
@@ -599,7 +615,10 @@ class _$PackingModelImpl implements _PackingModel {
             const DeepCollectionEquality()
                 .equals(other._operatorName, _operatorName) &&
             (identical(other.amendedFrom, amendedFrom) ||
-                other.amendedFrom == amendedFrom));
+                other.amendedFrom == amendedFrom) &&
+            (identical(other.qualityInspectionTemplate,
+                    qualityInspectionTemplate) ||
+                other.qualityInspectionTemplate == qualityInspectionTemplate));
   }
 
   @JsonKey(ignore: true)
@@ -630,7 +649,8 @@ class _$PackingModelImpl implements _PackingModel {
         rejectedQtyWarehouse,
         batchNo,
         const DeepCollectionEquality().hash(_operatorName),
-        amendedFrom
+        amendedFrom,
+        qualityInspectionTemplate
       ]);
 
   @JsonKey(ignore: true)
@@ -674,8 +694,8 @@ abstract class _PackingModel implements PackingModel {
       final String? rejectedQtyWarehouse,
       @JsonKey(name: 'batch_no') final String? batchNo,
       @JsonKey(name: 'operator_name') final List<String>? operatorName,
-      @JsonKey(name: 'amended_from')
-      final String? amendedFrom}) = _$PackingModelImpl;
+      @JsonKey(name: 'amended_from') final String? amendedFrom,
+      final String? qualityInspectionTemplate}) = _$PackingModelImpl;
 
   factory _PackingModel.fromJson(Map<String, dynamic> json) =
       _$PackingModelImpl.fromJson;
@@ -754,6 +774,8 @@ abstract class _PackingModel implements PackingModel {
   @override
   @JsonKey(name: 'amended_from')
   String? get amendedFrom;
+  @override
+  String? get qualityInspectionTemplate;
   @override
   @JsonKey(ignore: true)
   _$$PackingModelImplCopyWith<_$PackingModelImpl> get copyWith =>
