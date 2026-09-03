@@ -170,7 +170,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
               OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: Colors.grey.withOpacity(25),
+                  color: Colors.grey.withOpacity(0.25),
                   width: 1,
                 ),
               ),
@@ -178,7 +178,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
               OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: Colors.grey.withOpacity(25),
+                  color: Colors.grey.withOpacity(0.25),
                   width: 1,
                 ),
               ),
@@ -186,7 +186,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
               OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: Colors.grey.withOpacity(25),
+                  color: Colors.grey.withOpacity(0.25),
                   width: 1,
                 ),
               ),

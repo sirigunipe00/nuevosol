@@ -533,13 +533,13 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
   @override
   AsyncValueOf<List<EmployeeList>> fetchEmployeeList(String name) async {
     return await executeSafely(() async {
-      final userRole = $sl.get<LoggedInUser>();
-    final email = userRole.email;
+    //   final userRole = $sl.get<LoggedInUser>();
+    // final email = userRole.email;
 
-    final filters = <List<dynamic>>[];
-    if (email != null && email.isNotEmpty) {
-      filters.add(['company_email', '=', email]);
-    }
+    // final filters = <List<dynamic>>[];
+    // if (email != null && email.isNotEmpty) {
+    //   filters.add(['company_email', '=', email]);
+    // }
 
       final config = RequestConfig(
         url: Urls.getList,
@@ -554,7 +554,7 @@ AsyncValueOf<List<EmployeeTracker>> fetchEmployees(
           'order_by': 'creation desc',
           'doctype': 'Employee',
           'fields': ['*'],
-          'filters': jsonEncode(filters)
+          // 'filters': jsonEncode(filters)
         },
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );

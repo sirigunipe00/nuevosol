@@ -236,6 +236,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
 
 
       final response = await get(config);
+      $logger.devLog('response.....$response');
       return response.processAsync((r) async {
         return right((r.data!));
       });

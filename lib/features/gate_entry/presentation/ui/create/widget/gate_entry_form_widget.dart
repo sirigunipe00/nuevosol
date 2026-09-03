@@ -435,13 +435,17 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
                           .state
                           .form
                           .customSupplier;
-
                   if (selectedSupplier == null) return null;
 
-                  return data.firstWhere(
-                    (e) => e.name == selectedSupplier,
-                    orElse: () => const SupplierForm(),
+                  final normalizedTarget =
+                      selectedSupplier.trim().toLowerCase();
+
+                  final match = data.where(
+                    (e) =>
+                        (e.name ?? '').trim().toLowerCase() == normalizedTarget,
                   );
+
+                  return match.isNotEmpty ? match.first : null;
                 },
                 orElse: () => null,
               ),
