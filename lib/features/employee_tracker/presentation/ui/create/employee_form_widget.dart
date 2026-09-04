@@ -335,143 +335,143 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                 ],
               ),
               const SizedBox(height: 10),
-              // BlocListener<EmployeeListCubit, EmployeeListState>(
-              //   listener: (context, state) {
-              //     state.maybeWhen(
-              //       success: (items) {
-              //         if (items.isEmpty) return;
-              //         final me = items.first;
-              //         final currentForm =
-              //             context.read<CreateEmployeeCubit>().state.form;
-              //         if (currentForm.employeeNo == null ||
-              //             currentForm.employeeNo!.isEmpty) {
-              //           context.read<CreateEmployeeCubit>().onValueChanged(
-              //             employeeNo: me.name ?? '',
-              //             employeeName: me.employeeName,
-              //             department: me.department,
-              //             company: me.company,
-              //             hod: me.reportsToName,
-              //             secondHod: me.secondHodName,
-              //           );
-              //         }
-              //       },
-              //       orElse: () {},
-              //     );
-              //   },
-              //   child: BlocBuilder<EmployeeListCubit, EmployeeListState>(
-              //     builder: (_, state) {
-              //       return state.maybeWhen(
-              //         loading:
-              //             () =>
-              //                 const Center(child: CircularProgressIndicator()),
-              //         success: (items) {
-              //           if (items.isEmpty) {
-              //             return const Text(
-              //               'No employee record found for your account.',
-              //               style: TextStyle(color: Colors.red),
-              //             );
-              //           }
-              //           final me = items.first;
-              //           return InputField(
-              //             title: 'Employee No',
-              //             readOnly: true,
-              //             maxLines: 2,
-              //             initialValue:
-              //                 '${me.name ?? ''} - ${me.employeeName ?? ''}',
-              //             borderColor: AppColors.registration,
-              //           );
-              //         },
-              //         orElse: () => const SizedBox.shrink(),
-              //       );
-              //     },
-              //   ),
-              // ),
-
-              // const SizedBox(height: 15),
-              BlocBuilder<EmployeeListCubit, EmployeeListState>(
-                builder: (_, state) {
-                  return state.maybeWhen(
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
+              BlocListener<EmployeeListCubit, EmployeeListState>(
+                listener: (context, state) {
+                  state.maybeWhen(
                     success: (items) {
-                      return AppDropDownWidget<EmployeeList>(
-                        title: 'Employee No',
-                        items: items,
-                        isMandatory: true,
-                        // key: UniqueKey(),
-                        key: ValueKey(form.employeeNo),
-                        readOnly: isReadOnly,
-                        hint: 'Select Employee No',
-                        headerBuilder:
-                            (_, item, __) => Text(item.employeeName ?? ''),
-                        defaultSelection: state.maybeWhen(
-                          success: (data) {
-                            final selectedReason =
-                                context
-                                    .read<CreateEmployeeCubit>()
-                                    .state
-                                    .form
-                                    .employeeName;
-
-                            if (selectedReason == null) return null;
-
-                            return data.firstWhere(
-                              (e) =>
-                                  e.name == selectedReason ||
-                                  e.employeeName == selectedReason,
-                              orElse: () => const EmployeeList(),
-                            );
-                          },
-                          orElse: () => null,
-                        ),
-                        futureRequest: (query) async {
-                          if (query.isEmpty) return items;
-                          return items.where((item) {
-                            final orderNo = item.name?.toLowerCase() ?? '';
-                            final employeeName =
-                                item.employeeName?.toLowerCase() ?? '';
-
-                            final search = query.toLowerCase();
-                            return orderNo.contains(search) ||
-                                employeeName.contains(search);
-                          }).toList();
-                        },
-                        listItemBuilder:
-                            (_, item, isSelected, __) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Employee No: ${item.name ?? ''}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                AppSpacer.p4(),
-                                Text(
-                                  "Employee Name: ${item.employeeName ?? ''}",
-                                ),
-                              ],
-                            ),
-
-                        onSelected: (order) {
-                          if (order.isNull) return;
-                          context.cubit<CreateEmployeeCubit>().onValueChanged(
-                            employeeNo: order!.name ?? '',
-                            employeeName: order.employeeName,
-                            department: order.department,
-                            company: order.company,
-                            hod: order.reportsToName,
-                            secondHod: order.secondHodName,
-                          );
-                          setState(() {});
-                        },
-                        borderColor: AppColors.registration,
-                      );
+                      if (items.isEmpty) return;
+                      final me = items.first;
+                      final currentForm =
+                          context.read<CreateEmployeeCubit>().state.form;
+                      if (currentForm.employeeNo == null ||
+                          currentForm.employeeNo!.isEmpty) {
+                        context.read<CreateEmployeeCubit>().onValueChanged(
+                          employeeNo: me.name ?? '',
+                          employeeName: me.employeeName,
+                          department: me.department,
+                          company: me.company,
+                          hod: me.reportsToName,
+                          secondHod: me.secondHodName,
+                        );
+                      }
                     },
-                    orElse: () => const SizedBox.shrink(),
+                    orElse: () {},
                   );
                 },
+                child: BlocBuilder<EmployeeListCubit, EmployeeListState>(
+                  builder: (_, state) {
+                    return state.maybeWhen(
+                      loading:
+                          () =>
+                              const Center(child: CircularProgressIndicator()),
+                      success: (items) {
+                        if (items.isEmpty) {
+                          return const Text(
+                            'No employee record found for your account.',
+                            style: TextStyle(color: Colors.red),
+                          );
+                        }
+                        final me = items.first;
+                        return InputField(
+                          title: 'Employee No',
+                          readOnly: true,
+                          maxLines: 2,
+                          initialValue:
+                              '${me.name ?? ''} - ${me.employeeName ?? ''}',
+                          borderColor: AppColors.registration,
+                        );
+                      },
+                      orElse: () => const SizedBox.shrink(),
+                    );
+                  },
+                ),
               ),
+
+              // const SizedBox(height: 15),
+              // BlocBuilder<EmployeeListCubit, EmployeeListState>(
+              //   builder: (_, state) {
+              //     return state.maybeWhen(
+              //       loading:
+              //           () => const Center(child: CircularProgressIndicator()),
+              //       success: (items) {
+              //         return AppDropDownWidget<EmployeeList>(
+              //           title: 'Employee No',
+              //           items: items,
+              //           isMandatory: true,
+              //           // key: UniqueKey(),
+              //           key: ValueKey(form.employeeNo),
+              //           readOnly: isReadOnly,
+              //           hint: 'Select Employee No',
+              //           headerBuilder:
+              //               (_, item, __) => Text(item.employeeName ?? ''),
+              //           defaultSelection: state.maybeWhen(
+              //             success: (data) {
+              //               final selectedReason =
+              //                   context
+              //                       .read<CreateEmployeeCubit>()
+              //                       .state
+              //                       .form
+              //                       .employeeName;
+
+              //               if (selectedReason == null) return null;
+
+              //               return data.firstWhere(
+              //                 (e) =>
+              //                     e.name == selectedReason ||
+              //                     e.employeeName == selectedReason,
+              //                 orElse: () => const EmployeeList(),
+              //               );
+              //             },
+              //             orElse: () => null,
+              //           ),
+              //           futureRequest: (query) async {
+              //             if (query.isEmpty) return items;
+              //             return items.where((item) {
+              //               final orderNo = item.name?.toLowerCase() ?? '';
+              //               final employeeName =
+              //                   item.employeeName?.toLowerCase() ?? '';
+
+              //               final search = query.toLowerCase();
+              //               return orderNo.contains(search) ||
+              //                   employeeName.contains(search);
+              //             }).toList();
+              //           },
+              //           listItemBuilder:
+              //               (_, item, isSelected, __) => Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Text(
+              //                     "Employee No: ${item.name ?? ''}",
+              //                     style: const TextStyle(
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   AppSpacer.p4(),
+              //                   Text(
+              //                     "Employee Name: ${item.employeeName ?? ''}",
+              //                   ),
+              //                 ],
+              //               ),
+
+              //           onSelected: (order) {
+              //             if (order.isNull) return;
+              //             context.cubit<CreateEmployeeCubit>().onValueChanged(
+              //               employeeNo: order!.name ?? '',
+              //               employeeName: order.employeeName,
+              //               department: order.department,
+              //               company: order.company,
+              //               hod: order.reportsToName,
+              //               secondHod: order.secondHodName,
+              //             );
+              //             setState(() {});
+              //           },
+              //           borderColor: AppColors.registration,
+              //         );
+              //       },
+              //       orElse: () => const SizedBox.shrink(),
+              //     );
+              //   },
+              // ),
               InputField(
                 title: 'HOD',
                 readOnly: true,
