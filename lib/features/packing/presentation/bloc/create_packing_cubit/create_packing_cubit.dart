@@ -77,12 +77,6 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
 
     emitSafeState(state.copyWith(form: newForm));
   }
-
-  //   String? getFullUrl(String? path) {
-  //   if (path == null || path.isEmpty) return null;
-  //   if (path.startsWith('http')) return path;
-  //   return 'http://65.21.176.38:8000$path';
-  // }
   String? getFullUrl(String? path) {
     if (path == null || path.isEmpty) return null;
 
@@ -136,26 +130,36 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
     if (entry == null) return;
   }
 
-  // void clearVehiclePhoto() {
-  //   final form = state.form.copyWith(vehiclePhoto: null);
-  //   emitSafeState(state.copyWith(form: form));
-  // }
-
-  // void addpurchseorders({List<PurchaseOrder>? purchaseorder}) {
-  //   final form = state.form.copyWith(purchaseOrder: purchaseorder);
-
-  //   emitSafeState(state.copyWith(form: form));
-  // }
-
-  // void clearVehicleBackPhoto() {
-  //   final form = state.form.copyWith(weighmentPhoto: null);
-  //   emitSafeState(state.copyWith(form: form));
-  // }
-
-  // void clearInvoicePhoto() {
-  //   final form = state.form.copyWith(invoicePhoto: null);
-  //   emitSafeState(state.copyWith(form: form));
-  // }
+  /// Prefill create form from a previous packing without switching to edit/Next.
+  void initAsNewFrom(PackingModel source) {
+    shouldAskForConfirmation.value = false;
+    emitSafeState(
+      state.copyWith(
+        view: PackingView.create,
+        isLoading: false,
+        isSuccess: false,
+        error: null,
+        successMsg: null,
+        form: PackingModel(
+          company: source.company,
+          machineNameNo: source.machineNameNo,
+          selectProcess: source.selectProcess ?? 'Packing',
+          rawMaterialName: source.rawMaterialName,
+          uom: source.uom,
+          bomItem: source.bomItem,
+          bomQtyItem: source.bomQtyItem,
+          okQty: source.okQty,
+          rejectedQty: source.rejectedQty,
+          totalQty: source.totalQty,
+          okQtyWarehouse: source.okQtyWarehouse,
+          rejectedQtyWarehouse: source.rejectedQtyWarehouse,
+          batchNo: source.batchNo,
+          operatorName: source.operatorName,
+          qualityInspectionTemplate: source.qualityInspectionTemplate,
+        ),
+      ),
+    );
+  }
 
   void save() async {
     final validation = _validate();
@@ -207,25 +211,6 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
           },
         );
       }
-      //  else {
-      //   final response = await repo.submitGateEntry(state.form);
-
-      //   return response.fold(
-      //     (l) => emitSafeState(state.copyWith(isLoading: false, error: l)),
-      //     (r) {
-      //       shouldAskForConfirmation.value = false;
-      //       emitSafeState(
-      //         state.copyWith(
-      //           isLoading: false,
-      //           isSuccess: true,
-      //           form: state.form.copyWith(docStatus: 1),
-      //           successMsg: r.first,
-      //           view: PackingView.completed,
-      //         ),
-      //       );
-      //     },
-      //   );
-      // }
     }, _emitError);
   }
 

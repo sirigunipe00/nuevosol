@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:nuevosol/core/core.dart';
+import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/packing/data/packing_repo.dart';
 import 'package:nuevosol/features/packing/model/bom.dart';
 import 'package:nuevosol/features/packing/model/bom_items.dart';
@@ -160,6 +161,7 @@ class PackingRepoImpl extends BaseApiRepository implements PackingRepo {
 
     final response = await post(config);
     $logger.devLog('config.....$config');
+    $logger.devLog('response...$response');
 
     return response.fold(
       (failure) => left(failure),
@@ -305,6 +307,42 @@ class PackingRepoImpl extends BaseApiRepository implements PackingRepo {
       });
     });
   }
+
+    @override
+  AsyncValueOf<List<EmployeeList>> fetchEmployeeListPacking() async {
+    return await executeSafely(() async {
+
+    // final filters = <List<dynamic>>[];
+    // if (email != null && email.isNotEmpty) {
+    //   filters.add(['company_email', '=', email]);
+    // }
+
+      final config = RequestConfig(
+        url: Urls.getList,
+
+        parser: (json) {
+          final data = json['message'];
+          final listdata = data as List<dynamic>;
+          return listdata.map((e) => EmployeeList.fromJson(e)).toList();
+        },
+        reqParams: {
+          'limit_page_length': 'None',
+          'order_by': 'creation desc',
+          'doctype': 'Employee',
+          'fields': ['*'],
+          // 'filters': jsonEncode(filters)
+        },
+        headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      );
+
+      final response = await get(config);
+      $logger.devLog('response.....$response');
+      return response.processAsync((r) async {
+        return right((r.data!));
+      });
+    });
+  }
+  
 
   @override
   AsyncValueOf<List<SelectProcess>> fetchProcess(String name) async {
@@ -495,6 +533,7 @@ class PackingRepoImpl extends BaseApiRepository implements PackingRepo {
 
     final response = await post(config);
     $logger.devLog('packingQrScanning config.....$config');
+    $logger.devLog('response.....$response');
 
     return response.fold(
       (failure) => left(failure),

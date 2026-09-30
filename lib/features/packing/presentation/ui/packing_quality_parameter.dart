@@ -9,6 +9,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/core/utils/attachment_selection_mixin.dart';
+import 'package:nuevosol/features/packing/model/packing_form_args.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
 import 'package:nuevosol/features/packing/model/packing_quality_args.dart';
 import 'package:nuevosol/features/packing/model/quality_inspection_reading.dart';
@@ -393,7 +394,10 @@ class _PackingQualityParameterScrnState
             },
           );
           if (!mounted) return;
-          AppRoute.packing.go(context);
+          AppRoute.newPacking.go(
+            context,
+            extra: PackingFormArgs.createFromPrevious(widget.args.packing),
+          );
         },
       );
     } catch (e) {

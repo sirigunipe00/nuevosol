@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuevosol/core/core.dart';
 import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
-import 'package:nuevosol/features/employee_tracker/presentation/bloc/bloc_provider.dart';
 import 'package:nuevosol/features/packing/model/bom.dart';
 import 'package:nuevosol/features/packing/model/finished_component.dart';
 import 'package:nuevosol/features/packing/model/machine_no.dart';
@@ -304,7 +303,7 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
           },
         ),
         if (isCreating)
-          BlocBuilder<EmployeeListCubit, EmployeeListState>(
+          BlocBuilder<EmployeeListPacking, EmployeeListStatePacking>(
             builder: (_, state) {
               return state.maybeWhen(
                 loading:
@@ -665,7 +664,7 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
           BlocBuilder<CreatePackingCubit, CreatePackingState>(
             builder:
                 (_, state) => AppButton(
-                  label: 'Save',
+                  label: 'Create',
                   isLoading: state.isLoading,
                   bgColor: AppColors.haintBlue,
                   margin: const EdgeInsets.all(12.0),

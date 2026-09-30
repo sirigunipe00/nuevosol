@@ -1,5 +1,6 @@
 import 'package:nuevosol/core/model/pair.dart';
 import 'package:nuevosol/core/utils/typedefs.dart';
+import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/packing/model/bom.dart';
 import 'package:nuevosol/features/packing/model/bom_items.dart';
 import 'package:nuevosol/features/packing/model/component_scanning_data.dart';
@@ -23,6 +24,7 @@ abstract interface class PackingRepo {
   AsyncValueOf<List<FinishedComponent>> fetchFinished(String name);
   AsyncValueOf<List<SelectProcess>> fetchProcess(String name);
   AsyncValueOf<List<Operator>> fetchOperator(String name);
+     AsyncValueOf<List<EmployeeList>> fetchEmployeeListPacking();
   AsyncValueOf<List<BomItems>> fetchBomItems(String name);
   AsyncValueOf<List<ComponentScanningData>> fetchComponentScanningData(
     String productionPosting,

@@ -3,6 +3,7 @@ import 'package:nuevosol/core/cubit/infinite_list/infinite_list_cubit.dart';
 import 'package:nuevosol/core/cubit/network_request/network_request_cubit.dart';
 import 'package:nuevosol/core/di/injector.dart';
 import 'package:nuevosol/core/model/pair.dart';
+import 'package:nuevosol/features/employee_tracker/model/employee_list.dart';
 import 'package:nuevosol/features/packing/data/packing_repo.dart';
 import 'package:nuevosol/features/packing/model/bom.dart';
 import 'package:nuevosol/features/packing/model/bom_items.dart';
@@ -37,6 +38,9 @@ typedef QualityInspectionReadingsCubit =
     NetworkRequestCubit<List<QualityInspectionReading>, String>;
 typedef QualityInspectionReadingsState =
     NetworkRequestState<List<QualityInspectionReading>>;
+
+typedef EmployeeListPacking = NetworkRequestCubit<List<EmployeeList>, String>;
+typedef EmployeeListStatePacking = NetworkRequestState<List<EmployeeList>>;
 
 @lazySingleton
 class PackingBlocProvider {
@@ -89,4 +93,8 @@ class PackingBlocProvider {
             (params, state) =>
                 repo.fetchQualityInspectionReadings(params ?? ''),
       );
+
+    EmployeeListPacking fetchEmployeeList() => EmployeeListPacking(
+    onRequest: (params, state) => repo.fetchEmployeeListPacking(),
+  );
 }

@@ -53,8 +53,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
         context.cubit<CreateGateEntryCubit>().onValueChanged(
           invoiceAmount: value,
         );
-
-        // format back with commas
         final newText = indianFormat.format(value);
         if (invoiceAmountController.text != newText) {
           final selectionIndex =
@@ -87,18 +85,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
       margin: const EdgeInsets.all(12.0),
       defaultHeight: 8,
       children: [
-        // InputField(
-        //   title: 'Purchase Order No',
-        //   hintText: 'Enter Purchase Order No',
-        //   readOnly: isCompleted,
-        //   isRequired: true,
-        //   borderColor: AppColors.grey,
-        //   initialValue: form.purchaseOrder,
-        //   onChanged:
-        //       (p0) => context.cubit<CreateGateEntryCubit>().onValueChanged(
-        //         purchaseOrder: p0,
-        //       ),
-        // ),
         BlocBuilder<PurchaseOrders, PurchaseOrdersState>(
           builder: (_, state) {
             return state.maybeWhen(
@@ -294,7 +280,7 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
                                 curr.form.weighmentPhoto,
                         builder: (_, state) {
                           return ImageSelectionWidget1(
-                            title: 'Weighment Slip Photo',
+                            title: 'Weightment Slip Photo',
                             readOnly: isCompleted,
                             isRequired: false,
                             key: ValueKey(state.form.weighmentPhoto),
@@ -449,31 +435,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
                 },
                 orElse: () => null,
               ),
-
-              // defaultSelection:
-              //     (context
-              //                     .read<CreateGateEntryCubit>()
-              //                     .state
-              //                     .form
-              //                     .customSupplier !=
-              //                 null &&
-              //             context
-              //                 .read<CreateGateEntryCubit>()
-              //                 .state
-              //                 .form
-              //                 .customSupplier!
-              //                 .isNotEmpty)
-              //         ? names.firstWhere(
-              //           (g) =>
-              //               g.name ==
-              //               context
-              //                   .read<CreateGateEntryCubit>()
-              //                   .state
-              //                   .form
-              //                   .customSupplier,
-              //           orElse: () => const SupplierForm(),
-              //         )
-              //         : null,
               futureRequest: (query) async {
                 if (query.isEmpty) return names;
 
@@ -589,31 +550,6 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
           ),
           isRequired: false,
         ),
-        // InputField(
-        //   title: 'Unit 1',
-        //   hintText: 'Enter Unit 1',
-        //   readOnly: isCompleted,
-        //   initialValue: form.customeUnit1,
-        //   borderColor: AppColors.marigoldDDust,
-
-        //   onChanged: (qty) {
-        //     context.cubit<CreateGateEntryCubit>().onValueChanged(
-        //       customUnit1: qty,
-        //     );
-        //   },
-        // ),
-        // InputField(
-        //   title: 'Unit 2',
-        //   hintText: 'Enter Unit 2',
-        //   readOnly: isCompleted,
-        //   initialValue: form.customeUnit2,
-        //   borderColor: AppColors.marigoldDDust,
-        //   onChanged: (qty) {
-        //     context.cubit<CreateGateEntryCubit>().onValueChanged(
-        //       customUnit2: qty,
-        //     );
-        //   },
-        // ),
         InputField(
           title: 'Remarks',
           hintText: 'Enter Your Remarks',
@@ -643,36 +579,16 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
       ],
     );
   }
-
-  // Future<List<PurchaseOrder>> _onSearch(
-  //   List<PurchaseOrder> data,
-  //   String query,
-  // ) async {
-  //   final filterData = data.where((e) => e.poNumber.contains(query)).toList();
-  //   return filterData;
-  // }
-
-  //   Future<List<PurchaseOrderForm>> _onSearch(
-  //     List<PurchaseOrderForm> data, String query) async {
-  //   final filterData = data
-  //       .where((e) => (e.name ?? '').toLowerCase().contains(query.toLowerCase()))
-  //       .toList();
-  //   return filterData;
-  // }
 }
 
 String? formatTime(String? backendTime) {
   if (backendTime == null || backendTime.isEmpty) return null;
 
   try {
-    // Parse ISO 8601 string into DateTime
     final dateTime = DateTime.parse(backendTime);
 
-    // Format as HH:mm (24hr) or hh:mm a (12hr with AM/PM)
     return DateFormat('HH:mm').format(dateTime);
-    // return DateFormat('hh:mm a').format(dateTime); // if you want AM/PM
   } catch (e) {
-    // If parsing fails, just return original
     return backendTime;
   }
 }

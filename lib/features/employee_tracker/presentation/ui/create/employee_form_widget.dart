@@ -12,7 +12,6 @@ import 'package:nuevosol/features/employee_tracker/presentation/ui/approve_rejec
 import 'package:nuevosol/features/employee_tracker/presentation/widget/employee_qr_pass_widget.dart';
 import 'package:nuevosol/features/employee_tracker/presentation/widget/image_preview.dart';
 import 'package:nuevosol/styles/app_color.dart';
-import 'package:nuevosol/widgets/app_spacer.dart';
 import 'package:nuevosol/widgets/buttons/app_btn.dart';
 import 'package:nuevosol/widgets/input_filed.dart';
 import 'package:nuevosol/widgets/inputs/app_dropdown_widget.dart';
@@ -358,33 +357,41 @@ class _EmployeeFormWidgetState extends State<EmployeeFormWidget> {
                     orElse: () {},
                   );
                 },
-                child: BlocBuilder<EmployeeListCubit, EmployeeListState>(
-                  builder: (_, state) {
-                    return state.maybeWhen(
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      success: (items) {
-                        if (items.isEmpty) {
-                          return const Text(
-                            'No employee record found for your account.',
-                            style: TextStyle(color: Colors.red),
-                          );
-                        }
-                        final me = items.first;
-                        return InputField(
-                          title: 'Employee No',
-                          readOnly: true,
-                          maxLines: 2,
-                          initialValue:
-                              '${me.name ?? ''} - ${me.employeeName ?? ''}',
-                          borderColor: AppColors.registration,
-                        );
-                      },
-                      orElse: () => const SizedBox.shrink(),
-                    );
-                  },
-                ),
+                child:  BlocBuilder<EmployeeListCubit, EmployeeListState>(
+  builder: (_, state) {
+    if (!isCreating && (form.employeeNo?.isNotEmpty ?? false)) {
+      return InputField(
+        title: 'Employee No',
+        readOnly: true,
+        maxLines: 2,
+        initialValue:
+            '${form.employeeNo ?? ''} - ${form.employeeName ?? ''}',
+        borderColor: AppColors.registration,
+      );
+    }
+
+    return state.maybeWhen(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      success: (items) {
+        if (items.isEmpty) {
+          return const Text(
+            'No employee record found for your account.',
+            style: TextStyle(color: Colors.red),
+          );
+        }
+        final me = items.first;
+        return InputField(
+          title: 'Employee No',
+          readOnly: true,
+          maxLines: 2,
+          initialValue: '${me.name ?? ''} - ${me.employeeName ?? ''}',
+          borderColor: AppColors.registration,
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
+    );
+  },
+),
               ),
 
               // const SizedBox(height: 15),

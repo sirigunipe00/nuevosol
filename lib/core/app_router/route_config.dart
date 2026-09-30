@@ -24,6 +24,7 @@ import 'package:nuevosol/features/gate_exit/presentation/bloc/bloc_provider.dart
 import 'package:nuevosol/features/gate_exit/presentation/bloc/create_gate_exit/create_gate_exit_cubit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/create/new_gate_exit.dart';
 import 'package:nuevosol/features/gate_exit/presentation/ui/gate_exit_list/gate_exit_list.dart';
+import 'package:nuevosol/features/packing/model/packing_form_args.dart';
 import 'package:nuevosol/features/packing/model/packing_model.dart';
 import 'package:nuevosol/features/packing/model/packing_quality_args.dart';
 import 'package:nuevosol/features/packing/presentation/bloc/bloc_provider.dart';
@@ -373,14 +374,26 @@ class AppRouterConfig {
                         path: _getPath(AppRoute.newPacking),
                         builder: (ctxt, state) {
                           final provider = PackingBlocProvider.get();
-                          final form = state.extra as PackingModel?;
+                          final extra = state.extra;
+                          final PackingModel? form;
+                          final bool asNewCreate;
+                          if (extra is PackingFormArgs) {
+                            form = extra.packing;
+                            asNewCreate = extra.asNewCreate;
+                          } else if (extra is PackingModel) {
+                            form = extra;
+                            asNewCreate = false;
+                          } else {
+                            form = null;
+                            asNewCreate = false;
+                          }
 
                           return MultiBlocProvider(
                             providers: [
                               BlocProvider(
                                 create:
                                     (_) =>
-                                        EmployeeBlocProvider.get()
+                                        PackingBlocProvider.get()
                                             .fetchEmployeeList()
                                           ..request(),
                               ),
@@ -413,10 +426,16 @@ class AppRouterConfig {
                                           ..request(form?.name ?? ''),
                               ),
                               BlocProvider(
-                                create:
-                                    (_) =>
-                                        $sl.get<CreatePackingCubit>()
-                                          ..initDetails(form),
+                                create: (_) {
+                                  final cubit = $sl.get<CreatePackingCubit>();
+                                  if (form == null) return cubit;
+                                  if (asNewCreate) {
+                                    cubit.initAsNewFrom(form);
+                                  } else {
+                                    cubit.initDetails(form);
+                                  }
+                                  return cubit;
+                                },
                               ),
                             ],
                             child: const NewPacking(),

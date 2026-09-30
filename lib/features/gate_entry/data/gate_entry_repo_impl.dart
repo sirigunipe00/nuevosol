@@ -42,7 +42,6 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
         'filters': jsonEncode(filters),
         'limit_start': start,
         'limit': 20,
-
         'order_by': 'creation desc',
         'doctype': 'Gate Entry',
         'fields': jsonEncode(['*']),
