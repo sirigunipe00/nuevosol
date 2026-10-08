@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -383,6 +382,7 @@ class _PackingQualityParameterScrnState
         (result) async {
           setState(() => _isSubmitting = false);
           if (!mounted) return;
+          final nextPacking = _packingWithSavedOperators(widget.args.packing);
           await AppDialog.showSuccessDialog(
             context,
             title: 'Success',
@@ -393,10 +393,11 @@ class _PackingQualityParameterScrnState
               Navigator.of(context, rootNavigator: true).pop();
             },
           );
+          final packing = await nextPacking;
           if (!mounted) return;
           AppRoute.newPacking.go(
             context,
-            extra: PackingFormArgs.createFromPrevious(widget.args.packing),
+            extra: PackingFormArgs.createFromPrevious(packing),
           );
         },
       );
@@ -412,6 +413,23 @@ class _PackingQualityParameterScrnState
         },
       );
     }
+  }
+
+  Future<PackingModel> _packingWithSavedOperators(PackingModel source) async {
+    final docName = (source.name ?? '').trim();
+    if (docName.isEmpty) return source;
+
+    final response =
+        await PackingBlocProvider.get().repo.fetchOperator(docName);
+    return response.fold((_) => source, (operators) {
+      final ids = <String>[];
+      for (final operator in operators) {
+        final id = (operator.operatorName ?? '').trim();
+        if (id.isNotEmpty) ids.add(id);
+      }
+      if (ids.isEmpty) return source;
+      return source.copyWith(operatorName: ids);
+    });
   }
 
   Future<Map<String, dynamic>> _buildReadingPayload(
@@ -620,7 +638,22 @@ class _PackingQualityParameterScrnState
                 const SizedBox(height: 8),
                 _instrumentNoRow(reading, isReadOnly: isReadOnly),
                 const SizedBox(height: 8),
-                if (isNumeric)
+                
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isNumeric) ...[
+                  const Text(
+                    'Actual value Reading 1',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                  ),
+                  const SizedBox(height: 8),
+                  if (isNumeric)
                   Text(
                     'Min - ${_formatNum(reading.minValue)}    Max - ${_formatNum(reading.maxValue)}',
                     style: TextStyle(
@@ -637,19 +670,6 @@ class _PackingQualityParameterScrnState
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
-                  ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isNumeric) ...[
-                  const Text(
-                    'Actual value Reading 1',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                   const SizedBox(height: 8),
                   _numericReadingField(reading, isReadOnly: isReadOnly),
@@ -908,9 +928,12 @@ class _PackingQualityParameterScrnState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const  Row(children: [Text(
           'Photo',
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        ),
+        Text('*', style: TextStyle(color: Colors.red, fontSize: 18),),
+        ],
         ),
         const SizedBox(height: 8),
         if (photo != null)

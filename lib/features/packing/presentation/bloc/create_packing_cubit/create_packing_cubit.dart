@@ -77,6 +77,23 @@ class CreatePackingCubit extends AppBaseCubit<CreatePackingState> {
 
     emitSafeState(state.copyWith(form: newForm));
   }
+
+  void setOperators(List<String> operatorName) {
+    final current = state.form.operatorName ?? const <String>[];
+    if (current.length == operatorName.length) {
+      var same = true;
+      for (var i = 0; i < current.length; i++) {
+        if (current[i] != operatorName[i]) {
+          same = false;
+          break;
+        }
+      }
+      if (same) return;
+    }
+    emitSafeState(
+      state.copyWith(form: state.form.copyWith(operatorName: operatorName)),
+    );
+  }
   String? getFullUrl(String? path) {
     if (path == null || path.isEmpty) return null;
 

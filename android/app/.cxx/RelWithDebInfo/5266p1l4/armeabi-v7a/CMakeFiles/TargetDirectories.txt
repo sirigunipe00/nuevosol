@@ -1,0 +1,2 @@
+/Users/keerthi/Desktop/Easycloud/nuevosol/android/app/.cxx/RelWithDebInfo/5266p1l4/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/keerthi/Desktop/Easycloud/nuevosol/android/app/.cxx/RelWithDebInfo/5266p1l4/armeabi-v7a/CMakeFiles/rebuild_cache.dir

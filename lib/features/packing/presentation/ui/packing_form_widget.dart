@@ -312,9 +312,10 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
                   final selectedIds = form.operatorName ?? [];
                   final defaultSelection =
                       items
-                          .where((e) => selectedIds.contains(e.name))
+                          .where((e) => _employeeIsSelected(e, selectedIds))
                           .toList();
                   return SearchMultiDropDownList<EmployeeList>(
+                    key: ValueKey(selectedIds.join('|')),
                     title: 'Employees',
                     items: items,
                     isMandatory: true,
@@ -323,8 +324,15 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
                     color: AppColors.packing,
                     defaultSelection: defaultSelection,
                     showScanner: !isReadOnly,
+                    labelBuilder:
+                        (item) => _employeeIdAndName(
+                          item.name,
+                          item.employeeName,
+                        ),
                     headerBuilder:
-                        (_, item, __) => Text(item.employeeName ?? ''),
+                        (_, item, __) => Text(
+                          _employeeIdAndName(item.name, item.employeeName),
+                        ),
                     listItemBuilder:
                         (_, item, __, ___) => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,37 +417,79 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
             },
           )
         else
-          BlocBuilder<OperatorCubit, OperatorState>(
-            builder: (_, state) {
-              return state.maybeWhen(
-                loading:
-                    () => const Center(child: CircularProgressIndicator()),
-                success: (items) {
-                  return SearchMultiDropDownList<Operator>(
-                    title: 'Operators',
-                    items: items,
-                    readOnly: true,
-                    hint: 'Operators',
-                    color: AppColors.packing,
-                    defaultSelection: items,
-                    listItemBuilder:
-                        (_, item, __, ___) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.operatorName ?? item.name ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+          BlocBuilder<EmployeeListPacking, EmployeeListStatePacking>(
+            builder: (_, employeeState) {
+              final employees = employeeState.maybeWhen(
+                success: (items) => items,
+                orElse: () => const <EmployeeList>[],
+              );
+              return BlocBuilder<OperatorCubit, OperatorState>(
+                builder: (_, state) {
+                  return state.maybeWhen(
+                    loading:
+                        () => const Center(child: CircularProgressIndicator()),
+                    success: (items) {
+                      final operatorIds =
+                          items
+                              .map((item) => (item.operatorName ?? '').trim())
+                              .where((id) => id.isNotEmpty)
+                              .toList();
+                      if (operatorIds.isNotEmpty) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!context.mounted) return;
+                          context.read<CreatePackingCubit>().setOperators(
+                            operatorIds,
+                          );
+                        });
+                      }
+                      return SearchMultiDropDownList<Operator>(
+                        title: 'Employees',
+                        items: items,
+                        readOnly: true,
+                        hint: 'Employees',
+                        color: AppColors.packing,
+                        defaultSelection: items,
+                        labelBuilder: (item) {
+                          final match = _matchedEmployee(
+                            employees,
+                            item.operatorName,
+                          );
+                          return _employeeIdAndName(
+                            match?.name ?? item.operatorName,
+                            match?.employeeName ?? item.operatorUserName,
+                          );
+                        },
+                        listItemBuilder: (_, item, __, ___) {
+                          final match = _matchedEmployee(
+                            employees,
+                            item.operatorName,
+                          );
+                          final id =
+                              (match?.name ?? item.operatorName ?? '').trim();
+                          final name =
+                              (match?.employeeName ??
+                                      item.operatorUserName ??
+                                      '')
+                                  .trim();
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                id.isNotEmpty ? id : name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            if (item.operatorUserName.containsValidValue)
-                              Text(item.operatorUserName ?? ''),
-                          ],
-                        ),
-                    onSelected: (_) {},
+                              if (name.isNotEmpty && name != id) Text(name),
+                            ],
+                          );
+                        },
+                        onSelected: (_) {},
+                      );
+                    },
+                    orElse: () => const SizedBox.shrink(),
                   );
                 },
-                orElse: () => const SizedBox.shrink(),
               );
             },
           ),
@@ -710,4 +760,38 @@ class _PackingFormWidgetState extends State<PackingFormWidget> {
           ),
     );
   }
+}
+
+bool _employeeIsSelected(EmployeeList employee, List<String> selectedIds) {
+  final id = (employee.name ?? '').trim().toUpperCase();
+  final name = (employee.employeeName ?? '').trim().toUpperCase();
+  for (final raw in selectedIds) {
+    final value = raw.trim().toUpperCase();
+    if (value.isEmpty) continue;
+    if (value == id || value == name) return true;
+  }
+  return false;
+}
+
+EmployeeList? _matchedEmployee(List<EmployeeList> employees, String? raw) {
+  final value = (raw ?? '').trim().toUpperCase();
+  if (value.isEmpty) return null;
+  for (final employee in employees) {
+    final id = (employee.name ?? '').trim().toUpperCase();
+    final name = (employee.employeeName ?? '').trim().toUpperCase();
+    if (value == id || value == name) return employee;
+  }
+  return null;
+}
+
+String _employeeIdAndName(String? id, String? name) {
+  final employeeId = (id ?? '').trim();
+  final employeeName = (name ?? '').trim();
+  if (employeeId.isNotEmpty &&
+      employeeName.isNotEmpty &&
+      employeeName != employeeId) {
+    return '$employeeId - $employeeName';
+  }
+  if (employeeName.isNotEmpty) return employeeName;
+  return employeeId;
 }

@@ -19,6 +19,7 @@ class SearchMultiDropDownList<T> extends StatefulWidget {
     this.isloading = false,
     this.listItemBuilder,
     this.headerBuilder,
+    this.labelBuilder,
     this.futureRequest,
     this.fontSize,
     this.hintBuilder,
@@ -36,6 +37,7 @@ class SearchMultiDropDownList<T> extends StatefulWidget {
   final List<T> items;
   final HeaderBuilder<T>? headerBuilder;
   final ListMultiItemBuilder<T>? listItemBuilder;
+  final String Function(T item)? labelBuilder;
   final HintBuilder? hintBuilder;
   final Future<List<T>> Function(String)? futureRequest;
   final List<T> defaultSelection;
@@ -328,16 +330,28 @@ class _SearchMultiDropDownListState<T>
   }
 
   String _displayName(T item) {
+    final customLabel = widget.labelBuilder?.call(item);
+    if (customLabel != null && customLabel.trim().isNotEmpty) {
+      return customLabel;
+    }
     if (item is EmployeeList) {
-      return item.employeeName.containsValidValue
-          ? '${item.name ?? ''} - ${item.employeeName}'
-          : (item.name ?? '');
+      return _employeeIdAndName(item.name, item.employeeName);
     }
     if (item is Operator) {
-      return item.operatorName.containsValidValue
-          ? (item.operatorName ?? '')
-          : (item.name ?? '');
+      return _employeeIdAndName(item.operatorName, item.operatorUserName);
     }
     return item.toString();
   }
+}
+
+String _employeeIdAndName(String? id, String? name) {
+  final employeeId = (id ?? '').trim();
+  final employeeName = (name ?? '').trim();
+  if (employeeId.isNotEmpty &&
+      employeeName.isNotEmpty &&
+      employeeName != employeeId) {
+    return '$employeeId - $employeeName';
+  }
+  if (employeeName.isNotEmpty) return employeeName;
+  return employeeId;
 }
