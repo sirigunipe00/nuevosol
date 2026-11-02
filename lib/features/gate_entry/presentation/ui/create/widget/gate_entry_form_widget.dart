@@ -428,7 +428,7 @@ class _GateEntryFormWidgetState extends State<GateEntryFormWidget> {
 
                   final match = data.where(
                     (e) =>
-                        (e.name ?? '').trim().toLowerCase() == normalizedTarget,
+                        (e.supplierName ?? '').trim().toLowerCase() == normalizedTarget,
                   );
 
                   return match.isNotEmpty ? match.first : null;

@@ -9,6 +9,7 @@ class SupplierForm with _$SupplierForm {
   const factory SupplierForm({
     @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'supplier_group') String? supplierGruop,
+    @JsonKey(name: 'supplier_name') String? supplierName,
   }) = _SupplierForm;
 factory SupplierForm.fromJson(Map<String, dynamic> json) => _$SupplierFormFromJson(json);
 }

@@ -24,6 +24,8 @@ mixin _$SupplierForm {
   String? get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'supplier_group')
   String? get supplierGruop => throw _privateConstructorUsedError;
+  @JsonKey(name: 'supplier_name')
+  String? get supplierName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +41,8 @@ abstract class $SupplierFormCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String? name,
-      @JsonKey(name: 'supplier_group') String? supplierGruop});
+      @JsonKey(name: 'supplier_group') String? supplierGruop,
+      @JsonKey(name: 'supplier_name') String? supplierName});
 }
 
 /// @nodoc
@@ -57,6 +60,7 @@ class _$SupplierFormCopyWithImpl<$Res, $Val extends SupplierForm>
   $Res call({
     Object? name = freezed,
     Object? supplierGruop = freezed,
+    Object? supplierName = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -66,6 +70,10 @@ class _$SupplierFormCopyWithImpl<$Res, $Val extends SupplierForm>
       supplierGruop: freezed == supplierGruop
           ? _value.supplierGruop
           : supplierGruop // ignore: cast_nullable_to_non_nullable
+              as String?,
+      supplierName: freezed == supplierName
+          ? _value.supplierName
+          : supplierName // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -81,7 +89,8 @@ abstract class _$$SupplierFormImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'name') String? name,
-      @JsonKey(name: 'supplier_group') String? supplierGruop});
+      @JsonKey(name: 'supplier_group') String? supplierGruop,
+      @JsonKey(name: 'supplier_name') String? supplierName});
 }
 
 /// @nodoc
@@ -97,6 +106,7 @@ class __$$SupplierFormImplCopyWithImpl<$Res>
   $Res call({
     Object? name = freezed,
     Object? supplierGruop = freezed,
+    Object? supplierName = freezed,
   }) {
     return _then(_$SupplierFormImpl(
       name: freezed == name
@@ -107,6 +117,10 @@ class __$$SupplierFormImplCopyWithImpl<$Res>
           ? _value.supplierGruop
           : supplierGruop // ignore: cast_nullable_to_non_nullable
               as String?,
+      supplierName: freezed == supplierName
+          ? _value.supplierName
+          : supplierName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -116,7 +130,8 @@ class __$$SupplierFormImplCopyWithImpl<$Res>
 class _$SupplierFormImpl implements _SupplierForm {
   const _$SupplierFormImpl(
       {@JsonKey(name: 'name') this.name,
-      @JsonKey(name: 'supplier_group') this.supplierGruop});
+      @JsonKey(name: 'supplier_group') this.supplierGruop,
+      @JsonKey(name: 'supplier_name') this.supplierName});
 
   factory _$SupplierFormImpl.fromJson(Map<String, dynamic> json) =>
       _$$SupplierFormImplFromJson(json);
@@ -127,10 +142,13 @@ class _$SupplierFormImpl implements _SupplierForm {
   @override
   @JsonKey(name: 'supplier_group')
   final String? supplierGruop;
+  @override
+  @JsonKey(name: 'supplier_name')
+  final String? supplierName;
 
   @override
   String toString() {
-    return 'SupplierForm(name: $name, supplierGruop: $supplierGruop)';
+    return 'SupplierForm(name: $name, supplierGruop: $supplierGruop, supplierName: $supplierName)';
   }
 
   @override
@@ -140,12 +158,15 @@ class _$SupplierFormImpl implements _SupplierForm {
             other is _$SupplierFormImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.supplierGruop, supplierGruop) ||
-                other.supplierGruop == supplierGruop));
+                other.supplierGruop == supplierGruop) &&
+            (identical(other.supplierName, supplierName) ||
+                other.supplierName == supplierName));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, supplierGruop);
+  int get hashCode =>
+      Object.hash(runtimeType, name, supplierGruop, supplierName);
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +185,8 @@ class _$SupplierFormImpl implements _SupplierForm {
 abstract class _SupplierForm implements SupplierForm {
   const factory _SupplierForm(
           {@JsonKey(name: 'name') final String? name,
-          @JsonKey(name: 'supplier_group') final String? supplierGruop}) =
+          @JsonKey(name: 'supplier_group') final String? supplierGruop,
+          @JsonKey(name: 'supplier_name') final String? supplierName}) =
       _$SupplierFormImpl;
 
   factory _SupplierForm.fromJson(Map<String, dynamic> json) =
@@ -176,6 +198,9 @@ abstract class _SupplierForm implements SupplierForm {
   @override
   @JsonKey(name: 'supplier_group')
   String? get supplierGruop;
+  @override
+  @JsonKey(name: 'supplier_name')
+  String? get supplierName;
   @override
   @JsonKey(ignore: true)
   _$$SupplierFormImplCopyWith<_$SupplierFormImpl> get copyWith =>

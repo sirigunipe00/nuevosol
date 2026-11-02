@@ -24,12 +24,9 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     String? search,
   ) async {
     final filters = <List<dynamic>>[];
-
     if (docStatus != null && docStatus != 2) {
       filters.add(['docstatus', '=', docStatus]);
-    }
-
-    if (search != null && search.isNotEmpty) {
+    }if (search != null && search.isNotEmpty) {
       filters.add(['name', 'like', '%$search%']);
     }
     final requestConfig = RequestConfig(
@@ -48,10 +45,9 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       },
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     );
-
     $logger.devLog('requestConfig....$requestConfig');
-
     final response = await get(requestConfig);
+    $logger.devLog('response.....$response');
     return response.process((r) => right(r.data!));
   }
 
@@ -60,7 +56,6 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     return await executeSafely(() async {
       final config = RequestConfig(
         url: Urls.getList,
-
         parser: (json) {
           final data = json['message'];
           final listdata = data as List<dynamic>;
@@ -74,27 +69,19 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
         },
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
-
       final response = await get(config);
-      $logger.devLog('response.....$response');
       return response.processAsync((r) async {
         return right((r.data!));
       });
     });
   }
-
-
- 
   @override
   AsyncValueOf<Pair<String, String>> createGateEntry(GateEntry form) async {
     final formJson = form.toJson();
-
     formJson['status'] = 'Draft';
-
     Uint8List? vehiclefrontcompressedBytes;
     Uint8List? weightmentcompressedBytes;
     Uint8List? invocecompressedBytes;
-
     if (form.vehiclePhotoImg != null) {
       final filePath = form.vehiclePhotoImg!.path;
       vehiclefrontcompressedBytes = await FlutterImageCompress.compressWithFile(
@@ -105,9 +92,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       vehiclefrontcompressedBytes = await fetchAndConvertToBase64(
         form.vehiclePhoto ?? '',
       );
-    }
-
-    if (form.weighmentPhotoImg != null) {
+    }if (form.weighmentPhotoImg != null) {
       final filePath = form.weighmentPhotoImg!.path;
       weightmentcompressedBytes = await FlutterImageCompress.compressWithFile(
         filePath,
@@ -117,9 +102,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       weightmentcompressedBytes = await fetchAndConvertToBase64(
         form.weighmentPhoto ?? '',
       );
-    }
-
-    if (form.invoicePhotoImg != null) {
+    }if (form.invoicePhotoImg != null) {
       final filePath = form.invoicePhotoImg!.path;
       invocecompressedBytes = await FlutterImageCompress.compressWithFile(
         filePath,
@@ -130,27 +113,20 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
         form.invoicePhoto ?? '',
       );
     }
-
     final config = RequestConfig(
       url: Urls.createGateEntry,
      parser: (json) {
         final messageObj = json['message'] as Map<String, dynamic>;
-
-
         if (messageObj['status'] == 400) {
           log('Server returned an error: ${messageObj['message']}');
           final errorText = messageObj['message']?.toString()?? 'Gate entry creation failed';
           return Pair('__SERVER_ERROR__', errorText);
         }
-
-
         if (messageObj.containsKey('data') && messageObj['data'] != null) {
           final data = messageObj['data'] as Map<String, dynamic>;
           final name = data['name'] as String;
           return Pair( messageObj['message']?.toString() ?? '', name);
         }
-
-        // 3. Fallback for any other unexpected payload variations
         return const Pair('__SERVER_ERROR__', 'An unexpected response structure was received.');
       },
       body: jsonEncode({
@@ -182,9 +158,7 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
       }),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     );
-
     $logger.devLog('requestConfig.....$config');
-
     final response = await post(config);
     return response.processAsync((r) async {
       final first = r.data?.first;
@@ -195,45 +169,26 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
  @override
   AsyncValueOf<List<PurchaseOrderForm>> fetchPONumbers(String name) async {
     return await executeSafely(() async {
-    
-
-    //   final plantName = user().plantName;
-    //    final filters = <List<dynamic>>[];
-
-    // if (plantName != null && plantName.isNotEmpty) {
-    //   filters.add(['company', '=', plantName]);
-    // }
        final filters = [
       ['docstatus', '=', 1], 
-      // if (name.isNotEmpty) ['supplier', 'like', '%$name%'],
     ];
-
-      final reqParams = {
+    final reqParams = {
       'limit_page_length': 'None',
       'order_by': 'creation desc',
       'doctype': 'Purchase Order',
       'fields': jsonEncode(['*']),   
       'filters': jsonEncode(filters), 
     };
-
-     
-
-      final config = RequestConfig(
+    final config = RequestConfig(
         url: Urls.getList,
-
         parser: (json) {
           final data = json['message'];
           final listdata = data as List<dynamic>;
           return listdata.map((e) => PurchaseOrderForm.fromJson(e)).toList();
         },
-
         reqParams: reqParams,
-
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       );
-            $logger.devLog('requestconfif......$config');
-
-
       final response = await get(config);
       $logger.devLog('response.....$response');
       return response.processAsync((r) async {
@@ -247,11 +202,8 @@ class GateEntryRepoImpl extends BaseApiRepository implements GateEntryRepo {
     if (p.extension(relativePath).isEmpty) {
       return null;
     }
-
     final String url = Urls.filepath(relativePath);
-
     final response = await http.get(Uri.parse(url));
-
     if (response.statusCode == 200) {
       return response.bodyBytes;
     } else {
